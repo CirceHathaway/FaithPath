@@ -1927,6 +1927,89 @@
 }
 
 /* ==========================================================================
+   FIRMA DE PRÉDICA (PASTOR / PASTORA)
+   ========================================================================== */
+
+.sermon-preacher-filters {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sermon-preacher-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.sermon-preacher-chip {
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text-muted);
+  padding: 5px 13px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sermon-preacher-chip.active {
+  background-color: var(--sm-gold);
+  border-color: var(--sm-gold);
+  color: #0D0D0F;
+  font-weight: 700;
+}
+
+.sermon-card-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sermon-badge-preacher {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  background-color: rgba(229, 192, 123, 0.14);
+  border: 1px solid rgba(229, 192, 123, 0.3);
+  color: var(--sm-gold);
+}
+
+.chip-icon-gold {
+  color: var(--sm-gold);
+}
+
+.preacher-option-btn.active {
+  background-color: rgba(229, 192, 123, 0.16);
+  border-color: var(--sm-gold);
+  color: #FFFFFF;
+}
+
+.check-mark-gold {
+  color: var(--sm-gold);
+  font-weight: 700;
+}
+
+.pulpit-preacher-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: rgba(229, 192, 123, 0.14);
+  color: var(--sm-gold);
+}
+
+.pulpit-light .pulpit-preacher-pill {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+/* ==========================================================================
    RESPONSIVE — CELULARES CHICOS, TABLET Y PC (MODO PRÉDICA)
    ========================================================================== */
 

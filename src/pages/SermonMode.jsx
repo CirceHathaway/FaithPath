@@ -17,6 +17,7 @@ import './SermonMode.css';
 
 const CACHE_KEY = 'sermons_offline_cache';
 const TAG_OPTIONS = ['Culto', 'Jóvenes', 'Estudio', 'Oración', 'Especial'];
+const PREACHER_OPTIONS = ['Pastor', 'Pastora'];
 
 // Fecha local en formato "YYYY-MM-DD" sin corrimiento UTC
 const getLocalDateString = (dateObj = new Date()) => {
@@ -56,6 +57,7 @@ const createEmptySermon = () => ({
   title: '',
   tag: 'Culto',
   sermonDate: getLocalDateString(),
+  preacher: 'Pastor', // Firma: 'Pastor' | 'Pastora'
   status: 'borrador', // Automático: 'borrador' al editar/autoguardar, 'lista' al confirmar Guardar
   intro: '',
   blocks: [],
@@ -127,6 +129,7 @@ export default function SermonMode({
   const [loadingList, setLoadingList] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTag, setFilterTag] = useState('Todas');
+  const [filterPreacher, setFilterPreacher] = useState('Todos');
   const [isOfflineFallback, setIsOfflineFallback] = useState(false);
 
   // Prédica activa
@@ -139,7 +142,7 @@ export default function SermonMode({
   // Editor: secciones opcionales y modales de metadatos
   const [introOpen, setIntroOpen] = useState(false);
   const [conclusionOpen, setConclusionOpen] = useState(false);
-  const [activeMetaModal, setActiveMetaModal] = useState(null); // 'tag' | 'date' | null
+  const [activeMetaModal, setActiveMetaModal] = useState(null); // 'tag' | 'date' | 'preacher' | null
 
   // Modo Púlpito
   const [fontSize, setFontSize] = useState(20);
@@ -211,6 +214,7 @@ export default function SermonMode({
             id: d.id,
             ...data,
             tag: data.tag === 'Domingo' ? 'Culto' : (data.tag || 'Culto'),
+            preacher: data.preacher || '',
             sermonDate:
               data.sermonDate ||
               (data.updatedAtMs ? getLocalDateString(new Date(data.updatedAtMs)) : getLocalDateString())
@@ -383,6 +387,7 @@ export default function SermonMode({
       ...createEmptySermon(),
       ...JSON.parse(JSON.stringify(sermon)),
       tag: sermon.tag === 'Domingo' ? 'Culto' : (sermon.tag || 'Culto'),
+      preacher: sermon.preacher || '',
       sermonDate: sermon.sermonDate || getLocalDateString()
     };
     setActiveSermon(normalized);
@@ -494,11 +499,12 @@ export default function SermonMode({
 
       const sections = [];
 
-      // Cabecera: título, fecha y etiqueta
+      // Cabecera: título, fecha, etiqueta y firma
       const headerLines = [`📌 ${(sermon.title || 'Sin título').trim()}`];
       const metaParts = [];
       if (sermon.sermonDate) metaParts.push(`📅 ${formatDisplayDate(sermon.sermonDate)}`);
       if (sermon.tag) metaParts.push(`🏷️ ${sermon.tag}`);
+      if (sermon.preacher) metaParts.push(`✍️ ${sermon.preacher}`);
       if (metaParts.length > 0) headerLines.push(metaParts.join('  |  '));
       sections.push(headerLines.join('\n'));
 
@@ -720,11 +726,14 @@ export default function SermonMode({
   // =========================================================================
   if (mode === 'library') {
     const filteredSermons = sermons.filter((s) => {
+      const q = searchQuery.toLowerCase();
       const matchesQuery =
-        (s.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (s.tag || '').toLowerCase().includes(searchQuery.toLowerCase());
+        (s.title || '').toLowerCase().includes(q) ||
+        (s.tag || '').toLowerCase().includes(q) ||
+        (s.preacher || '').toLowerCase().includes(q);
       const matchesTag = filterTag === 'Todas' || s.tag === filterTag;
-      return matchesQuery && matchesTag;
+      const matchesPreacher = filterPreacher === 'Todos' || s.preacher === filterPreacher;
+      return matchesQuery && matchesTag && matchesPreacher;
     });
 
     return (
@@ -759,7 +768,7 @@ export default function SermonMode({
             <input
               type="text"
               className="sermon-search-input"
-              placeholder="Buscar prédica por título o etiqueta..."
+              placeholder="Buscar por título, etiqueta o firma..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -774,6 +783,20 @@ export default function SermonMode({
                 onClick={() => setFilterTag(tag)}
               >
                 {tag}
+              </button>
+            ))}
+          </div>
+
+          {/* Filtro por firma (Pastor / Pastora) */}
+          <div className="sermon-preacher-filters">
+            {['Todos', ...PREACHER_OPTIONS].map((preacher) => (
+              <button
+                key={preacher}
+                type="button"
+                className={`sermon-preacher-chip ${filterPreacher === preacher ? 'active' : ''}`}
+                onClick={() => setFilterPreacher(preacher)}
+              >
+                {preacher === 'Todos' ? 'Todos' : preacher}
               </button>
             ))}
           </div>
@@ -804,7 +827,12 @@ export default function SermonMode({
               return (
                 <article key={sermon.id} className="sermon-card">
                   <div className="sermon-card-top">
-                    <span className="sermon-badge-tag">{sermon.tag || 'Culto'}</span>
+                    <div className="sermon-card-badges">
+                      <span className="sermon-badge-tag">{sermon.tag || 'Culto'}</span>
+                      {sermon.preacher && (
+                        <span className="sermon-badge-preacher">{sermon.preacher}</span>
+                      )}
+                    </div>
                     <span className={`sermon-badge-status ${sermon.status === 'lista' ? 'ready' : 'draft'}`}>
                       <span className="status-dot" />
                       {sermon.status === 'lista' ? 'Lista' : 'Borrador'}
@@ -965,7 +993,7 @@ export default function SermonMode({
               onChange={(e) => updateActiveDraft({ title: e.target.value })}
             />
 
-            {/* Chips de metadatos: Etiqueta y Fecha de la prédica */}
+            {/* Chips de metadatos: Etiqueta, Fecha y Firma (Pastor / Pastora) */}
             <div className="editor-meta-chips">
               <button
                 type="button"
@@ -992,6 +1020,19 @@ export default function SermonMode({
                   <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
                 <span>{formatDisplayDate(activeSermon.sermonDate)}</span>
+                <span className="chip-chevron">▾</span>
+              </button>
+
+              <button
+                type="button"
+                className="meta-chip-btn"
+                onClick={() => setActiveMetaModal('preacher')}
+              >
+                <svg className="chip-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span>{activeSermon.preacher || 'Firma'}</span>
                 <span className="chip-chevron">▾</span>
               </button>
             </div>
@@ -1368,15 +1409,15 @@ export default function SermonMode({
           </button>
         </footer>
 
-        {/* Modales de selección (Etiqueta / Fecha) - Cierre EXCLUSIVO con botones */}
+        {/* Modales de selección (Etiqueta / Fecha / Firma) - Cierre EXCLUSIVO con botones */}
         {activeMetaModal && (
           <div className="sermon-modal-backdrop sheet-bottom">
             <div className="sermon-modal-box sheet-card">
               <div className="modal-header-row">
                 <h3>
-                  {activeMetaModal === 'tag'
-                    ? 'Etiqueta del mensaje'
-                    : 'Fecha de la prédica'}
+                  {activeMetaModal === 'tag' && 'Etiqueta del mensaje'}
+                  {activeMetaModal === 'date' && 'Fecha de la prédica'}
+                  {activeMetaModal === 'preacher' && 'Firma de la prédica'}
                 </h3>
                 <button
                   type="button"
@@ -1444,6 +1485,25 @@ export default function SermonMode({
                       Próx. domingo
                     </button>
                   </div>
+                </div>
+              )}
+
+              {activeMetaModal === 'preacher' && (
+                <div className="tag-modal-grid">
+                  {PREACHER_OPTIONS.map((preacher) => {
+                    const isSelected = activeSermon.preacher === preacher;
+                    return (
+                      <button
+                        key={preacher}
+                        type="button"
+                        className={`tag-option-btn preacher-option-btn ${isSelected ? 'active' : ''}`}
+                        onClick={() => updateActiveDraft({ preacher })}
+                      >
+                        <span>{preacher}</span>
+                        {isSelected && <span className="check-mark-gold">✓</span>}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
 
@@ -1545,6 +1605,9 @@ export default function SermonMode({
           <div className="pulpit-title-block">
             <div className="pulpit-meta-line">
               <span className="pulpit-tag-pill">{activeSermon.tag || 'Culto'}</span>
+              {activeSermon.preacher && (
+                <span className="pulpit-preacher-pill">{activeSermon.preacher}</span>
+              )}
               {activeSermon.sermonDate && (
                 <span className="pulpit-date-text">
                   {formatDisplayDate(activeSermon.sermonDate)}
