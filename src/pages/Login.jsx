@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import SermonMode from './SermonMode';
+import DailyVersesManager from './DailyVersesManager';
 import './Login.css';
 
 export default function Login({
@@ -17,8 +18,11 @@ export default function Login({
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [showSermonMode, setShowSermonMode] = useState(false);
+
+  // null | 'sermons' | 'dailyVerses'
+  const [adminView, setAdminView] = useState(null);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
@@ -26,7 +30,7 @@ export default function Login({
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (!currentUser) {
-        setShowSermonMode(false);
+        setAdminView(null);
         if (setIsPulpitMode) setIsPulpitMode(false);
       }
       setLoadingAuth(false);
@@ -81,7 +85,7 @@ export default function Login({
 
   const handleLogout = async () => {
     try {
-      setShowSermonMode(false);
+      setAdminView(null);
       if (setIsPulpitMode) setIsPulpitMode(false);
       await signOut(auth);
     } catch (err) {
@@ -89,14 +93,18 @@ export default function Login({
     }
   };
 
-  if (user && showSermonMode) {
+  if (user && adminView === 'sermons') {
     return (
       <SermonMode
-        onBack={() => setShowSermonMode(false)}
+        onBack={() => setAdminView(null)}
         navigateToBibleReference={navigateToBibleReference}
         setIsPulpitMode={setIsPulpitMode}
       />
     );
+  }
+
+  if (user && adminView === 'dailyVerses') {
+    return <DailyVersesManager onBack={() => setAdminView(null)} />;
   }
 
   return (
@@ -132,6 +140,7 @@ export default function Login({
         )}
       </div>
 
+      {/* Acceso Administrativo */}
       <div className="login-card">
         {loadingAuth ? (
           <p className="login-loading">Verificando sesión...</p>
@@ -145,16 +154,25 @@ export default function Login({
             </div>
             <h2>Bienvenido</h2>
             <p className="login-user-email">{user.email}</p>
-            <p>Tienes acceso administrativo para gestionar devocionales y preparar tus prédicas.</p>
+            <p>Tienes acceso administrativo para gestionar devocionales, versículos diarios y preparar tus prédicas.</p>
 
             <button
+              type="button"
               className="sermon-mode-entry-btn"
-              onClick={() => setShowSermonMode(true)}
+              onClick={() => setAdminView('sermons')}
             >
               Modo Prédica
             </button>
 
-            <button className="logout-btn" onClick={handleLogout}>
+            <button
+              type="button"
+              className="daily-verses-entry-btn"
+              onClick={() => setAdminView('dailyVerses')}
+            >
+              Versículos Diarios
+            </button>
+
+            <button type="button" className="logout-btn" onClick={handleLogout}>
               Cerrar Sesión
             </button>
           </div>
@@ -194,7 +212,104 @@ export default function Login({
         )}
       </div>
 
-      {/* Modal de instrucciones para iOS o navegadores sin aviso automático */}
+      {/* Botón Acerca de */}
+      <div className="about-entry-card">
+        <button
+          type="button"
+          className="about-entry-btn"
+          onClick={() => setShowAboutModal(true)}
+        >
+          <span className="about-entry-left">
+            <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span>Acerca de</span>
+          </span>
+          <span className="about-entry-arrow">›</span>
+        </button>
+      </div>
+
+      {/* Modal Acerca de (cierre exclusivo por botones) */}
+      {showAboutModal && (
+        <div className="install-modal-backdrop">
+          <div className="install-modal-box about-modal-box">
+            <div className="install-modal-header">
+              <h3>Acerca de FaithPath</h3>
+              <button
+                type="button"
+                className="install-modal-close"
+                onClick={() => setShowAboutModal(false)}
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="about-modal-scroll">
+              <p className="about-intro">
+                <strong>FaithPath</strong> es una aplicación bíblica y devocional diseñada para acompañarte cada día en tu lectura, estudio y predicación de la Palabra, tanto en celular como en tablet y PC.
+              </p>
+
+              <div className="about-section">
+                <h4>¿Qué puedes hacer en la app?</h4>
+                <ul className="about-features-list">
+                  <li><strong>Biblia interactiva sin conexión:</strong> Lee el Antiguo y Nuevo Testamento en Reina-Valera 1960 (RVR1960), Reina Valera Contemporánea (RVC) y Nueva Versión Internacional (NVI) desde el modo cartas o el modo lista con buscador.</li>
+                  <li><strong>Lectura personalizada:</strong> Activa la versión paralela para comparar traducciones versículo por versículo, ajusta el tamaño de la letra, resalta pasajes, guarda favoritos y comparte citas.</li>
+                  <li><strong>Devocional diario y Versículos del día:</strong> Accede a reflexiones diarias con salto directo a la cita bíblica y a los versículos destacados en la pantalla de inicio.</li>
+                  <li><strong>Modo Prédica y Modo Púlpito:</strong> Herramienta administrativa para armar bosquejos por bloques con citas automáticas, copiar citas para proyección, compartir prédicas completas y leer en vivo con pantalla siempre encendida.</li>
+                  <li><strong>Aplicación instalable (PWA):</strong> Descárgala en tu dispositivo para usarla incluso sin acceso a internet.</li>
+                </ul>
+              </div>
+
+              <div className="about-section about-credits">
+                <h4>Derechos y atribuciones bíblicas</h4>
+
+                <div className="credit-block">
+                  <p className="credit-label">Para la versión RV1960:</p>
+                  <p>
+                    Texto bíblico Reina-Valera 1960® © Sociedades Bíblicas en América Latina, 1960. Derechos renovados 1988, Sociedades Bíblicas Unidas.
+                  </p>
+                  <a
+                    href="https://www.sociedadesbiblicas.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="credit-link"
+                  >
+                    Más información sobre Biblia Reina Valera 1960
+                  </a>
+                </div>
+
+                <div className="credit-block">
+                  <p className="credit-label">Para la versión RVC:</p>
+                  <p>
+                    Reina Valera Contemporánea® © Sociedades Bíblicas Unidas, 2009, 2011, 2018, 2025.
+                  </p>
+                  <a
+                    href="https://www.sociedadesbiblicas.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="credit-link"
+                  >
+                    Más información sobre Reina Valera Contemporánea.
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="install-modal-done"
+              onClick={() => setShowAboutModal(false)}
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de instrucciones de instalación */}
       {showInstallHelp && (
         <div className="install-modal-backdrop">
           <div className="install-modal-box">

@@ -1,0 +1,253 @@
+.dv-manager-page {
+  height: 100%;
+  width: 100%;
+  background-color: #0D0D0F;
+  color: #F3F4F6;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.dv-topbar {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background-color: rgba(13, 13, 15, 0.94);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dv-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #E06C75;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 8px 6px 2px;
+  cursor: pointer;
+}
+
+.dv-topbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #F3F4F6;
+}
+
+.dv-save-pill {
+  background-color: #E06C75;
+  color: #0D0D0F;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dv-save-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dv-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 96px;
+}
+
+.dv-intro-text,
+.dv-loading,
+.dv-cards-list {
+  width: 100%;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dv-intro-text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #A1A1AA;
+  margin-bottom: 20px;
+}
+
+.dv-loading {
+  text-align: center;
+  color: #71717A;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+.dv-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dv-card {
+  background-color: #16161A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #E5C07B;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dv-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dv-card-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #E5C07B;
+}
+
+.dv-card-ready {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #34D399;
+}
+
+.dv-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.dv-ref-input {
+  flex: 1;
+  min-width: 0;
+  background-color: #1E1E24;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 11px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #E5C07B;
+  outline: none;
+}
+
+.dv-ref-input::placeholder {
+  color: #71717A;
+  font-weight: 400;
+}
+
+.dv-ref-input:focus {
+  border-color: rgba(229, 192, 123, 0.55);
+}
+
+.dv-version-select {
+  width: 102px;
+  flex-shrink: 0;
+  background-color: #1E1E24;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 11px 8px;
+  font-size: 13px;
+  color: #F3F4F6;
+  outline: none;
+}
+
+.dv-fetch-btn {
+  width: 100%;
+  background-color: rgba(229, 192, 123, 0.12);
+  border: 1px solid rgba(229, 192, 123, 0.35);
+  color: #E5C07B;
+  padding: 10px 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dv-error {
+  color: #F87171;
+  font-size: 12.5px;
+}
+
+.dv-preview-box {
+  background-color: #0D0D0F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dv-preview-text {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #F3F4F6;
+}
+
+.dv-preview-ref {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #cf666d;
+  letter-spacing: 0.6px;
+}
+
+.dv-save-big-btn {
+  width: 100%;
+  background-color: #E06C75;
+  color: #0D0D0F;
+  border: none;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.dv-save-big-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dv-toast {
+  position: fixed;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1E1E24;
+  color: #F3F4F6;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  z-index: 1500;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 768px) {
+  .dv-topbar {
+    padding: 14px 28px;
+  }
+
+  .dv-content {
+    padding: 28px 32px 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dv-toast {
+    bottom: 28px;
+  }
+}
