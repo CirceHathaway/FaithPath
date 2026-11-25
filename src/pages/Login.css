@@ -1,0 +1,200 @@
+/* --- ESTILOS PARA LOGIN.JSX --- */
+
+.login-container {
+  height: 100%;
+  width: 100%;
+  background-color: #050505;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px 80px;
+  overflow-y: auto;
+}
+
+.login-title {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto 32px;
+  font-size: clamp(24px, 6vw, 30px);
+  font-weight: bold;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 16px;
+}
+
+.login-card {
+  background-color: #111;
+  border: 1px solid #222;
+  border-radius: 18px;
+  padding: 28px;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.login-loading {
+  text-align: center;
+  color: #888;
+  font-size: 15px;
+  padding: 20px 0;
+}
+
+.login-form h2 {
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+.login-error {
+  background-color: rgba(207, 102, 109, 0.15);
+  color: #cf666d;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(207, 102, 109, 0.3);
+}
+
+.input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 12.5px;
+  color: #aaa;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 13px 14px;
+  border-radius: 10px;
+  font-size: 15.5px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #cf666d;
+}
+
+.login-submit-btn {
+  width: 100%;
+  background-color: #cf666d;
+  color: #000;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15.5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s;
+}
+
+.login-submit-btn:hover,
+.login-submit-btn:active {
+  opacity: 0.9;
+}
+
+.login-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.success-icon {
+  color: #4ade80;
+  margin-bottom: 6px;
+}
+
+.login-success-state h2 {
+  font-size: 22px;
+  color: #fff;
+}
+
+.login-user-email {
+  color: #cf666d !important;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 0 !important;
+  word-break: break-all;
+}
+
+.login-success-state p {
+  color: #aaa;
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.sermon-mode-entry-btn {
+  width: 100%;
+  background-color: #cf666d;
+  color: #000;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.sermon-mode-entry-btn:hover,
+.sermon-mode-entry-btn:active {
+  opacity: 0.9;
+}
+
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 11px 24px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.logout-btn:hover {
+  border-color: #666;
+  color: #fff;
+}
+
+@media (max-width: 380px) {
+  .login-container {
+    padding: 20px 14px 76px;
+  }
+
+  .login-card {
+    padding: 22px 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .login-container {
+    padding: 48px 32px;
+  }
+
+  .login-card {
+    padding: 36px;
+  }
+}

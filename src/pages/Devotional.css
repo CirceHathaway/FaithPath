@@ -1,0 +1,346 @@
+/* --- ESTILOS PARA DEVOTIONAL.JSX --- */
+
+.devotional-container {
+  height: 100%;
+  width: 100%;
+  background-color: #050505;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 20px 96px;
+  scroll-behavior: smooth;
+}
+
+.devotional-date-header,
+.devotional-top-label,
+.devotional-content,
+.devotional-editor,
+.devotional-empty {
+  width: 100%;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.devotional-date-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+  margin-bottom: 26px;
+}
+
+.date-nav-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.date-nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.date-display {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.devotional-top-label {
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 22px;
+}
+
+.devotional-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.devotional-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(28px, 7.5vw, 46px);
+  text-align: center;
+  line-height: 1.12;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.devotional-line {
+  width: 40px;
+  border: 0;
+  border-top: 1px solid #444;
+  margin-bottom: 24px;
+}
+
+.devotional-subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 36px;
+}
+
+.devotional-verse-card {
+  width: 100%;
+  background-color: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 28px 24px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  margin-bottom: 36px;
+}
+
+.devotional-verse-card:hover {
+  border-color: #3f3f46;
+}
+
+.devotional-verse-card:active {
+  background-color: #111;
+}
+
+.devotional-verse-ref {
+  text-align: center;
+  color: #cf666d;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.devotional-verse-text {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(18px, 4.6vw, 23px);
+  line-height: 1.6;
+  text-align: center;
+  color: #dcdcdc;
+  background: -webkit-linear-gradient(#fff, #f0cbb3);
+  background: linear-gradient(#fff, #f0cbb3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.verse-card-icon {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  color: #555;
+}
+
+.devotional-separator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 28px 0;
+  opacity: 0.8;
+}
+
+.devotional-separator::before,
+.devotional-separator::after {
+  content: '';
+  height: 1px;
+  width: 40px;
+  background-color: #333;
+  margin: 0 15px;
+}
+
+.devotional-body {
+  width: 100%;
+}
+
+.devotional-body p {
+  font-size: clamp(16.5px, 4.2vw, 19px);
+  line-height: 1.8;
+  color: #e0e0e0;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+
+.devotional-body.conclusion p {
+  font-style: italic;
+  color: #c7c7c7;
+}
+
+.devotional-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #666;
+  gap: 20px;
+  text-align: center;
+}
+
+.create-btn {
+  background-color: #cf666d;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.devotional-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.devotional-editor input,
+.devotional-editor textarea {
+  width: 100%;
+  background-color: #111;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+.devotional-editor input:focus,
+.devotional-editor textarea:focus {
+  border-color: #cf666d;
+}
+
+.verse-input-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.verse-input-group input {
+  flex: 2;
+  min-width: 0;
+}
+
+.verse-input-group select {
+  flex: 1;
+  min-width: 110px;
+  background-color: #111;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+
+.editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.editor-actions button {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: #222;
+  color: #fff;
+}
+
+.editor-actions .save-btn {
+  background-color: #cf666d;
+  color: #000;
+  font-weight: bold;
+}
+
+.editor-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.devotional-bottom-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 44px;
+  width: 100%;
+}
+
+.edit-btn-ghost {
+  background: transparent;
+  border: 1px solid #333;
+  color: #888;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 0;
+  cursor: pointer;
+}
+
+.edit-btn-ghost:hover {
+  border-color: #555;
+  color: #ccc;
+}
+
+.share-btn-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #cf666d;
+  color: #cf666d;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.share-btn-ghost:hover,
+.share-btn-ghost:active {
+  background-color: rgba(207, 102, 109, 0.15);
+}
+
+.devotional-loading {
+  color: #888;
+  font-size: 15px;
+}
+
+/* Celulares chicos */
+@media (max-width: 380px) {
+  .devotional-container {
+    padding: 16px 15px 88px;
+  }
+
+  .devotional-verse-card {
+    padding: 22px 16px;
+  }
+
+  .verse-input-group {
+    flex-direction: column;
+  }
+}
+
+/* Tablet y PC */
+@media (min-width: 768px) {
+  .devotional-container {
+    padding: 36px 40px 80px;
+  }
+
+  .devotional-verse-card {
+    padding: 36px 34px;
+  }
+}

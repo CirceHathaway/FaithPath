@@ -1,0 +1,2128 @@
+/* ==========================================================================
+   TOKENS Y BASE EDITORIAL — MODO PRÉDICA
+   ========================================================================== */
+
+:root {
+  --sm-canvas: #0D0D0F;
+  --sm-surface: #16161A;
+  --sm-elevated: #1E1E24;
+  --sm-border: rgba(255, 255, 255, 0.08);
+  --sm-border-strong: rgba(255, 255, 255, 0.14);
+  --sm-coral: #E06C75;
+  --sm-coral-hover: #E8828A;
+  --sm-gold: #E5C07B;
+  --sm-purple: #C4B5FD;
+  --sm-purple-bg: #1B1822;
+  --sm-text: #F3F4F6;
+  --sm-text-muted: #A1A1AA;
+  --sm-text-dim: #71717A;
+}
+
+.sermon-page,
+.pulpit-page {
+  height: 100%;
+  width: 100%;
+  background-color: var(--sm-canvas);
+  color: var(--sm-text);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sermon-page *,
+.pulpit-page * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sermon-page textarea,
+.pulpit-page textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   HEADER FIJO SUPERIOR (BIBLIOTECA Y EDITOR)
+   ========================================================================== */
+
+.sermon-topbar {
+  flex-shrink: 0;
+  z-index: 20;
+  padding: 12px 16px;
+  background-color: rgba(13, 13, 15, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--sm-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sermon-topbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--sm-text);
+}
+
+.sermon-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: var(--sm-coral);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 8px 6px 2px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sermon-back-btn:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.topbar-right-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sermon-primary-pill {
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.sermon-primary-pill:active {
+  background-color: var(--sm-coral-hover);
+  transform: scale(0.97);
+}
+
+.sermon-save-pill {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #FBBF24;
+  white-space: nowrap;
+}
+
+.sermon-save-pill.saved {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #34D399;
+}
+
+.sermon-save-pill.saving {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--sm-text-muted);
+}
+
+.sermon-save-pill.offline {
+  background-color: rgba(245, 158, 11, 0.16);
+  color: #F59E0B;
+}
+
+.sermon-offline-banner {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #FBBF24;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.22);
+}
+
+/* ==========================================================================
+   VISTA 1: BIBLIOTECA DE PRÉDICAS
+   ========================================================================== */
+
+.sermon-search-wrap {
+  padding: 14px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.sermon-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  color: var(--sm-text-dim);
+  transition: border-color 0.15s ease;
+}
+
+.sermon-search-box:focus-within {
+  border-color: rgba(224, 108, 117, 0.5);
+}
+
+.sermon-search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--sm-text);
+  font-size: 14px;
+  outline: none;
+}
+
+.sermon-search-input::placeholder {
+  color: var(--sm-text-dim);
+}
+
+.sermon-tag-filters {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sermon-tag-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.sermon-tag-chip {
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text-muted);
+  padding: 6px 13px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sermon-tag-chip.active {
+  background-color: var(--sm-coral);
+  border-color: var(--sm-coral);
+  color: #0D0D0F;
+  font-weight: 600;
+}
+
+.sermon-library-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sermon-empty-msg {
+  text-align: center;
+  color: var(--sm-text-dim);
+  margin-top: 60px;
+  font-size: 14px;
+}
+
+.sermon-empty-box {
+  margin-top: 48px;
+  padding: 28px 20px;
+  border-radius: 22px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.sermon-empty-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background-color: rgba(224, 108, 117, 0.14);
+  color: var(--sm-coral);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.sermon-empty-box h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sm-text);
+}
+
+.sermon-empty-box p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sm-text-muted);
+  margin-bottom: 8px;
+}
+
+.sermon-create-big-btn {
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sermon-card {
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sermon-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sermon-badge-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--sm-coral);
+  font-weight: 700;
+}
+
+.sermon-badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.sermon-badge-status .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.sermon-badge-status.ready {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #34D399;
+}
+
+.sermon-badge-status.ready .status-dot {
+  background-color: #34D399;
+}
+
+.sermon-badge-status.draft {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #FBBF24;
+}
+
+.sermon-badge-status.draft .status-dot {
+  background-color: #FBBF24;
+}
+
+.sermon-card-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--sm-text);
+  line-height: 1.25;
+}
+
+.sermon-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--sm-text-muted);
+}
+
+.meta-sep {
+  opacity: 0.45;
+}
+
+.sermon-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sermon-btn-pulpit {
+  flex: 1;
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sermon-btn-secondary {
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sermon-btn-icon {
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-gold);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sermon-btn-danger {
+  background-color: transparent;
+  border: 1px solid rgba(224, 108, 117, 0.28);
+  color: var(--sm-coral);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.sermon-btn-danger-solid {
+  background-color: #DC2626;
+  border: none;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   VISTA 2: EDITOR EDITORIAL TIPO LIENZO
+   ========================================================================== */
+
+.editor-canvas-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px 18px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.editor-hero-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.editor-canvas-title {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 25px;
+  line-height: 1.22;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sm-text);
+  font-family: inherit;
+  padding: 0;
+}
+
+.editor-canvas-title::placeholder {
+  color: #52525B;
+}
+
+.editor-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 9999px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  color: #E4E4E7;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.12s ease;
+}
+
+.meta-chip-btn:active {
+  background-color: var(--sm-elevated);
+  transform: scale(0.97);
+}
+
+.chip-icon-coral {
+  color: var(--sm-coral);
+}
+
+.chip-icon-muted {
+  color: var(--sm-text-muted);
+}
+
+.chip-chevron {
+  color: var(--sm-text-dim);
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+/* Secciones opcionales colapsables */
+.editor-optional-section.conclusion-pad {
+  padding-bottom: 12px;
+}
+
+.optional-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  background-color: rgba(22, 22, 26, 0.65);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  color: var(--sm-text-muted);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.optional-expand-btn:active {
+  background-color: var(--sm-surface);
+  color: var(--sm-text);
+}
+
+.plus-coral {
+  color: var(--sm-coral);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.optional-tag {
+  font-size: 11.5px;
+  color: var(--sm-text-dim);
+}
+
+.optional-editor-box {
+  padding-left: 14px;
+  border-left: 2px solid rgba(255, 255, 255, 0.14);
+  transition: border-color 0.15s ease;
+}
+
+.optional-editor-box:focus-within {
+  border-left-color: var(--sm-coral);
+}
+
+.optional-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.optional-editor-head span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sm-text-dim);
+}
+
+.optional-hide-btn {
+  background: transparent;
+  border: none;
+  color: var(--sm-text-dim);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.optional-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #E4E4E7;
+  font-size: 15px;
+  line-height: 1.6;
+  font-family: inherit;
+  padding: 0;
+}
+
+.optional-textarea::placeholder {
+  color: #52525B;
+}
+
+.editor-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+  width: 100%;
+}
+
+/* Desarrollo por bloques */
+.editor-dev-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.editor-dev-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.editor-dev-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor-dev-title-group h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--sm-text);
+}
+
+.blocks-count-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sm-text-muted);
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.copy-verses-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  color: #E4E4E7;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.copy-verses-pill-btn svg {
+  color: var(--sm-gold);
+}
+
+.copy-verses-pill-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Estado vacío 2x2 */
+.empty-blocks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.empty-blocks-subtitle {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--sm-text-muted);
+}
+
+.empty-blocks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.block-picker-card {
+  text-align: left;
+  padding: 14px;
+  border-radius: 16px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.block-picker-card:active {
+  background-color: var(--sm-elevated);
+  transform: scale(0.98);
+}
+
+.picker-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.picker-coral {
+  background-color: rgba(224, 108, 117, 0.15);
+  color: var(--sm-coral);
+}
+
+.picker-neutral {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #D4D4D8;
+}
+
+.picker-gold {
+  background-color: rgba(229, 192, 123, 0.15);
+  color: var(--sm-gold);
+}
+
+.picker-purple {
+  background-color: rgba(196, 181, 253, 0.15);
+  color: var(--sm-purple);
+}
+
+.picker-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.picker-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sm-text);
+}
+
+.picker-text span {
+  font-size: 11px;
+  color: var(--sm-text-muted);
+}
+
+/* Tarjetas de bloques activos */
+.editor-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor-block-card {
+  border-radius: 16px;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+}
+
+.editor-block-card.block-type-subtitle:focus-within {
+  border-color: rgba(224, 108, 117, 0.45);
+}
+
+.editor-block-card.block-type-paragraph {
+  background-color: rgba(22, 22, 26, 0.65);
+}
+
+.editor-block-card.block-type-paragraph:focus-within {
+  background-color: var(--sm-surface);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.editor-block-card.block-type-verse {
+  border-left: 3px solid var(--sm-gold);
+}
+
+.editor-block-card.block-type-highlight {
+  background-color: var(--sm-purple-bg);
+  border-color: rgba(216, 180, 254, 0.16);
+}
+
+.editor-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.block-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.point-num-badge {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: rgba(224, 108, 117, 0.16);
+  color: var(--sm-coral);
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.block-badge-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sm-text-dim);
+}
+
+.block-badge-label.label-gold {
+  color: var(--sm-gold);
+}
+
+.block-badge-label.label-purple {
+  color: var(--sm-purple);
+}
+
+.block-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.block-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sm-text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-controls button:active {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.block-controls button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.block-controls .block-delete-btn {
+  color: var(--sm-coral);
+}
+
+.block-input-point,
+.block-input-paragraph,
+.block-input-highlight {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.block-input-point {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--sm-text);
+}
+
+.block-input-paragraph,
+.block-input-highlight {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #E4E4E7;
+}
+
+.block-input-point::placeholder,
+.block-input-paragraph::placeholder,
+.block-input-highlight::placeholder {
+  color: #52525B;
+}
+
+/* Bloque versículo en editor */
+.editor-verse-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editor-verse-row {
+  display: flex;
+  gap: 8px;
+}
+
+.verse-ref-input {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  border-radius: 11px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--sm-gold);
+  outline: none;
+}
+
+.verse-ref-input::placeholder {
+  color: var(--sm-text-dim);
+  font-weight: 400;
+}
+
+.verse-ref-input:focus {
+  border-color: rgba(229, 192, 123, 0.5);
+}
+
+.verse-version-select {
+  width: 98px;
+  flex-shrink: 0;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  border-radius: 11px;
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--sm-text);
+  outline: none;
+}
+
+.editor-fetch-verse-btn {
+  width: 100%;
+  background-color: rgba(229, 192, 123, 0.12);
+  border: 1px solid rgba(229, 192, 123, 0.35);
+  color: var(--sm-gold);
+  padding: 9px 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editor-verse-error {
+  color: #F87171;
+  font-size: 12.5px;
+}
+
+.editor-verse-preview {
+  background-color: rgba(13, 13, 15, 0.75);
+  border: 1px solid var(--sm-border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.editor-verse-preview strong {
+  color: var(--sm-gold);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.editor-verse-preview p {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: #E4E4E7;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Barra inferior contextual fija en editor */
+.editor-sticky-footer {
+  flex-shrink: 0;
+  z-index: 20;
+  background-color: rgba(18, 18, 22, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--sm-border);
+  padding: 10px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quick-add-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.quick-add-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-add-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 11px;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: #E4E4E7;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.qa-coral { color: var(--sm-coral); font-weight: 700; }
+.qa-neutral { color: var(--sm-text-muted); font-weight: 700; }
+.qa-gold { color: var(--sm-gold); font-weight: 700; }
+.qa-purple { color: var(--sm-purple); font-weight: 700; }
+
+.editor-pulpit-cta {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  box-shadow: 0 6px 24px rgba(224, 108, 117, 0.22);
+  cursor: pointer;
+}
+
+.editor-pulpit-cta:active {
+  background-color: var(--sm-coral-hover);
+  transform: scale(0.99);
+}
+
+/* ==========================================================================
+   VISTA 3: MODO PÚLPITO (LECTURA EN VIVO)
+   ========================================================================== */
+
+.pulpit-page {
+  background-color: #09090B;
+}
+
+.pulpit-topbar {
+  flex-shrink: 0;
+  z-index: 20;
+  padding: 12px 14px;
+  background-color: #121216;
+  border-bottom: 1px solid var(--sm-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pulpit-topbar-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #D4D4D8;
+}
+
+.pulpit-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--sm-coral);
+}
+
+.pulpit-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pulpit-top-btn {
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border-strong);
+  color: var(--sm-text);
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pulpit-top-btn.icon-only {
+  width: 36px;
+  padding: 7px 0;
+  text-align: center;
+}
+
+.pulpit-top-btn.wake-on {
+  border-color: var(--sm-gold);
+  color: var(--sm-gold);
+}
+
+.pulpit-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px 105px;
+  scroll-behavior: smooth;
+}
+
+.pulpit-title-block {
+  margin-bottom: 26px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.pulpit-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pulpit-tag-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background-color: var(--sm-surface);
+  color: var(--sm-coral);
+}
+
+.pulpit-date-text {
+  font-size: 13px;
+  color: var(--sm-text-muted);
+}
+
+.pulpit-title {
+  font-size: 1.55em;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.pulpit-hint {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--sm-text-dim);
+}
+
+.pulpit-block {
+  margin-bottom: 22px;
+  transition: opacity 0.25s ease;
+  cursor: pointer;
+}
+
+.pulpit-block.is-done,
+.pulpit-verse-card.is-done {
+  opacity: 0.32;
+}
+
+.pulpit-section-kicker {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sm-coral);
+  margin-bottom: 6px;
+}
+
+.pulpit-section-kicker.kicker-purple {
+  color: var(--sm-purple);
+}
+
+.pulpit-subtitle-block {
+  margin-top: 30px;
+  margin-bottom: 14px;
+}
+
+.pulpit-point-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.pulpit-point-num {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pulpit-point-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sm-text-muted);
+}
+
+.pulpit-subtitle-block h2 {
+  font-size: 1.18em;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #FFFFFF;
+}
+
+.pulpit-paragraph p {
+  margin-bottom: 12px;
+  color: #E4E4E7;
+}
+
+.pulpit-highlight {
+  background-color: var(--sm-purple-bg);
+  border: 1px solid rgba(216, 180, 254, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  color: #E4E4E7;
+}
+
+.pulpit-conclusion {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Tarjeta de versículo interactiva en púlpito */
+.pulpit-verse-card {
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border);
+  border-left: 4px solid var(--sm-gold);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin: 22px 0;
+  transition: opacity 0.25s ease;
+}
+
+.pulpit-verse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.pulpit-verse-ref {
+  color: var(--sm-gold);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.pulpit-verse-check {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--sm-text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.pulpit-verse-check.checked {
+  background-color: #34D399;
+  border-color: #34D399;
+  color: #0D0D0F;
+  font-weight: 800;
+}
+
+.pulpit-verse-body {
+  cursor: pointer;
+}
+
+.pulpit-verse-text {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: #F4F4F5;
+}
+
+.pulpit-parallel-box {
+  margin-top: 14px;
+  padding-left: 12px;
+  border-left: 2px solid var(--sm-coral);
+  color: #B4B4BC;
+  font-size: 0.9em;
+}
+
+.pulpit-parallel-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sm-coral);
+  margin-bottom: 4px;
+}
+
+.pulpit-verse-controls {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sm-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+
+.verse-ctrl-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.verse-ctrl-label {
+  color: var(--sm-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.verse-ctrl-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.verse-pill {
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border-strong);
+  color: #E4E4E7;
+  padding: 7px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verse-pill.active {
+  background-color: var(--sm-gold);
+  border-color: var(--sm-gold);
+  color: #0D0D0F;
+}
+
+.verse-ctrl-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.verse-jump-btn {
+  flex: 1;
+  min-width: 140px;
+  background-color: rgba(224, 108, 117, 0.14);
+  border: 1px solid var(--sm-coral);
+  color: var(--sm-coral);
+  padding: 9px 12px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verse-close-btn {
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border-strong);
+  color: var(--sm-text);
+  padding: 9px 14px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pulpit-bottom-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.pulpit-index-fab {
+  position: absolute;
+  bottom: 20px;
+  right: 18px;
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 9999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  z-index: 30;
+}
+
+/* ==========================================================================
+   MODO ALTO CONTRASTE (CLARO PURO EN PÚLPITO)
+   ========================================================================== */
+
+.pulpit-page.pulpit-light {
+  background-color: #FFFFFF;
+  color: #09090B;
+}
+
+.pulpit-light .pulpit-topbar {
+  background-color: #F4F4F5;
+  border-bottom-color: #D4D4D8;
+}
+
+.pulpit-light .pulpit-topbar-badge {
+  color: #27272A;
+}
+
+.pulpit-light .pulpit-top-btn {
+  background-color: #FFFFFF;
+  border-color: #D4D4D8;
+  color: #09090B;
+}
+
+.pulpit-light .pulpit-title-block,
+.pulpit-light .pulpit-conclusion {
+  border-color: #D4D4D8;
+}
+
+.pulpit-light .pulpit-title,
+.pulpit-light .pulpit-subtitle-block h2,
+.pulpit-light .pulpit-paragraph p {
+  color: #09090B;
+}
+
+.pulpit-light .pulpit-hint,
+.pulpit-light .pulpit-date-text,
+.pulpit-light .pulpit-point-label {
+  color: #52525B;
+}
+
+.pulpit-light .pulpit-tag-pill {
+  background-color: #FFE4E6;
+  color: #9F1239;
+}
+
+.pulpit-light .pulpit-section-kicker,
+.pulpit-light .pulpit-parallel-label {
+  color: #9F1239;
+}
+
+.pulpit-light .pulpit-point-num {
+  background-color: #9F1239;
+  color: #FFFFFF;
+}
+
+.pulpit-light .pulpit-highlight {
+  background-color: #F5F3FF;
+  border-color: #DDD6FE;
+  color: #18181B;
+}
+
+.pulpit-light .pulpit-section-kicker.kicker-purple {
+  color: #6D28D9;
+}
+
+.pulpit-light .pulpit-verse-card {
+  background-color: #FFFBEB;
+  border-color: #FDE68A;
+  border-left-color: #B45309;
+}
+
+.pulpit-light .pulpit-verse-ref {
+  color: #92400E;
+}
+
+.pulpit-light .pulpit-verse-text {
+  color: #0F172A;
+}
+
+.pulpit-light .pulpit-parallel-box {
+  color: #334155;
+  border-left-color: #9F1239;
+}
+
+.pulpit-light .pulpit-verse-controls {
+  border-top-color: #FDE68A;
+}
+
+.pulpit-light .verse-pill {
+  background-color: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.pulpit-light .verse-pill.active {
+  background-color: #92400E;
+  border-color: #92400E;
+  color: #FFFFFF;
+}
+
+.pulpit-light .verse-jump-btn {
+  background-color: #FFF1F2;
+  border-color: #9F1239;
+  color: #9F1239;
+}
+
+.pulpit-light .verse-close-btn,
+.pulpit-light .sermon-btn-secondary {
+  background-color: #E4E4E7;
+  border-color: #A1A1AA;
+  color: #09090B;
+}
+
+.pulpit-light .pulpit-index-fab {
+  background-color: #9F1239;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   MODALES Y HOJAS INFERIORES (100% CONTENIDOS, SIN DESBORDAMIENTO)
+   ========================================================================== */
+
+.sermon-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  z-index: 1200;
+}
+
+.sermon-modal-backdrop.sheet-bottom {
+  align-items: flex-end;
+  padding: 12px;
+}
+
+.sermon-modal-box {
+  width: 100%;
+  max-width: 360px;
+  max-height: 84dvh;
+  overflow-y: auto;
+  background-color: var(--sm-surface);
+  border: 1px solid var(--sm-border-strong);
+  border-radius: 24px;
+  padding: 20px;
+  color: var(--sm-text);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.sermon-modal-box.modal-light {
+  background-color: #FFFFFF;
+  color: #09090B;
+  border-color: #CBD5E1;
+}
+
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-header-row h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.modal-close-x {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: #D4D4D8;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-light .modal-close-x {
+  background-color: #F4F4F5;
+  border-color: #D4D4D8;
+  color: #09090B;
+}
+
+.modal-desc-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--sm-text-muted);
+}
+
+.sermon-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Modal Etiqueta */
+.tag-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.tag-option-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: #E4E4E7;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tag-option-btn.active {
+  background-color: rgba(224, 108, 117, 0.16);
+  border-color: var(--sm-coral);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.check-mark {
+  color: var(--sm-coral);
+  font-weight: 700;
+}
+
+/* Modal Fecha */
+.date-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.date-picker-input {
+  width: 100%;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border-strong);
+  border-radius: 14px;
+  padding: 13px 14px;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-family: inherit;
+  color-scheme: dark;
+  outline: none;
+}
+
+.date-picker-input:focus {
+  border-color: var(--sm-coral);
+}
+
+.date-presets-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.date-preset-chip {
+  padding: 9px 6px;
+  border-radius: 12px;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+
+.date-preset-chip.active {
+  background-color: var(--sm-coral);
+  border-color: var(--sm-coral);
+  color: #0D0D0F;
+  font-weight: 700;
+}
+
+/* Ajustes de Púlpito: grupos apilados con grillas exactas */
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.setting-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--sm-text-muted);
+}
+
+.modal-light .setting-label {
+  color: #52525B;
+}
+
+.setting-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.setting-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.setting-btn {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border-strong);
+  color: #E4E4E7;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.setting-btn.full-width {
+  padding: 11px 12px;
+}
+
+.setting-btn.active {
+  background-color: var(--sm-coral);
+  border-color: var(--sm-coral);
+  color: #0D0D0F;
+  font-weight: 700;
+}
+
+.setting-value-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--sm-border);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--sm-text);
+}
+
+.modal-light .setting-btn {
+  background-color: #F4F4F5;
+  border-color: #D4D4D8;
+  color: #09090B;
+}
+
+.modal-light .setting-btn.active {
+  background-color: #9F1239;
+  border-color: #9F1239;
+  color: #FFFFFF;
+}
+
+.modal-light .setting-value-box {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #09090B;
+}
+
+.modal-done-btn {
+  width: 100%;
+  background-color: var(--sm-coral);
+  color: #0D0D0F;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.modal-light .modal-done-btn {
+  background-color: #9F1239;
+  color: #FFFFFF;
+}
+
+/* Índice rápido */
+.pulpit-index-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 46dvh;
+  overflow-y: auto;
+}
+
+.pulpit-index-item {
+  text-align: left;
+  background-color: var(--sm-elevated);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-text);
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pulpit-index-item.is-verse {
+  color: var(--sm-gold);
+  font-size: 12.5px;
+}
+
+.modal-light .pulpit-index-item {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.modal-light .pulpit-index-item.is-verse {
+  color: #92400E;
+}
+
+/* Toast */
+.sermon-toast {
+  position: fixed;
+  bottom: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--sm-elevated);
+  color: var(--sm-text);
+  border: 1px solid var(--sm-border-strong);
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  z-index: 1500;
+  white-space: nowrap;
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.sermon-toast.editor-toast {
+  bottom: 120px;
+}
+
+/* Botón Compartir prédica */
+.sermon-btn-share {
+  background-color: rgba(224, 108, 117, 0.14);
+  border: 1px solid rgba(224, 108, 117, 0.4);
+  color: var(--sm-coral);
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.sermon-btn-share:active {
+  background-color: rgba(224, 108, 117, 0.24);
+}
+
+.pulpit-light .sermon-btn-share {
+  background-color: #FFF1F2;
+  border-color: #9F1239;
+  color: #9F1239;
+}
+
+.editor-dev-header {
+  flex-wrap: wrap;
+}
+
+.editor-dev-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.share-sermon-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background-color: rgba(224, 108, 117, 0.12);
+  border: 1px solid rgba(224, 108, 117, 0.35);
+  color: var(--sm-coral);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.share-sermon-pill-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pulpit-bottom-actions {
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE — CELULARES CHICOS, TABLET Y PC (MODO PRÉDICA)
+   ========================================================================== */
+
+/* Celulares chicos (320px - 375px) */
+@media (max-width: 375px) {
+  .sermon-topbar,
+  .pulpit-topbar {
+    padding: 10px 12px;
+  }
+
+  .sermon-topbar-title {
+    font-size: 15.5px;
+  }
+
+  .sermon-back-btn {
+    font-size: 13px;
+  }
+
+  .sermon-primary-pill {
+    padding: 6px 11px;
+    font-size: 12px;
+  }
+
+  .sermon-save-pill {
+    padding: 3px 8px;
+    font-size: 10.5px;
+  }
+
+  .editor-canvas-scroll {
+    padding: 16px 14px 24px;
+  }
+
+  .editor-canvas-title {
+    font-size: 21px;
+  }
+
+  .block-picker-card {
+    padding: 11px;
+    gap: 8px;
+  }
+
+  .verse-version-select {
+    width: 84px;
+    font-size: 12px;
+  }
+
+  .pulpit-topbar-badge {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .pulpit-content {
+    padding: 18px 15px 96px;
+  }
+}
+
+/* Tablet (>= 768px) */
+@media (min-width: 768px) {
+  .sermon-topbar,
+  .pulpit-topbar {
+    padding: 14px 28px;
+  }
+
+  .sermon-search-wrap {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 28px 12px;
+  }
+
+  /* Biblioteca en 2 columnas */
+  .sermon-library-list {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 12px 28px 90px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-content: start;
+  }
+
+  .sermon-empty-msg,
+  .sermon-empty-box {
+    grid-column: 1 / -1;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Editor centrado en columna editorial (scrollbar al borde derecho) */
+  .editor-canvas-scroll {
+    padding: 32px 32px 36px;
+  }
+
+  .editor-canvas-scroll > * {
+    width: 100%;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty-blocks-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .editor-sticky-footer {
+    padding: 12px 28px 16px;
+  }
+
+  .editor-sticky-footer > * {
+    width: 100%;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Modo Púlpito centrado tipo atril / teleprompter */
+  .pulpit-content {
+    padding: 36px 36px 110px;
+  }
+
+  .pulpit-content > * {
+    width: 100%;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pulpit-index-fab {
+    bottom: 28px;
+    right: 32px;
+    padding: 13px 22px;
+    font-size: 14.5px;
+  }
+
+  /* Modales centrados en pantallas medianas/grandes */
+  .sermon-modal-backdrop.sheet-bottom {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .sermon-modal-box {
+    max-width: 440px;
+    padding: 24px;
+  }
+}
+
+/* PC / Escritorio (>= 1024px) */
+@media (min-width: 1024px) {
+  .sermon-search-wrap,
+  .sermon-library-list {
+    max-width: 1120px;
+  }
+
+  .sermon-library-list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    padding-bottom: 48px;
+  }
+
+  .editor-sticky-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .editor-sticky-footer .quick-add-strip {
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  .editor-sticky-footer .editor-pulpit-cta {
+    width: auto;
+    min-width: 280px;
+    max-width: 340px;
+    margin: 0;
+  }
+
+  .sermon-toast {
+    bottom: 28px;
+  }
+
+  .sermon-toast.editor-toast {
+    bottom: 86px;
+  }
+
+  .pulpit-content {
+    padding: 40px clamp(44px, 5vw, 88px) 120px;
+  }
+
+  .pulpit-content > * {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
