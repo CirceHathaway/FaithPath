@@ -293,7 +293,7 @@ export default function Devotional({ navigateToBibleReference }) {
   const handleShare = () => {
     if (!devotionalData) return;
 
-    const appLink = '\n\n📲 Lee más devocionales y la Biblia interactiva en FaithPath: https://tu-app-url.com';
+    const appLink = '\n\n📲 Lee más devocionales y la Biblia interactiva en FaithPath: https://faith-path.netlify.app';
 
     const textToShare = `${devotionalData.title}\n\n${devotionalData.introText ? devotionalData.introText + '\n\n' : ''}"${devotionalData.verseText}"\n- ${devotionalData.formattedRef}\n\n${devotionalData.bodyText}\n\n${devotionalData.conclusionText ? devotionalData.conclusionText : ''}${appLink}`.trim();
 
