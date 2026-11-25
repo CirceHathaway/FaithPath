@@ -4,6 +4,7 @@ import './Bible.css';
 import { rv1960 } from '../data/rv1960';
 import { rvc } from '../data/rvc';
 import { nvi } from '../data/nvi';
+import { generateVerseImage, formatVerseRanges } from '../utils/verseImageGenerator';
 
 const bibleDataMap = {
   'RVR1960': rv1960,
@@ -27,6 +28,12 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
   const [fontSizeOffset, setFontSizeOffset] = useState(100);
 
   const [selectedVerses, setSelectedVerses] = useState([]);
+
+  // Estado del modal de compartir versículo como imagen
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [generatingImage, setGeneratingImage] = useState(false);
+  const [verseImageData, setVerseImageData] = useState(null); // { blob, previewUrl, reference, fileName }
+  const [imageFeedback, setImageFeedback] = useState('');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [parallelVersion, setParallelVersion] = useState('Desactivado');
@@ -62,6 +69,15 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
       setParallelVersion('Desactivado');
     }
   }, [view]);
+
+  // Libera la URL temporal del Blob al cerrar o desmontar
+  useEffect(() => {
+    return () => {
+      if (verseImageData?.previewUrl) {
+        URL.revokeObjectURL(verseImageData.previewUrl);
+      }
+    };
+  }, [verseImageData]);
 
   // Asegura que cada capítulo abra siempre desde arriba del todo
   useEffect(() => {
@@ -314,6 +330,90 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
   const handleCopy = () => { navigator.clipboard.writeText(getSelectedText()); setSelectedVerses([]); };
   const handleShare = () => { if (navigator.share) navigator.share({ title: `${activeBook.name} ${activeChapter.id}`, text: getSelectedText() }).catch(console.error); else { handleCopy(); alert("Copiado."); } setSelectedVerses([]); };
 
+  // Genera la imagen del versículo seleccionado y abre la vista previa
+  const handleCreateVerseImage = async () => {
+    if (selectedVerses.length === 0) return;
+
+    const sortedVerses = [...selectedVerses].sort((a, b) => a - b);
+    const combinedText = sortedVerses
+      .map((vNum) => activeChapter.verses.find((v) => v.number === vNum)?.text || '')
+      .filter(Boolean)
+      .join(' ');
+
+    const rangeStr = formatVerseRanges(sortedVerses);
+    const reference = `${activeBook.name} ${activeChapter.id}:${rangeStr}`;
+    const safeFileName = `FaithPath-${activeBook.name}-${activeChapter.id}-${rangeStr}`
+      .replace(/[^a-zA-Z0-9_-]/g, '_') + '.png';
+
+    setSelectedVerses([]);
+    setImageFeedback('');
+    setImageModalOpen(true);
+    setGeneratingImage(true);
+
+    try {
+      const { blob, previewUrl } = await generateVerseImage({
+        verseText: combinedText,
+        reference,
+        version: activeVersion,
+        isNewTestament
+      });
+
+      setVerseImageData({
+        blob,
+        previewUrl,
+        reference,
+        fileName: safeFileName
+      });
+    } catch (err) {
+      console.error('Error al generar la imagen del versículo:', err);
+      setImageFeedback('No se pudo generar la imagen. Intenta nuevamente.');
+    } finally {
+      setGeneratingImage(false);
+    }
+  };
+
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+    setImageFeedback('');
+    setVerseImageData(null);
+  };
+
+  const handleDownloadVerseImage = () => {
+    if (!verseImageData?.previewUrl) return;
+    const link = document.createElement('a');
+    link.href = verseImageData.previewUrl;
+    link.download = verseImageData.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setImageFeedback('Imagen descargada.');
+  };
+
+  const handleShareVerseImage = async () => {
+    if (!verseImageData?.blob) return;
+
+    const file = new File([verseImageData.blob], verseImageData.fileName, {
+      type: 'image/png'
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: verseImageData.reference
+        });
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        console.warn('Error al compartir imagen:', err);
+      }
+    }
+
+    // Respaldo automático en navegadores de escritorio que no soportan compartir archivos
+    handleDownloadVerseImage();
+    setImageFeedback('Tu navegador no admite envío directo: imagen descargada.');
+  };
+
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -531,14 +631,28 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
 
         {selectedVerses.length > 0 && (
           <div className="selection-toolbar">
-            <span className="selection-count">{selectedVerses.length} seleccionados</span>
+            <span className="selection-count">{selectedVerses.length} sel.</span>
             <div className="selection-actions">
-              <button className="action-btn" onClick={handleHighlight}><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Resaltar</span></button>
-              <button className="action-btn" onClick={handleCopy}><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button>
-              <button className="action-btn" onClick={handleShare}><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span>Compartir</span></button>
+              <button className="action-btn" onClick={handleHighlight}>
+                <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" strokeWidth="2" fill="none"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                <span>Resaltar</span>
+              </button>
+              <button className="action-btn" onClick={handleCopy}>
+                <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" strokeWidth="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copiar</span>
+              </button>
+              <button className="action-btn" onClick={handleCreateVerseImage}>
+                <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Imagen</span>
+              </button>
+              <button className="action-btn" onClick={handleShare}>
+                <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" strokeWidth="2" fill="none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span>Compartir</span>
+              </button>
             </div>
           </div>
         )}
+
         {selectedVerses.length === 0 && (
           <div className="fab-container">
             <button
@@ -561,6 +675,60 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
             >
               <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
             </button>
+          </div>
+        )}
+
+        {/* Modal de vista previa de imagen del versículo (cierre exclusivo con botón) */}
+        {imageModalOpen && (
+          <div className="verse-image-modal-backdrop">
+            <div className="verse-image-modal-box">
+              <div className="verse-image-modal-header">
+                <h3>Imagen del versículo</h3>
+                <button
+                  type="button"
+                  className="verse-image-close-btn"
+                  onClick={handleCloseImageModal}
+                  aria-label="Cerrar"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="verse-image-preview-wrap">
+                {generatingImage ? (
+                  <p className="verse-image-loading">Generando imagen...</p>
+                ) : verseImageData?.previewUrl ? (
+                  <img
+                    src={verseImageData.previewUrl}
+                    alt={verseImageData.reference}
+                    className="verse-image-preview"
+                  />
+                ) : (
+                  <p className="verse-image-loading">No se pudo cargar la vista previa.</p>
+                )}
+              </div>
+
+              {imageFeedback && <p className="verse-image-feedback">{imageFeedback}</p>}
+
+              <div className="verse-image-modal-actions">
+                <button
+                  type="button"
+                  className="verse-image-btn-primary"
+                  disabled={generatingImage || !verseImageData}
+                  onClick={handleShareVerseImage}
+                >
+                  Compartir
+                </button>
+                <button
+                  type="button"
+                  className="verse-image-btn-secondary"
+                  disabled={generatingImage || !verseImageData}
+                  onClick={handleDownloadVerseImage}
+                >
+                  Descargar
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
