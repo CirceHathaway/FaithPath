@@ -63,6 +63,22 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
     }
   }, [view]);
 
+  // Asegura que cada capítulo abra siempre desde arriba del todo
+  useEffect(() => {
+    if (view === 'lectura') {
+      if (readingContainerRef.current) {
+        readingContainerRef.current.scrollTo({ top: 0, behavior: 'instant' });
+        readingContainerRef.current.scrollTop = 0;
+      }
+      const appContainer = document.querySelector('.app-container');
+      if (appContainer) {
+        appContainer.scrollTop = 0;
+      }
+      window.scrollTo(0, 0);
+      setIsScrolled(false);
+    }
+  }, [view, activeBookIndex, activeChapterIndex]);
+
   useImperativeHandle(ref, () => ({
     reset: () => {
       setView('libros');
@@ -456,7 +472,14 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
           </>
         )}
 
-        <div className="verses-container" ref={readingContainerRef} onScroll={handleReadingScroll} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <div
+          key={`verses-${activeBook.id}-${activeChapter.id}`}
+          className="verses-container"
+          ref={readingContainerRef}
+          onScroll={handleReadingScroll}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="summary-toggle" onClick={() => setIsSummaryOpen(!isSummaryOpen)}>{activeBook.name} {activeChapter.id} resumen {isSummaryOpen ? '∧' : '∨'}</div>
           {isSummaryOpen && <div className="summary-box"><p>{activeChapter.summary}</p></div>}
           <div className="verses-list" style={{ fontSize: `${(fontSizeOffset / 100) * 19}px` }}>

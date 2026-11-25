@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import BottomNav from './components/BottomNav';
 import Home from './pages/Home';
 import Devotional from './pages/Devotional';
@@ -11,7 +11,35 @@ function App() {
   const [currentTab, setCurrentTab] = useState('home');
   const [isReadingMode, setIsReadingMode] = useState(false);
   const [isPulpitMode, setIsPulpitMode] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(() => {
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    );
+  });
+
   const bibleRef = useRef(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setInstallPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
 
   const resetBible = () => {
     if (bibleRef.current) {
@@ -44,6 +72,9 @@ function App() {
           <Login
             navigateToBibleReference={navigateToBibleReference}
             setIsPulpitMode={setIsPulpitMode}
+            installPrompt={installPrompt}
+            isAppInstalled={isAppInstalled}
+            clearInstallPrompt={() => setInstallPrompt(null)}
           />
         );
       default:
@@ -55,7 +86,7 @@ function App() {
     <BibleProvider>
       <div
         className="app-container"
-        style={isPulpitMode ? { height: '100vh' } : undefined}
+        style={isPulpitMode ? { height: '100dvh' } : undefined}
       >
         {renderContent()}
       </div>

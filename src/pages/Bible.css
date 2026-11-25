@@ -457,6 +457,12 @@
   color: #aaa;
 }
 
+.verse-number {
+  font-size: 16px;
+  color: #cf666d;
+  margin-right: 6px;
+}
+
 .fab-container {
   position: absolute;
   bottom: 20px;
