@@ -7,7 +7,7 @@ export const nvi = {
       name: "Deuteronomio",
       testament: "Antiguo Testamento",
       type: "Ley",
-      desc: "Deuteronomio es el quinto y último libro del Pentateuco, que recoge los discursos de despedida de Moisés a la nueva generación de israelitas en las llanuras de Moab, antes de cruzar el Jordán hacia la Tierra Prometida. A lo largo de sus treinta y cuatro capítulos repasa la fidelidad de Dios en el desierto, renueva el pacto y la ley —incluidos los Diez Mandamientos—, llama a amar y obedecer al Señor de todo corazón, expone las bendiciones y maldiciones, designa a Josué como sucesor y concluye con el cántico, la bendición final y la muerte de Moisés.",
+      desc: "Deuteronomio reúne los últimos discursos de Moisés antes de entrar a la Tierra Prometida. Recuerda la fidelidad de Dios, renueva el pacto y llama al pueblo a amarlo y obedecerlo, preparando a Josué como su sucesor.",
       chapters: [
         {
           chapterNumber: 1,
@@ -1179,7 +1179,7 @@ export const nvi = {
       name: "Nehemías",
       testament: "Antiguo Testamento",
       type: "Históricos",
-      desc: "Nehemías es un libro histórico que relata la reconstrucción de las murallas de Jerusalén y la renovación espiritual del pueblo judío tras el regreso del destierro en Babilonia. A lo largo de sus trece capítulos muestra el liderazgo firme y de oración de Nehemías frente a la oposición externa y las injusticias internas, la lectura pública de la ley junto a Esdras, la renovación del pacto con Dios y las reformas finales para restaurar el culto y la obediencia.",
+      desc: "Nehemías relata la reconstrucción de las murallas de Jerusalén y la restauración espiritual del pueblo. Destaca el liderazgo de Nehemías, la renovación del compromiso con Dios y el regreso a la obediencia de su Palabra.",
       chapters: [
         {
           chapterNumber: 1,
@@ -1668,11 +1668,129 @@ export const nvi = {
       ]
     },
     {
+      id: 8,
+      name: "Ruth",
+      testament: "Antiguo Testamento",
+      type: "Históricos",
+      desc: "Ruth relata la lealtad de una mujer moabita hacia su suegra Noemí y su fe en Dios. A través de su encuentro con Booz, muestra la redención y cómo Ruth llega a formar parte de la descendencia del rey David.",
+      chapters: [
+        {
+          chapterNumber: 1,
+          summary: "Ante una época de hambre en Belén, Elimélec emigra a Moab con su esposa Noemí y sus dos hijos, quienes se casan con las moabitas Orfa y Ruth. Tras la muerte de los tres hombres, Noemí decide volver a Judá; Orfa regresa con su familia, pero Ruth se aferra a su suegra jurándole lealtad eterna a ella y al Dios de Israel, llegando juntas a Belén al inicio de la cosecha de cebada.",
+          verses: [
+            { number: 1, title: "Noemí y Ruth", text: "En el tiempo en que los caudillos gobernaban el país, hubo allí una época de hambre. Entonces un hombre de Belén de Judá emigró a la tierra de Moab, junto con su esposa y sus dos hijos." },
+            { number: 2, text: "El hombre se llamaba Elimélec, su esposa se llamaba Noemí y sus dos hijos, Majlón y Quilión, todos ellos efrateos, de Belén de Judá. Cuando llegaron a la tierra de Moab, se quedaron a vivir allí." },
+            { number: 3, text: "Pero murió Elimélec, esposo de Noemí, y ella se quedó sola con sus dos hijos." },
+            { number: 4, text: "Éstos se casaron con mujeres moabitas, la una llamada Orfa y la otra Ruth. Después de haber vivido allí unos diez años," },
+            { number: 5, text: "murieron también Majlón y Quilión, y Noemí se quedó viuda y sin hijos." },
+            { number: 6, text: "Noemí regresó de la tierra de Moab con sus dos nueras, porque allí se enteró de que el Señor había acudido en ayuda de su pueblo al proveerle de alimento." },
+            { number: 7, text: "Salió, pues, con sus dos nueras del lugar donde había vivido, y juntas emprendieron el camino que las llevaría hasta la tierra de Judá." },
+            { number: 8, text: "Entonces Noemí les dijo a sus dos nueras: ¡Miren, vuelva cada una a la casa de su madre! Que el Señor las trate a ustedes con el mismo amor y lealtad que ustedes han mostrado con los que murieron y conmigo." },
+            { number: 9, text: "Que el Señor les conceda hallar seguridad en un nuevo hogar, al lado de un nuevo esposo. Luego las besó. Pero ellas, deshechas en llanto, alzaron la voz" },
+            { number: 10, text: "y exclamaron: ¡No! Nosotras volveremos contigo a tu pueblo." },
+            { number: 11, text: "¡Vuelvan a su casa, hijas mías! insistió Noemí. ¿Para qué se van a ir conmigo? ¿Acaso voy a tener más hijos que pudieran casarse con ustedes?" },
+            { number: 12, text: "¡Vuelvan a su casa, hijas mías! ¡Váyanse! Yo soy demasiado vieja para volver a casarme. Aun si abrigara esa esperanza, y esta misma noche me casara y llegara a tener hijos," },
+            { number: 13, text: "¿los esperarían ustedes hasta que crecieran? ¿Y por ellos se quedarían sin casarse? ¡No, hijas mías! Mi amargura es mayor que la de ustedes; ¡la mano del Señor se ha levantado contra mí!" },
+            { number: 14, text: "Una vez más alzaron la voz, deshechas en llanto. Luego Orfa se despidió de su suegra con un beso, pero Ruth se aferró a ella." },
+            { number: 15, text: "Mira dijo Noemí, tu cuñada se vuelve a su pueblo y a sus dioses. Vuélvete con ella." },
+            { number: 16, text: "Pero Ruth respondió: ¡No insistas en que te abandone o en que me separe de ti! »Porque iré adonde tú vayas, y viviré donde tú vivas. Tu pueblo será mi pueblo, y tu Dios será mi Dios." },
+            { number: 17, text: "Moriré donde tú mueras, y allí seré sepultada. ¡Que me castigue el Señor con toda severidad si me separa de ti algo que no sea la muerte!" },
+            { number: 18, text: "Al ver Noemí que Ruth estaba tan decidida a acompañarla, no le insistió más." },
+            { number: 19, text: "Entonces las dos mujeres siguieron caminando hasta llegar a Belén. Apenas llegaron, hubo gran conmoción en todo el pueblo a causa de ellas. ¿No es ésta Noemí? se preguntaban las mujeres del pueblo." },
+            { number: 20, text: "Ya no me llamen Noemí repuso ella. Llámenme Mara, porque el Todopoderoso ha colmado mi vida de amargura." },
+            { number: 21, text: "»Me fui con las manos llenas, pero el Señor me ha hecho volver sin nada. ¿Por qué me llaman Noemí si me ha afligido el Señor, si me ha hecho desdichada el Todopoderoso?" },
+            { number: 22, text: "Así fue como Noemí volvió de la tierra de Moab acompañada por su nuera, Ruth la moabita. Cuando llegaron a Belén, comenzaba la cosecha de cebada." }
+          ]
+        },
+        {
+          chapterNumber: 2,
+          summary: "Ruth sale a recoger espigas y llega providencialmente al campo de Booz, un pariente rico e influyente de Elimélec. Al saber de la lealtad de Ruth hacia Noemí, Booz la protege, la bendice y ordena a sus criados favorecerla; al regresar con abundante cebada, Noemí bendice al Señor y le revela a Ruth que Booz es uno de sus parientes redentores.",
+          verses: [
+            { number: 1, title: "Encuentro de Ruth con Booz", text: "Noemí tenía, por parte de su esposo, un pariente que se llamaba Booz. Era un hombre rico e influyente de la familia de Elimélec." },
+            { number: 2, text: "Y sucedió que Ruth la moabita le dijo a Noemí: Permíteme ir al campo a recoger las espigas que vaya dejando alguien a quien yo le caiga bien. Anda, hija mía le respondió su suegra." },
+            { number: 3, text: "Ruth salió y comenzó a recoger espigas en el campo, detrás de los segadores. Y dio la casualidad de que el campo donde estaba trabajando pertenecía a Booz, el pariente de Elimélec." },
+            { number: 4, text: "En eso llegó Booz desde Belén y saludó a los segadores: ¡Que el Señor esté con ustedes! ¡Que el Señor lo bendiga! respondieron ellos." },
+            { number: 5, text: "¿De quién es esa joven? preguntó Booz al capataz de sus segadores." },
+            { number: 6, text: "Es una joven moabita que volvió de la tierra de Moab con Noemí le contestó el capataz." },
+            { number: 7, text: "Ella me rogó que la dejara recoger espigas de entre las gavillas, detrás de los segadores. No ha dejado de trabajar desde esta mañana que entró en el campo, hasta ahora que ha venido a descansar un rato en el cobertizo." },
+            { number: 8, text: "Entonces Booz le dijo a Ruth: Escucha, hija mía. No vayas a recoger espigas a otro campo, ni te alejes de aquí; quédate junto a mis criadas," },
+            { number: 9, text: "fíjate bien en el campo donde se esté cosechando, y síguelas. Ya les ordené a los criados que no te molesten. Y cuando tengas sed, ve adonde están las vasijas y bebe del agua que los criados hayan sacado." },
+            { number: 10, text: "Ruth se inclinó hacia la tierra, se postró sobre su rostro y exclamó: ¿Cómo es que le he caído tan bien a usted, hasta el punto de fijarse en mí, siendo sólo una extranjera?" },
+            { number: 11, text: "Ya me han contado le respondió Booz todo lo que has hecho por tu suegra desde que murió tu esposo; cómo dejaste padre y madre, y la tierra donde naciste, y viniste a vivir con un pueblo que antes no conocías." },
+            { number: 12, text: "¡Que el Señor te recompense por lo que has hecho! Que el Señor, Dios de Israel, bajo cuyas alas has venido a refugiarte, te lo pague con creces." },
+            { number: 13, text: "¡Ojalá siga yo siendo de su agrado, mi señor! contestó ella. Usted me ha consolado y me ha hablado con cariño, aunque ni siquiera soy como una de sus servidoras." },
+            { number: 14, text: "A la hora de comer, Booz le dijo: Ven acá. Sírvete pan y moja tu bocado en el vinagre. Cuando Ruth se sentó con los segadores, Booz le ofreció grano tostado. Ella comió, quedó satisfecha, y hasta le sobró." },
+            { number: 15, text: "Después, cuando ella se levantó a recoger espigas, él dio estas órdenes a sus criados: Aun cuando saque espigas de las gavillas mismas, no la hagan pasar vergüenza." },
+            { number: 16, text: "Más bien, dejen caer algunas espigas de los manojos para que ella las recoja, ¡y no la reprendan!" },
+            { number: 17, text: "Así que Ruth recogió espigas en el campo hasta el atardecer. Luego desgranó la cebada que había recogido, la cual pesó más de veinte kilos." },
+            { number: 18, text: "La cargó de vuelta al pueblo, y su suegra vio cuánto traía. Además, Ruth le entregó a su suegra lo que le había quedado después de haber comido hasta quedar satisfecha." },
+            { number: 19, text: "Su suegra le preguntó: ¿Dónde recogiste espigas hoy? ¿Dónde trabajaste? ¡Bendito sea el hombre que se fijó en ti! Entonces Ruth le contó a su suegra acerca del hombre con quien había estado trabajando. Le dijo: El hombre con quien hoy trabajé se llama Booz." },
+            { number: 20, text: "¡Que el Señor lo bendiga! exclamó Noemí delante de su nuera. El Señor no ha dejado de mostrar su fiel amor hacia los vivos y los muertos. Ese hombre es nuestro pariente cercano; es uno de los parientes que nos pueden redimir." },
+            { number: 21, text: "Ruth la moabita añadió: Incluso me dijo que me quede allí con sus criados hasta que terminen de recogerle toda la cosecha." },
+            { number: 22, text: "Hija mía, te conviene seguir con sus criadas le dijo Noemí, para que no se aprovechen de ti en otro campo." },
+            { number: 23, text: "Así que Ruth se quedó junto con las criadas de Booz para recoger espigas hasta que terminó la cosecha de la cebada y del trigo. Mientras tanto, vivía con su suegra." }
+          ]
+        },
+        {
+          chapterNumber: 3,
+          summary: "Buscando asegurar un hogar para Ruth, Noemí la instruye para presentarse ante Booz esa noche en la era. Ruth obedece y le pide a Booz que ejerza su papel de pariente redentor; Booz elogia su carácter ejemplar, le jura resolver el asunto respetando primero el derecho de un pariente más cercano y la envía de vuelta a Noemí con veinte kilos de cebada.",
+          verses: [
+            { number: 1, title: "Ruth y Booz en la era", text: "Un día su suegra Noemí le dijo: Hija mía, ¿no debiera yo buscarte un hogar seguro donde no te falte nada?" },
+            { number: 2, text: "Además, ¿acaso Booz, con cuyas criadas has estado, no es nuestro pariente? Pues bien, él va esta noche a la era para aventar la cebada." },
+            { number: 3, text: "Báñate y perfúmate, y ponte tu mejor ropa. Baja luego a la era, pero no dejes que él se dé cuenta de que estás allí hasta que haya terminado de comer y beber." },
+            { number: 4, text: "Cuando se vaya a dormir, te fijas dónde se acuesta. Luego vas, le destapas los pies, y te acuestas allí. Verás que él mismo te dice lo que tienes que hacer." },
+            { number: 5, text: "Haré todo lo que me has dicho respondió Ruth." },
+            { number: 6, text: "Y bajó a la era e hizo todo lo que su suegra le había mandado." },
+            { number: 7, text: "Booz comió y bebió, y se puso alegre. Luego se fue a dormir detrás del montón de grano. Más tarde Ruth se acercó sigilosamente, le destapó los pies y se acostó allí." },
+            { number: 8, text: "A medianoche Booz se despertó sobresaltado y, al darse vuelta, descubrió que había una mujer acostada a sus pies." },
+            { number: 9, text: "¿Quién eres? le preguntó. Soy Ruth, su sierva. Extienda sobre mí el borde de su manto, ya que usted es un pariente que me puede redimir." },
+            { number: 10, text: "Que el Señor te bendiga, hija mía. Esta nueva muestra de lealtad de tu parte supera la anterior, ya que no has ido en busca de hombres jóvenes, sean ricos o pobres." },
+            { number: 11, text: "Y ahora, hija mía, no tengas miedo. Haré por ti todo lo que me pidas. Todo mi pueblo sabe que eres una mujer ejemplar." },
+            { number: 12, text: "Ahora bien, aunque es cierto que soy un pariente que puede redimirte, hay otro más cercano que yo." },
+            { number: 13, text: "Quédate aquí esta noche. Mañana, si él quiere redimirte, está bien que lo haga. Pero si no está dispuesto a hacerlo, ¡tan cierto como que el Señor vive, te juro que yo te redimiré! Ahora acuéstate aquí hasta que amanezca." },
+            { number: 14, text: "Así que se quedó acostada a sus pies hasta el amanecer, y se levantó cuando aún estaba oscuro; pues él había dicho: »Que no se sepa que una mujer vino a la era.»" },
+            { number: 15, text: "Luego Booz le dijo: Pásame el manto que llevas puesto y sosténlo firmemente. Ruth lo hizo así, y él echó en el manto veinte kilos de cebada y puso la carga sobre ella. Luego él regresó al pueblo." },
+            { number: 16, text: "Cuando Ruth llegó adonde estaba su suegra, ésta le preguntó: ¿Cómo te fue, hija mía? Ruth le contó todo lo que aquel hombre había hecho por ella," },
+            { number: 17, text: "y añadió: Me dio estos veinte kilos de cebada, y me dijo: No debes volver a tu suegra con las manos vacías." },
+            { number: 18, text: "Entonces Noemí le dijo: Espérate, hija mía, a ver qué sucede. Porque este hombre no va a descansar hasta dejar resuelto este asunto hoy mismo." }
+          ]
+        },
+        {
+          chapterNumber: 4,
+          summary: "En la puerta de la ciudad y ante diez ancianos, el pariente más cercano renuncia a su derecho de redención para no perjudicar su herencia, y Booz adquiere legalmente las tierras de Elimélec y toma a Ruth por esposa. Dios les concede un hijo llamado Obed, que renueva la alegría de Noemí, y el libro cierra trazando el linaje desde Fares hasta el rey David.",
+          verses: [
+            { number: 1, title: "Matrimonio de Booz y Ruth", text: "Booz, por su parte, subió hasta la puerta de la ciudad y se sentó allí. En eso pasó el pariente redentor que él había mencionado. Ven acá, amigo mío, y siéntate le dijo Booz. El hombre fue y se sentó." },
+            { number: 2, text: "Entonces Booz llamó a diez de los ancianos de la ciudad, y les dijo: Siéntense aquí. Y ellos se sentaron." },
+            { number: 3, text: "Booz le dijo al pariente redentor: Noemí, que ha regresado de la tierra de Moab, está vendiendo el terreno que perteneció a nuestro hermano Elimélec." },
+            { number: 4, text: "Consideré que debía informarte del asunto y sugerirte que lo compres en presencia de estos testigos y de los ancianos de mi pueblo. Si vas a redimir el terreno, hazlo. Pero si no vas a redimirlo, házmelo saber, para que yo lo sepa. Porque ningún otro tiene el derecho de redimirlo sino tú, y después de ti, yo tengo ese derecho. Yo lo redimo le contestó." },
+            { number: 5, text: "Pero Booz le aclaró: El día que adquieras el terreno de Noemí, adquieres también a Ruth la moabita, viuda del difunto, a fin de conservar su nombre junto con su heredad." },
+            { number: 6, text: "Entonces no puedo redimirlo respondió el pariente redentor, porque podría perjudicar mi propia herencia. Redímelo tú; te cedo mi derecho. Yo no puedo ejercerlo." },
+            { number: 7, text: "En aquellos tiempos, para ratificar la redención o el traspaso de una propiedad en Israel, una de las partes contratantes se quitaba la sandalia y se la daba a la otra. Así se acostumbraba legalizar los contratos en Israel." },
+            { number: 8, text: "Por eso el pariente redentor le dijo a Booz: Cómpralo tú. Y se quitó la sandalia." },
+            { number: 9, text: "Entonces Booz proclamó ante los ancianos y ante todo el pueblo: Hoy son ustedes testigos de que le he comprado a Noemí toda la propiedad de Elimélec, Quilión y Majlón," },
+            { number: 10, text: "y de que he tomado como esposa a Ruth la moabita, viuda de Majlón, a fin de preservar el nombre del difunto con su heredad, para que su nombre no desaparezca de entre su familia ni de los registros del pueblo. ¡Hoy son ustedes testigos!" },
+            { number: 11, text: "Los ancianos y todos los que estaban en la puerta respondieron: Somos testigos. »¡Que el Señor haga que la mujer que va a formar parte de tu hogar sea como Raquel y Lea, quienes juntas edificaron el pueblo de Israel! »¡Que seas un hombre ilustre en Efrata, y que adquieras renombre en Belén!" },
+            { number: 12, text: "»¡Que por medio de esta joven el Señor te conceda una descendencia tal que tu familia sea como la de Fares, el hijo que Tamar le dio a Judá!" },
+            { number: 13, title: "Ruth tiene un hijo", text: "Así que Booz tomó a Ruth y se casó con ella. Cuando se unieron, el Señor le concedió quedar embarazada, de modo que tuvo un hijo." },
+            { number: 14, text: "Las mujeres le decían a Noemí: »¡Alabado sea el Señor, que no te ha dejado hoy sin un redentor! ¡Que llegue a tener renombre en Israel!" },
+            { number: 15, text: "Este niño renovará tu vida y te sustentará en la vejez, porque lo ha dado a luz tu nuera, que te ama y es para ti mejor que siete hijos.»" },
+            { number: 16, text: "Noemí tomó al niño, lo puso en su regazo y se encargó de criarlo." },
+            { number: 17, text: "Las vecinas decían: »¡Noemí ha tenido un hijo!» Y lo llamaron Obed. Éste fue el padre de Isaí, padre de David." },
+            { number: 18, title: "Genealogía de David", text: "Así que éste es el linaje de Fares: Fares fue el padre de Jezrón;" },
+            { number: 19, text: "Jezrón, el padre de Ram; Ram, el padre de Aminadab;" },
+            { number: 20, text: "Aminadab, el padre de Naasón; Naasón, el padre de Salmón;" },
+            { number: 21, text: "Salmón, el padre de Booz; Booz, el padre de Obed;" },
+            { number: 22, text: "Obed, el padre de Isaí; e Isaí, el padre de David." }
+          ]
+        },
+      ]
+    },
+    {
       id: 17,
       name: "Ester",
       testament: "Antiguo Testamento",
       type: "Históricos",
-      desc: "Ester es un libro histórico ambientado en la corte persa de Susa durante el reinado del rey Asuero, que narra la providencial preservación del pueblo judío ante una amenaza de exterminio total. A lo largo de sus diez capítulos relata el ascenso de la joven judía Ester al trono, la conspiración genocida de Amán, la valentía de Ester y Mardoqueo para interceder ante el rey, la caída de sus enemigos y la institución anual de la fiesta de Purim.",
+      desc: "Ester relata cómo una joven judía se convierte en reina y, junto a Mardoqueo, logra salvar a su pueblo de un exterminio planeado por Amán. También narra la caída de sus enemigos y el origen de la fiesta de Purim.",
       chapters: [
         {
           chapterNumber: 1,
@@ -1899,6 +2017,296 @@ export const nvi = {
             { number: 1, title: "Grandeza de Mardoqueo", text: "El rey Asuero impuso tributo por todo el imperio, incluyendo las islas del mar." },
             { number: 2, text: "Todos los hechos de poder y autoridad de Mardoqueo, junto con un relato completo de la grandeza a la cual lo elevó el rey, se hallan registrados en las crónicas de los reyes de Media y Persia." },
             { number: 3, text: "El judío Mardoqueo fue preeminente entre su pueblo y segundo en jerarquía después del rey Asuero. Alcanzó gran estima entre sus muchos compatriotas, porque procuraba el bien de su pueblo y promovía su bienestar." }
+          ]
+        },
+      ]
+    },
+    {
+      id: 28,
+      name: "Oseas",
+      testament: "Antiguo Testamento",
+      type: "Profetas Menores",
+      desc: "Oseas es el primero de los Profetas Menores y presenta el doloroso matrimonio del profeta con la infiel Gómer como símbolo vivo de la relación entre Dios y un Israel idólatra. A lo largo de sus catorce capítulos denuncia la infidelidad espiritual, la corrupción moral y la falta de conocimiento de Dios, anuncia el juicio venidero y proclama con profunda ternura el amor persistente del Señor que llama al arrepentimiento y promete restauración.",
+      chapters: [
+        {
+          chapterNumber: 1,
+          summary: "Dios ordena al profeta Oseas casarse con Gómer, una prostituta, para simbolizar la infidelidad espiritual de Israel. Los nombres de sus tres hijos —Jezrel, Indigna de compasión y Pueblo ajeno— anuncian el juicio sobre el reino del norte, aunque el capítulo cierra prometiendo compasión para Judá y la futura reunificación y restauración de todo Israel como hijos del Dios viviente.",
+          verses: [
+            { number: 1, title: "Introducción", text: "Ésta es la palabra del Señor que vino a Oseas hijo de Beerí durante los reinados de Uzías, Jotán, Acaz y Ezequías, reyes de Judá, y durante el reinado de Jeroboán hijo de Joás, rey de Israel." },
+            { number: 2, title: "La esposa y los hijos de Oseas", text: "La primera vez que el Señor habló por medio de Oseas, le dijo: «Ve y toma por esposa una prostituta, y ten con ella hijos de prostitución, porque el país se ha prostituido por completo. ¡Se ha apartado del Señor!»" },
+            { number: 3, text: "Oseas fue y tomó por esposa a Gómer, hija de Diblayin, la cual concibió y le dio a luz un hijo." },
+            { number: 4, text: "Entonces el Señor le dijo: «Ponle por nombre Jezrel, porque dentro de poco haré que la casa real de Jehú pague por la masacre en Jezrel. Así pondré fin al dominio del reino de Israel." },
+            { number: 5, text: "Ese día quebraré el arco de Israel en el valle de Jezrel.»" },
+            { number: 6, text: "Gómer volvió a concebir y dio a luz una niña. Entonces el Señor le dijo a Oseas: «Ponle por nombre: Indigna de compasión, porque no volveré a compadecerme del reino de Israel, sino que le negaré el perdón." },
+            { number: 7, text: "En cambio, tendré compasión de la tribu de Judá, y la salvaré; pero no por medio de arco, ni de espada ni de batallas, ni tampoco por medio de caballos y jinetes, sino por medio del Señor su Dios.»" },
+            { number: 8, text: "Cuando Gómer destetó a la llamada «Indigna de compasión», volvió a concebir y tuvo otro hijo." },
+            { number: 9, text: "Entonces el Señor le dijo a Oseas: «Ponle por nombre: Pueblo ajeno, porque ni ustedes son mi pueblo, ni yo soy su Dios." },
+            { number: 10, text: "»Con todo, los israelitas serán tan numerosos como la arena del mar, que no se puede medir ni contar. Y en el mismo lugar donde se les llamó: Pueblo ajeno, se les llamará: Hijos del Dios viviente." },
+            { number: 11, text: "El pueblo de Judá se reunirá con el pueblo de Israel, y nombrarán un solo jefe y resurgirán en su país, porque grande será el día de Jezrel." }
+          ]
+        },
+        {
+          chapterNumber: 2,
+          summary: "El Señor acusa a Israel de infidelidad por atribuir a sus falsos dioses las bendiciones que Él mismo le proveyó, anunciando disciplina y escasez para cerrarle el paso hacia sus amantes. Sin embargo, promete volver a seducirla en el desierto hablándole con ternura, desposarla para siempre en justicia, amor y fidelidad, y transformar la sentencia anterior en compasión y pertenencia.",
+          verses: [
+            { number: 1, text: "»Llamen a sus hermanos: Pueblo mío, y a sus hermanas: Compadecidas." },
+            { number: 2, title: "Castigo y restauración de Israel", text: "»¡Échenle en cara a su madre que ni ella es mi esposa ni yo su esposo! ¡Que se quite del rostro el maquillaje de prostituta, y de entre los pechos los adornos de ramera!" },
+            { number: 3, text: "De lo contrario, la desnudaré por completo; la dejaré como el día en que nació. La pondré como un desierto: ¡la convertiré en tierra seca y la mataré de sed!" },
+            { number: 4, text: "No tendré compasión de sus hijos, porque son hijos de prostitución." },
+            { number: 5, text: "Su madre es una prostituta; ¡la que los concibió es una sinvergüenza! Pues dijo: Quiero ir tras mis amantes, que me dan mi pan y mi agua, mi lana y mi lino, mi aceite y mis bebidas." },
+            { number: 6, text: "Por eso le cerraré el paso con espinos; la encerraré para que no encuentre el camino." },
+            { number: 7, text: "Con ardor perseguirá a sus amantes, y al no encontrarlos dirá: Prefiero volver con mi primer esposo, porque antes me iba mejor que ahora." },
+            { number: 8, text: "Ella no ha querido reconocer que soy yo quien le da el grano, el vino nuevo y el aceite. Yo le he multiplicado la plata y el oro, ¿y qué hizo con ellos? ¡Falsos dioses!" },
+            { number: 9, text: "»Por eso, llegado el momento le quitaré mi trigo y mi vino nuevo. La dejaré sin la lana y el lino que le di para cubrir su desnudez." },
+            { number: 10, text: "Voy a exhibir su desvergüenza a la vista de sus amantes, y nadie la librará de mi mano." },
+            { number: 11, text: "Pondré fin a todo su jolgorio: sus peregrinaciones, sus lunas nuevas, sus días de reposo, y sus fiestas solemnes." },
+            { number: 12, text: "Devastaré sus vides y sus higueras, que consideraba la paga de sus amantes. Las convertiré en maleza, y los animales del campo acabarán con ellas." },
+            { number: 13, text: "La llamaré a cuentas por los días en que quemaba ofrendas a sus falsos dioses, cuando se adornaba con zarcillos y joyas, y olvidándose de mí, se iba tras sus amantes afirma el Señor." },
+            { number: 14, text: "»Por eso, ahora voy a seducirla: me la llevaré al desierto y le hablaré con ternura." },
+            { number: 15, text: "Allí le devolveré sus viñedos, y convertiré el valle de la Desgracia en el paso de la Esperanza. Allí me corresponderá, como en los días de su juventud, como en el día en que salió de Egipto." },
+            { number: 16, text: "»En aquel día afirma el Señor, ya no me llamarás: mi señor, sino que me dirás: esposo mío." },
+            { number: 17, text: "Te quitaré de los labios el nombre de tus falsos dioses, y nunca más volverás a invocarlos." },
+            { number: 18, text: "Aquel día haré en tu favor un pacto con los animales del campo, con las aves de los cielos y con los reptiles de la tierra. Eliminaré del país arcos, espadas y guerra, para que todos duerman seguros." },
+            { number: 19, text: "Yo te haré mi esposa para siempre, y te daré como dote el derecho y la justicia, el amor y la compasión." },
+            { number: 20, text: "Te daré como dote mi fidelidad, y entonces conocerás al Señor." },
+            { number: 21, text: "»En aquel día yo responderé afirma el Señor; yo le responderé al cielo, y el cielo le responderá a la tierra;" },
+            { number: 22, text: "la tierra les responderá al cereal, al vino nuevo y al aceite, y éstos le responderán a Jezrel." },
+            { number: 23, text: "Yo la sembraré para mí en la tierra; me compadeceré de la Indigna de compasión, a Pueblo ajeno lo llamaré: Pueblo mío; y él me dirá: Mi Dios.»" }
+          ]
+        },
+        {
+          chapterNumber: 3,
+          summary: "Dios manda a Oseas volver a amar y rescatar a su esposa adúltera como imagen del amor fiel del Señor hacia Israel. Oseas la compra y la aparta por un tiempo, simbolizando el largo período en que Israel vivirá sin rey ni sacrificios antes de volver a buscar con temor reverente al Señor y a David su rey.",
+          verses: [
+            { number: 1, title: "Oseas se reconcilia con su esposa", text: "Me habló una vez más el Señor, y me dijo: «Ve y ama a esa mujer adúltera, que es amante de otro. Ámala como ama el Señor a los israelitas, aunque se hayan vuelto a dioses ajenos y se deleiten con las tortas de pasas que les ofrecen.»" },
+            { number: 2, text: "Compré entonces a esa mujer por quince monedas de plata" },
+            { number: 3, text: "y una carga y media de cebada, y le dije: «Vas a vivir conmigo mucho tiempo, pero sin prostituirte. No tendrás relaciones sexuales con ningún otro hombre. ¡Ni yo te voy a tocar!»" },
+            { number: 4, text: "Ciertamente los israelitas vivirán mucho tiempo sin rey ni gobernante, sin sacrificio ni altares, ni efod ni ídolos." },
+            { number: 5, text: "Pero después los israelitas buscarán nuevamente al Señor su Dios, y a David su rey. En los últimos días acudirán con temor reverente al Señor y a sus bondades." }
+          ]
+        },
+        {
+          chapterNumber: 4,
+          summary: "El Señor entabla un pleito contra Israel porque no hay fidelidad, amor ni conocimiento de Dios, sino perjurio, violencia y adulterio. Reprende especialmente a los sacerdotes por rechazar el conocimiento y lucrarse con el pecado del pueblo, denuncia la idolatría y la prostitución ritual, y advierte a Judá que no imite la rebeldía de Efraín.",
+          verses: [
+            { number: 1, title: "Pleito contra Israel", text: "Escuchen, israelitas, la palabra del Señor, porque el Señor va a entrar en juicio contra los habitantes del país: «Ya no hay entre mi pueblo fidelidad ni amor, ni conocimiento de Dios." },
+            { number: 2, text: "Cunden, más bien, el perjurio y la mentira. Abundan el robo, el adulterio y el asesinato. ¡Un homicidio sigue a otro!" },
+            { number: 3, text: "Por tanto, se resecará la tierra, y desfallecerán todos sus habitantes. ¡Morirán las bestias del campo, las aves del cielo y los peces del mar!" },
+            { number: 4, text: "»¡Que nadie acuse ni reprenda a nadie! ¡Tu pueblo parece acusar al sacerdote!" },
+            { number: 5, text: "Tropiezas de día y de noche, y los profetas tropiezan contigo; tu madre dejará de existir," },
+            { number: 6, text: "pues por falta de conocimiento mi pueblo ha sido destruido. »Puesto que rechazaste el conocimiento, yo también te rechazo como mi sacerdote. Ya que te olvidaste de la ley de tu Dios, yo también me olvidaré de tus hijos." },
+            { number: 7, text: "Mientras más aumentaban los sacerdotes, más pecaban contra mí; cambiaron a quien es su gloria en algo deshonroso." },
+            { number: 8, text: "El pecado de mi pueblo es su comida; se regodean en su perversidad." },
+            { number: 9, text: "¡De tal pueblo, tal sacerdote! ¡Por eso les pediré cuentas de su conducta y les daré la paga de sus acciones!" },
+            { number: 10, text: "»Comerán, pero no quedarán satisfechos; se prostituirán, pero no se saciarán; porque han abandonado al Señor para entregarse" },
+            { number: 11, text: "a la prostitución y al vino, ¡al mosto que hace perder la razón!" },
+            { number: 12, text: "Mi pueblo consulta a su ídolo de madera, y ese pedazo de palo le responde; su tendencia a prostituirse los descarría; se prostituyen en abierto desafío a su Dios." },
+            { number: 13, text: "En la cumbre de montes y colinas queman ofrendas y ofrecen sacrificios, bajo la agradable sombra de robles, álamos y encinas. Por eso se prostituyen sus hijas y cometen adulterio sus nueras." },
+            { number: 14, text: "Pero no las castigaré por sus prostituciones y adulterios, porque sus propios maridos se juntan con prostitutas y celebran banquetes paganos con las sacerdotisas del templo. ¡Es así como acaba por hundirse un pueblo falto de entendimiento!" },
+            { number: 15, text: "»Si tú, Israel, te prostituyes, ¡que no resulte culpable Judá! »No vayan a Guilgal ni suban a Bet Avén, ni juren: ¡Por la vida del Señor!" },
+            { number: 16, text: "Israel es tan indómito como una novilla. ¿Cómo podrá el Señor pastorearlos en campo abierto, como a corderos?" },
+            { number: 17, text: "Efraín se ha aliado con las imágenes; ¡pues que se quede con ellas!" },
+            { number: 18, text: "Cuando ya no tienen licor, se entregan de lleno a la prostitución, ¡y hasta sus gobernantes aman la deshonra!" },
+            { number: 19, text: "¡Por eso un torbellino los arrastrará, y quedarán avergonzados por sus sacrificios!" }
+          ]
+        },
+        {
+          chapterNumber: 5,
+          summary: "Pronuncia sentencia contra los sacerdotes, el pueblo y la casa real de Israel —y también contra Judá— por su arrogancia, idolatría e infidelidad. Anuncia que ni sus sacrificios ni el auxilio del rey de Asiria podrán sanarlos, y que Dios actuará como polilla y león antes de retirarse hasta que reconozcan su culpa y lo busquen con ansias.",
+          verses: [
+            { number: 1, title: "Juicio contra Israel", text: "»¡Oigan esto, sacerdotes! ¡Pon atención, reino de Israel! ¡Escucha, casa real! ¡Contra ustedes es la sentencia! En Mizpa han sido ustedes una trampa; en el monte Tabor, una red tendida;" },
+            { number: 2, text: "en Sitín, una fosa abierta. Por eso, yo los disciplinaré." },
+            { number: 3, text: "Yo conozco bien a Efraín; Israel no me es desconocido. Pero ahora Efraín se ha prostituido; e Israel se ha mancillado." },
+            { number: 4, text: "»No les permiten sus malas obras volverse a su Dios; su tendencia a prostituirse les impide conocer al Señor." },
+            { number: 5, text: "La arrogancia de Israel testificará en su contra, Israel y Efraín tropezarán con su maldad, y hasta Judá caerá con ellos." },
+            { number: 6, text: "Con sus ovejas y sus vacas irán en busca del Señor, pero no lo encontrarán porque él se ha apartado de ellos." },
+            { number: 7, text: "Han traicionado al Señor; han dado a luz hijos de otros padres. ¡Ahora la destrucción devorará sus fincas!" },
+            { number: 8, text: "»Toquen la corneta en Guibeá, hagan sonar la trompeta en Ramá, lancen el grito de guerra en Bet Avén: ¡Cuídate las espaldas, Benjamín!" },
+            { number: 9, text: "En el día de la reprensión, Efraín quedará desolado. Entre las tribus de Israel doy a conocer lo que les va a pasar." },
+            { number: 10, text: "Las autoridades de Judá se parecen a los que alteran los linderos. ¡Pues derramaré mi enojo sobre ellos como si derramara un torrente de agua!" },
+            { number: 11, text: "Efraín está deprimido, aplastado por el juicio, empeñado en seguir a los ídolos." },
+            { number: 12, text: "¡Pues seré para Efraín como polilla, como carcoma para el pueblo de Judá!" },
+            { number: 13, text: "»Cuando Efraín vio su enfermedad y Judá reparó en sus llagas, Efraín recurrió a Asiria y pidió la ayuda del gran rey. Pero el rey no podrá sanarlo, ni tampoco curar sus llagas." },
+            { number: 14, text: "Yo seré como un león para Efraín, como un cachorro para Judá. Yo mismo los haré pedazos, y luego me alejaré; yo mismo me llevaré la presa, y no habrá quien me la arrebate." },
+            { number: 15, text: "Volveré luego a mi morada, hasta que reconozcan su culpa. Buscarán ganarse mi favor; angustiados, me buscarán con ansias.»" }
+          ]
+        },
+        {
+          chapterNumber: 6,
+          summary: "Incluye un llamado a volver al Señor confiando en que Él sana y da vida, pero Dios lamenta que el amor de Efraín y Judá sea pasajero como el rocío de la mañana. Declara que prefiere amor y conocimiento de Dios antes que sacrificios y holocaustos, y denuncia la traición al pacto y los crímenes cometidos incluso por sacerdotes.",
+          verses: [
+            { number: 1, title: "Impenitencia de Israel", text: "¡Vengan, volvámonos al Señor! Él nos ha despedazado, pero nos sanará; nos ha herido, pero nos vendará." },
+            { number: 2, text: "Después de dos días nos dará vida; al tercer día nos levantará, y así viviremos en su presencia." },
+            { number: 3, text: "Conozcamos al Señor; vayamos tras su conocimiento. Tan cierto como que sale el sol, él habrá de manifestarse; vendrá a nosotros como la lluvia de invierno, como la lluvia de primavera que riega la tierra." },
+            { number: 4, text: "«¿Qué voy a hacer contigo, Efraín? ¿Qué voy a hacer contigo, Judá? El amor de ustedes es como nube matutina, como rocío que temprano se evapora." },
+            { number: 5, text: "Por eso los hice pedazos por medio de los profetas; los herí con las palabras de mi boca. ¡Mi sentencia los fulminará como un relámpago!" },
+            { number: 6, text: "Lo que pido de ustedes es amor y no sacrificios, conocimiento de Dios y no holocaustos." },
+            { number: 7, text: "Son como Adán: han quebrantado el pacto, ¡me han traicionado!" },
+            { number: 8, text: "Galaad es una ciudad de malhechores; sus pisadas dejan huellas de sangre." },
+            { number: 9, text: "Una pandilla de sacerdotes está al acecho en el camino a Siquén, y como banda de salteadores, comete toda clase de infamias." },
+            { number: 10, text: "En el reino de Israel he visto algo horrible: Allí se prostituye Efraín y se mancilla Israel." },
+            { number: 11, text: "»¡A ti también, Judá, te espera la cosecha de tu maldad! »Cuando cambie yo la suerte de mi pueblo," }
+          ]
+        },
+        {
+          chapterNumber: 7,
+          summary: "Expone la corrupción política y moral de Samaria: intrigas palaciegas, embriaguez, asesinatos de reyes y alianzas insensatas con Egipto y Asiria. Compara a Efraín con un horno encendido, una torta cocida de un solo lado y una paloma torpe que no invoca de corazón al Señor ni se vuelve al Altísimo.",
+          verses: [
+            { number: 1, text: "cuando sane yo a Israel, la perversidad de Efraín y la maldad de Samaria quedarán al descubierto. Porque ellos cometen fraudes; mientras el ladrón se mete en las casas, una banda de salteadores roba en las calles." },
+            { number: 2, text: "No se ponen a pensar que yo tomo en cuenta todas sus maldades. Sus malas acciones los tienen cercados, y las tengo muy presentes." },
+            { number: 3, text: "»Con su maldad deleitan al rey; con sus mentiras, a las autoridades." },
+            { number: 4, text: "Parecen un horno encendido cuyo fuego no hace falta atizar desde que el panadero prepara la harina hasta que la masa fermenta. ¡Todos ellos son adúlteros!" },
+            { number: 5, text: "En la fiesta del rey las autoridades se encienden bajo los efectos del vino, y el rey pierde su dignidad codeándose con la plebe." },
+            { number: 6, text: "Como el horno, se les prende el corazón, dispuesto para la intriga. Su ira se adormece por la noche, pero se reaviva por la mañana." },
+            { number: 7, text: "Todos ellos arden como un horno; devoran a sus gobernantes. Caen todos sus reyes, pero ninguno de ellos me invoca." },
+            { number: 8, text: "»Efraín se mezcla con las naciones; parece una torta cocida de un solo lado." },
+            { number: 9, text: "Los extranjeros le minan las fuerzas, pero él ni cuenta se da. Su pelo se ha encanecido, pero él ni cuenta se da." },
+            { number: 10, text: "La arrogancia de Israel testifica en su contra, pero él no se vuelve al Señor su Dios; a pesar de todo esto, no lo busca." },
+            { number: 11, text: "»Efraín es como una paloma torpe y sin entendimiento, que unas veces pide ayuda a Egipto y otras, recurre a Asiria." },
+            { number: 12, text: "Pero tan pronto como lo hagan, lanzaré mi red sobre ellos; los derribaré como a las aves del cielo, ¡siete veces los castigaré por sus pecados!" },
+            { number: 13, text: "¡Ay de ellos, que de mí se alejaron! ¡Que sean destruidos por rebelarse contra mí! Yo bien podría redimirlos, pero ellos no me hablan con la verdad." },
+            { number: 14, text: "No me invocan de corazón, sino que se lamentan echados en sus camas. Para obtener grano y vino nuevo se laceran y se ponen en mi contra." },
+            { number: 15, text: "Yo adiestré y fortalecí sus brazos, pero ellos maquinan maldades contra mí." },
+            { number: 16, text: "No se vuelven al Altísimo; son como un arco engañoso. Sus autoridades caerán a filo de espada por sus palabras insolentes, y en la tierra de Egipto se burlarán de ellos." }
+          ]
+        },
+        {
+          chapterNumber: 8,
+          summary: "Anuncia el juicio inminente sobre Israel por quebrantar el pacto, establecer reyes sin la aprobación de Dios y adorar al becerro de Samaria. Advierte que quienes siembran vientos cosecharán tempestades, denuncia sus alianzas con Asiria y sus altares multiplicados para pecar, y profetiza fuego sobre las ciudades y fortalezas de Israel y Judá.",
+          verses: [
+            { number: 1, title: "Siembran vientos y cosechan tempestades", text: "»¡Da el toque de trompeta! ¡Un águila se cierne sobre la casa del Señor! Han quebrantado mi pacto y se han rebelado contra mi ley," },
+            { number: 2, text: "y ahora vienen a suplicarme: ¡Dios de Israel, te conocemos!" },
+            { number: 3, text: "Pero Israel ha rechazado el bien, así que un enemigo lo perseguirá." },
+            { number: 4, text: "Establecen reyes que yo no apruebo, y escogen autoridades que no conozco. Con su plata y con su oro se hacen imágenes para su propia destrucción." },
+            { number: 5, text: "Samaria, ¡arroja el becerro que tienes por ídolo! Contra ustedes se ha encendido mi ira. ¿Hasta cuándo estarán sin purificarse?" },
+            { number: 6, text: "Oye, Israel: Ese becerro no es Dios; es obra de un escultor. Ese becerro de Samaria será hecho pedazos." },
+            { number: 7, text: "»Sembraron vientos y cosecharán tempestades. El tallo no tiene espiga y no producirá harina; si acaso llegara a producirla, se la tragarían los extranjeros." },
+            { number: 8, text: "Pues a Israel se lo han tragado, y hoy es de poca estima entre las naciones." },
+            { number: 9, text: "Los israelitas subieron a Asiria; se apartaron como terco asno salvaje, y Efraín se ha comprado amantes." },
+            { number: 10, text: "Pero aunque se los compre entre las naciones, de allí volveré a reunirlos; y comenzarán a retorcerse bajo la opresión de un rey poderoso." },
+            { number: 11, text: "»Efraín edificó muchos altares para expiar sus pecados, pero éstos se han convertido en altares para pecar." },
+            { number: 12, text: "Yo podría escribirles mi ley muchas veces, pero ellos la verían como algo extraño." },
+            { number: 13, text: "Me han ofrecido sacrificios y ofrendas, y se han comido la carne, pero eso a mí no me agrada. Voy ahora a tomar en cuenta sus perversidades, y castigaré sus pecados; ¡y tendrán que regresar a Egipto!" },
+            { number: 14, text: "Israel se olvidó de su Hacedor y se edificó palacios; Judá multiplicó las ciudades amuralladas; pero yo lanzaré sobre sus ciudades y fortalezas un fuego que las consuma.»" }
+          ]
+        },
+        {
+          chapterNumber: 9,
+          summary: "Prohíbe a Israel alegrarse como las naciones porque su infidelidad traerá escasez, exilio a Egipto y Asiria, y el fin de sus fiestas y sacrificios. Recuerda la corrupción desde Baal Peor, Guibeá y Guilgal, anunciando esterilidad, pérdida de esplendor y que Dios los rechazará haciéndolos andar errantes entre las naciones.",
+          verses: [
+            { number: 1, title: "El castigo a Israel", text: "No te alegres, Israel; no hagas fiesta como las naciones. Porque te has prostituido: ¡le has sido infiel a tu Dios! Prefieres la paga de prostituta que recibes en todos los trigales." },
+            { number: 2, text: "Ni el trigo ni las uvas podrán alimentarlos; el vino nuevo no tendrá el gusto que esperaban." },
+            { number: 3, text: "No habitarán en la tierra del Señor; Efraín regresará a Egipto y comerá inmundicias en Asiria." },
+            { number: 4, text: "No le ofrecerán al Señor más libaciones de vino, ni le serán gratos sus sacrificios. Se les volverá pan de lágrimas; quienes lo coman quedarán impuros. Tal vez les sirva para matar el hambre, pero no tendrá cabida en la casa del Señor." },
+            { number: 5, text: "¿Qué harán ustedes en los días de fiesta, o en las peregrinaciones en honor del Señor?" },
+            { number: 6, text: "Aunque escapen de la destrucción, los recogerá Egipto y los enterrará Menfis. Sus tesoros de plata se llenarán de ortigas, y los espinos invadirán sus carpas." },
+            { number: 7, text: "Han llegado los días del castigo, han llegado los días de la retribución. ¡Que lo sepa Israel! Es tan grande tu maldad, y tan intensa tu hostilidad, que al profeta se le tiene por necio, y al hombre inspirado por loco." },
+            { number: 8, text: "El profeta, junto con Dios, es el centinela de Efraín, pero enfrenta trampas en todos sus caminos, y hostilidad en la casa de su Dios." },
+            { number: 9, text: "Han llegado al colmo de la corrupción, como en los días de Guibeá; ¡pero Dios se acordará de sus perversidades y los castigará por sus pecados!" },
+            { number: 10, text: "«Cuando encontré a Israel, fue como hallar uvas en el desierto; cuando vi a sus antepasados, fue como ver higos tiernos en la higuera. Pero ellos se fueron a Baal Peor y se entregaron a la vergüenza; ¡se volvieron tan detestables como el objeto de su amor!" },
+            { number: 11, text: "El esplendor de Efraín saldrá volando, como un ave; no habrá más concepción ni embarazo ni nacimiento." },
+            { number: 12, text: "Y aun cuando vean crecer a sus hijos, yo los arrebataré de este mundo. ¡Ay de ellos cuando los abandone!" },
+            { number: 13, text: "He visto a Efraín y a Tiro plantados en una pradera. ¡Pero Efraín entregará sus hijos al verdugo!»" },
+            { number: 14, text: "Dales, Señor … ¿qué les darás? ¡Dales vientres que aborten y pechos resecos!" },
+            { number: 15, text: "«Toda su maldad comenzó en Guilgal; allí comencé a aborrecerlos. Por causa de sus maldades, los expulsaré de mi casa. No volveré a amarlos, pues todas sus autoridades son rebeldes." },
+            { number: 16, text: "Efraín se ha marchitado: su raíz se secó y no produce fruto. Aunque llegue a tener hijos, mataré el precioso fruto de su vientre.»" },
+            { number: 17, text: "Como no lo obedecieron, mi Dios los rechazará; ¡andarán errantes entre las naciones!" }
+          ]
+        },
+        {
+          chapterNumber: 10,
+          summary: "Compara a Israel con una vid frondosa que usó su prosperidad para multiplicar altares e ídolos, anunciando la destrucción de sus santuarios, la vergüenza de llevar el becerro de Bet Avén como tributo a Asiria y la desaparición del rey de Samaria. Exhorta a sembrar justicia y buscar al Señor antes de que llegue la devastación de la guerra por haber confiado en su propia fuerza militar.",
+          verses: [
+            { number: 1, title: "Israel era una vid frondosa", text: "Israel era una vid frondosa que daba fruto a su antojo. Pero cuanto más aumentaba su fruto, más altares se construía; cuanto más prosperaba su país, más hermosas hacía sus piedras sagradas." },
+            { number: 2, text: "Su corazón es escurridizo, pero tendrá que cargar con su culpa. El Señor destrozará sus altares y devastará sus piedras sagradas." },
+            { number: 3, text: "Tal vez dirán: «No hemos temido al Señor, y por eso no tenemos rey. Pero aun si lo tuviéramos, ¿qué podría hacer por nosotros?»" },
+            { number: 4, text: "Hablan sólo por hablar; juran en falso y hacen tratos; ¡por eso florecen los pleitos como la mala yerba en el campo!" },
+            { number: 5, text: "Temen los moradores de Samaria por el becerro que adoran en Bet Avén. El pueblo del becerro hará duelo por él, lo mismo que sus sacerdotes idólatras. Harán lamentos por su esplendor, porque se lo llevarán al destierro." },
+            { number: 6, text: "El becerro será llevado a Asiria como tributo para el gran rey. Efraín quedará avergonzado; Israel se avergonzará de sus ídolos." },
+            { number: 7, text: "Samaria y su rey desaparecerán como rama arrastrada por el agua." },
+            { number: 8, text: "Serán destruidos sus santuarios paganos, lugares de pecado de Israel. ¡Cardos y espinos crecerán sobre sus altares! Entonces dirán a las montañas: «¡Cúbrannos!», y a las colinas: «¡Caigan sobre nosotros!»" },
+            { number: 9, text: "«Tú, Israel, has venido pecando desde los días de Guibeá, y allí te has mantenido. ¡En Guibeá la guerra tomará por sorpresa a los malvados!" },
+            { number: 10, text: "Cuando yo quiera, los castigaré; entonces las naciones se juntarán contra ellos para aprisionarlos por su doble perversión." },
+            { number: 11, text: "Efraín es una novilla adiestrada a la que le gusta trillar, pero yo no quise ponerle el yugo. Pero ahora voy a uncir a Efraín, y Judá tendrá que arar, y Jacob emparejará la tierra.»" },
+            { number: 12, text: "¡Siembren para ustedes justicia! ¡Cosechen el fruto del amor, y pónganse a labrar el barbecho! ¡Ya es tiempo de buscar al Señor!, hasta que él venga y les envíe lluvias de justicia." },
+            { number: 13, text: "Pero ustedes sembraron maldad, cosecharon crímenes y comieron el fruto de la mentira, porque confiaron en sus carros y en la multitud de sus guerreros." },
+            { number: 14, text: "Un estruendo de guerra se levantará contra su pueblo, y todas sus fortalezas serán devastadas, como devastó Salmán a Bet Arbel en el día de la batalla, cuando las madres fueron destrozadas junto con sus hijos." },
+            { number: 15, text: "Esto es lo que Betel les hizo a ustedes, a causa de su extrema maldad. ¡Pues el rey de Israel será destruido por completo en cuanto amanezca!" }
+          ]
+        },
+        {
+          chapterNumber: 11,
+          summary: "Expresa con profunda ternura el amor paternal de Dios, que llamó a Israel de Egipto, lo enseñó a caminar y lo atrajo con lazos de amor a pesar de su rebeldía. Aunque anuncia el dominio asirio, el corazón de Dios se conmueve y promete no destruir por completo a Efraín sino reunir a sus hijos de vuelta en sus casas, antes de señalar nuevamente el fraude de Efraín y la inconstancia de Judá.",
+          verses: [
+            { number: 1, title: "El amor de Dios por Israel", text: "«Desde que Israel era niño, yo lo amé; de Egipto llamé a mi hijo." },
+            { number: 2, text: "Pero cuanto más lo llamaba, más se alejaba de mí. Ofrecía sacrificios a sus falsos dioses y quemaba incienso a las imágenes." },
+            { number: 3, text: "Yo fui quien enseñó a caminar a Efraín; yo fui quien lo tomó de la mano. Pero él no quiso reconocer que era yo quien lo sanaba." },
+            { number: 4, text: "Lo atraje con cuerdas de ternura, lo atraje con lazos de amor. Le quité de la cerviz el yugo, y con ternura me acerqué para alimentarlo." },
+            { number: 5, text: "»No volverán a Egipto, sino que Asiria reinará sobre ellos, porque no quisieron volverse a mí." },
+            { number: 6, text: "En sus ciudades se blandirán espadas, que destrozarán los barrotes de sus puertas y acabarán con sus planes." },
+            { number: 7, text: "Mi pueblo está resuelto a renegar de mi nombre; por eso, aunque me invoquen, no los exaltaré." },
+            { number: 8, text: "»¿Cómo podría yo entregarte, Efraín? ¿Cómo podría abandonarte, Israel? ¡Yo no podría entregarte como entregué a Admá! ¡Yo no podría abandonarte como a Zeboyín! Dentro de mí, el corazón me da vuelcos, y se me conmueven las entrañas." },
+            { number: 9, text: "Pero no daré rienda suelta a mi ira, ni volveré a destruir a Efraín. Porque en medio de ti no está un hombre, sino estoy yo, el Dios santo, y no atacaré la ciudad.»" },
+            { number: 10, text: "El Señor rugirá como león, y ellos lo seguirán. Cuando el Señor lance su rugido, sus hijos vendrán temblando de occidente." },
+            { number: 11, text: "«Vendrán desde Egipto, temblando como aves; vendrán desde Asiria, temblando como palomas, y yo los estableceré en sus casas afirma el Señor." },
+            { number: 12, title: "El pecado de Israel", text: "»Efraín me ha rodeado de mentiras, y el reino de Israel con fraude; Judá anda errante, lejos de Dios; ¡lejos del Dios santísimo y fiel!" }
+          ]
+        },
+        {
+          chapterNumber: 12,
+          summary: "Denuncia las alianzas vacías de Efraín con Asiria y Egipto y el fraude comercial del pueblo, evocando la historia del patriarca Jacob para llamar a Israel a volverse a su Dios practicando el amor y la justicia. Recuerda cómo el Señor habló por medio de los profetas y los sacó de Egipto, advirtiendo que ahora hará pagar a Efraín sus crímenes e injurias.",
+          verses: [
+            { number: 1, title: "Efraín se alimenta de viento", text: "Efraín se alimenta de viento: todo el día va tras el viento solano, y multiplica la mentira y la violencia. Hace pactos con Asiria, y a Egipto le da aceite como tributo.»" },
+            { number: 2, text: "El Señor tiene un pleito contra Judá: le hará pagar a Jacob todo lo que ha hecho, le dará lo que merecen sus obras." },
+            { number: 3, text: "Ya en el seno materno suplantó a su hermano, y cuando se hizo hombre luchó con Dios." },
+            { number: 4, text: "Luchó con el ángel, y lo venció; lloró y le rogó que lo favoreciera. Se lo encontró en Betel, y allí habló con él;" },
+            { number: 5, text: "¡habló con el Señor, Dios Todopoderoso, cuyo nombre es el Señor!" },
+            { number: 6, text: "Pero tú debes volverte a tu Dios, practicar el amor y la justicia, y confiar siempre en él." },
+            { number: 7, text: "Canaán usa balanzas fraudulentas, pues le gusta explotar a los demás." },
+            { number: 8, text: "Efraín dice con jactancia: «¡Cómo me he enriquecido! ¡He amasado una gran fortuna! En todas mis ganancias no encontrarán que haya pecado en algo.»" },
+            { number: 9, text: "«Yo soy el Señor tu Dios desde que estabas en Egipto, y haré que vuelvas a vivir en carpas, como en los días de nuestro encuentro en el desierto." },
+            { number: 10, text: "Yo les hablé a los profetas; les hice tener muchas visiones, y por medio de ellos les hablé en parábolas.»" },
+            { number: 11, text: "¿Es Galaad malvado? ¡No hay duda de que no vale nada! En Guilgal sacrifica toros; por eso sus altares quedarán reducidos a montones de piedra entre los surcos del campo." },
+            { number: 12, text: "Jacob huyó a un campo de Aram; Israel trabajó cuidando ovejas en pago por su esposa." },
+            { number: 13, text: "Para sacar a Israel de Egipto, y después cuidarlo, el Señor usó a un profeta." },
+            { number: 14, text: "Pero Efraín ha irritado a su Señor; le ha causado un amargo disgusto. Por eso el Señor le hará pagar sus crímenes y le devolverá sus injurias." }
+          ]
+        },
+        {
+          chapterNumber: 13,
+          summary: "Expone la caída de Efraín por rendir culto a Baal y fabricar ídolos de plata pese a que solo el Señor es su Salvador desde Egipto. Al volverse arrogantes tras ser saciados, Dios anuncia un juicio implacable —comparándose con un león, un leopardo y una osa— que agotará sus fuentes, arrebatará sus tesoros y traerá la devastación de Samaria por su rebelión.",
+          verses: [
+            { number: 1, title: "La ira del Señor contra Israel", text: "Efraín tenía la preeminencia en Israel. Cuando él hablaba, la gente temblaba. Pero le rindió culto a Baal, y por ese pecado murió." },
+            { number: 2, text: "Sin embargo, siguen pecando, pues se fabrican, según su ingenio, imágenes de fundición e ídolos de plata que no son más que obra de artesanos. De ellos se dice: «Ofrecen sacrificios humanos y besan ídolos en forma de becerros.»" },
+            { number: 3, text: "Por eso serán como nube matutina, como rocío que temprano se evapora, como paja que se lleva el viento, como humo que se escapa por la chimenea." },
+            { number: 4, text: "«Pero yo soy el Señor tu Dios desde que estabas en Egipto. No conocerás a otro Dios fuera de mí, ni a otro Salvador que no sea yo." },
+            { number: 5, text: "Porque yo fui el que te conoció en el desierto, en esa tierra de terrible aridez." },
+            { number: 6, text: "Les di de comer, y quedaron saciados, y una vez satisfechos, se volvieron arrogantes y se olvidaron de mí." },
+            { number: 7, text: "Por eso, yo seré para ellos como un león; los acecharé junto al camino, como un leopardo." },
+            { number: 8, text: "Los atacaré y les desgarraré el pecho como una osa a quien le quitan sus cachorros. ¡Los devoraré como un león! ¡Los despedazaré como fiera del campo!" },
+            { number: 9, text: "»Voy a destruirte, Israel, porque estás contra quien te ayuda." },
+            { number: 10, text: "¿Dónde está tu rey, para que te salve en todas tus ciudades? ¿Dónde están los gobernantes, de los que decías: Dame rey y autoridades?" },
+            { number: 11, text: "En mi ira te di rey, y en mi enojo te lo quité." },
+            { number: 12, text: "La perversidad de Efraín está bien guardada; se ha tomado nota de su pecado." },
+            { number: 13, text: "Llegan los dolores de parto, pero él es una criatura necia: ¡cuando llega la hora del parto, no se acomoda para salir!" },
+            { number: 14, text: "»¿Habré de rescatarlos del poder del sepulcro? ¿Los redimiré de la muerte? ¿Dónde están, oh muerte, tus plagas? ¿Dónde está, oh sepulcro, tu destrucción? ¡Vengan, que no les tendré misericordia!»" },
+            { number: 15, text: "Aunque Efraín prospere entre sus hermanos, vendrá el viento del Señor, el viento solano que se levanta del desierto, y se agotarán sus fuentes y manantiales. ¡Y arrebatará sus tesoros, todos sus objetos preciosos!" },
+            { number: 16, text: "El pueblo de Samaria cargará con su culpa por haberse rebelado contra su Dios. Caerán a filo de espada; ¡a los niños los lanzarán contra el suelo, y a las embarazadas les abrirán el vientre!" }
+          ]
+        },
+        {
+          chapterNumber: 14,
+          summary: "Dirige un llamado final a Israel para volver al Señor con palabras de sincero arrepentimiento, renunciando a Asiria y a los ídolos. Dios responde prometiendo sanar su rebeldía, amarlos de pura gracia y hacerlos florecer como lirio, olivo y cedro del Líbano, cerrando el libro con una exhortación sapiencial a caminar por los caminos rectos del Señor.",
+          verses: [
+            { number: 1, title: "Arrepentimiento para traer bendición", text: "Vuélvete, Israel, al Señor tu Dios. ¡Tu perversidad te ha hecho caer!" },
+            { number: 2, text: "Piensa bien lo que le dirás, y vuélvete al Señor con este ruego: «Perdónanos nuestra perversidad, y recíbenos con benevolencia, pues queremos ofrecerte el fruto de nuestros labios." },
+            { number: 3, text: "Asiria no podrá salvarnos; no montaremos caballos de guerra. Nunca más llamaremos dios nuestro a cosas hechas por nuestras manos, pues en ti el huérfano halla compasión.»" },
+            { number: 4, title: "Respuesta de Dios", text: "«Yo corregiré su rebeldía y los amaré de pura gracia, porque mi ira contra ellos se ha calmado." },
+            { number: 5, text: "Yo seré para Israel como el rocío, y lo haré florecer como lirio. ¡Hundirá sus raíces como cedro del Líbano!" },
+            { number: 6, text: "Sus vástagos crecerán, y tendrán el esplendor del olivo y la fragancia del cedro del Líbano." },
+            { number: 7, text: "Volverán a habitar bajo mi sombra, y crecerán como el trigo. Echarán renuevos, como la vid, y serán tan famosos como el vino del Líbano." },
+            { number: 8, text: "Efraín, ¿yo qué tengo que ver con las imágenes? ¡Soy yo quien te responde y cuida de ti! Soy como un pino siempre verde; tu fruto procede de mí.»" },
+            { number: 9, text: "El que es sabio entiende estas cosas; el que es inteligente las comprende. Ciertamente son rectos los caminos del Señor: en ellos caminan los justos, mientras que allí tropiezan los rebeldes." }
           ]
         },
       ]

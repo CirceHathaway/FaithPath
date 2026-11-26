@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -9,12 +9,21 @@ import { nvi } from '../data/nvi';
 import { useBackHandler } from '../utils/backNavigation';
 
 const DEVOTIONALS_CACHE_KEY = 'devotionals_offline_cache';
+const APP_URL = 'https://faith-path.netlify.app';
 
 const formatDateKey = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+};
+
+// Parsea "YYYY-MM-DD" en hora local sin corrimiento UTC
+const parseLocalDateKey = (key) => {
+  if (!key || !/^\d{4}-\d{2}-\d{2}$/.test(key)) return null;
+  const [y, m, d] = key.split('-').map(Number);
+  const parsed = new Date(y, m - 1, d);
+  return isNaN(parsed.getTime()) ? null : parsed;
 };
 
 const readDevotionalsCache = () => {
@@ -33,14 +42,17 @@ const writeDevotionalsCache = (cacheObj) => {
   }
 };
 
-export default function Devotional({ navigateToBibleReference }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+export default function Devotional({ navigateToBibleReference, initialDateKey = null }) {
+  const [currentDate, setCurrentDate] = useState(
+    () => parseLocalDateKey(initialDateKey) || new Date()
+  );
   const [devotionalData, setDevotionalData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
 
   const [editForm, setEditForm] = useState({
     title: '',
@@ -50,6 +62,20 @@ export default function Devotional({ navigateToBibleReference }) {
     bodyText: '',
     conclusionText: ''
   });
+
+  const toastTimeoutRef = useRef(null);
+
+  const showToast = useCallback((msg) => {
+    setToastMsg(msg);
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    toastTimeoutRef.current = setTimeout(() => setToastMsg(''), 2500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   // Manejo del botón/gesto "Atrás" al editar un devocional
   useBackHandler(() => {
@@ -298,19 +324,81 @@ export default function Devotional({ navigateToBibleReference }) {
     }
   };
 
-  const handleShare = () => {
+  const copyTextToClipboard = useCallback(async (text) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        // Continúa con el fallback
+      }
+    }
+
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      textarea.setSelectionRange(0, textarea.value.length);
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return copied;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const getDirectDevotionalUrl = () => {
+    const targetKey = devotionalData?.dateKey || dateKey;
+    return `${APP_URL}/?devotional=${targetKey}`;
+  };
+
+  // Compartir: envía solo el título y el enlace directo a este devocional
+  const handleShare = async () => {
     if (!devotionalData) return;
 
-    const appLink = '\n\n📲 Lee más devocionales y la Biblia interactiva en FaithPath: https://faith-path.netlify.app';
-
-    const textToShare = `${devotionalData.title}\n\n${devotionalData.introText ? devotionalData.introText + '\n\n' : ''}"${devotionalData.verseText}"\n- ${devotionalData.formattedRef}\n\n${devotionalData.bodyText}\n\n${devotionalData.conclusionText ? devotionalData.conclusionText : ''}${appLink}`.trim();
+    const directUrl = getDirectDevotionalUrl();
+    const shareTitle = devotionalData.title?.trim() || 'Devocional diario';
+    const shareText = `📖 ${shareTitle}`;
 
     if (navigator.share) {
-      navigator.share({ title: devotionalData.title, text: textToShare }).catch(console.error);
-    } else {
-      navigator.clipboard.writeText(textToShare);
-      alert('Devocional copiado al portapapeles.');
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: directUrl
+        });
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
     }
+
+    const copied = await copyTextToClipboard(`${shareText}\n${directUrl}`);
+    showToast(copied ? 'Enlace del devocional copiado' : 'No se pudo compartir el enlace');
+  };
+
+  // Copiar: copia el texto completo del devocional + el enlace directo
+  const handleCopy = async () => {
+    if (!devotionalData) return;
+
+    const directUrl = getDirectDevotionalUrl();
+    const appLink = `\n\n📲 Lee este devocional en FaithPath: ${directUrl}`;
+
+    const sections = [];
+    if (devotionalData.title?.trim()) sections.push(devotionalData.title.trim());
+    if (devotionalData.introText?.trim()) sections.push(devotionalData.introText.trim());
+    sections.push(`"${devotionalData.verseText}"\n- ${devotionalData.formattedRef}`);
+    if (devotionalData.bodyText?.trim()) sections.push(devotionalData.bodyText.trim());
+    if (devotionalData.conclusionText?.trim()) sections.push(devotionalData.conclusionText.trim());
+
+    const textToCopy = `${sections.join('\n\n')}${appLink}`.trim();
+    const copied = await copyTextToClipboard(textToCopy);
+    showToast(copied ? 'Devocional copiado al portapapeles' : 'No se pudo copiar el devocional');
   };
 
   const DecorativeSeparator = () => (
@@ -433,7 +521,7 @@ export default function Devotional({ navigateToBibleReference }) {
           )}
 
           <div className="devotional-bottom-actions">
-            <button className="share-btn-ghost" onClick={handleShare}>
+            <button type="button" className="share-btn-ghost" onClick={handleShare}>
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" style={{ marginRight: '8px' }}>
                 <circle cx="18" cy="5" r="3" />
                 <circle cx="6" cy="12" r="3" />
@@ -443,8 +531,17 @@ export default function Devotional({ navigateToBibleReference }) {
               </svg>
               Compartir
             </button>
+
+            <button type="button" className="copy-btn-ghost" onClick={handleCopy}>
+              <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copiar
+            </button>
+
             {isAdmin && (
-              <button className="edit-btn-ghost" onClick={handleEditExisting}>Editar</button>
+              <button type="button" className="edit-btn-ghost" onClick={handleEditExisting}>Editar</button>
             )}
           </div>
         </div>
@@ -456,6 +553,8 @@ export default function Devotional({ navigateToBibleReference }) {
           )}
         </div>
       )}
+
+      {toastMsg && <div className="devotional-toast">{toastMsg}</div>}
     </div>
   );
 }
