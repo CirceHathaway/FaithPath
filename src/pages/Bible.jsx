@@ -6,6 +6,7 @@ import { rvc } from '../data/rvc';
 import { nvi } from '../data/nvi';
 import { generateVerseImage, formatVerseRanges } from '../utils/verseImageGenerator';
 import { useBackHandler } from '../utils/backNavigation';
+import { addReadingHistoryEntry } from '../utils/readingHistory';
 
 const bibleDataMap = {
   'RVR1960': rv1960,
@@ -150,6 +151,19 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
   });
 
   const activeChapter = chaptersData[activeChapterIndex];
+
+  // Registra automáticamente el libro y capítulo en el historial (máx. 10)
+  useEffect(() => {
+    if (view === 'lectura' && activeBook && activeChapter) {
+      addReadingHistoryEntry({
+        bookId: activeBook.id,
+        bookName: activeBook.name,
+        chapterId: activeChapter.id,
+        version: activeVersion,
+        isNewTestament
+      });
+    }
+  }, [view, activeBook.id, activeBook.name, activeChapter?.id, activeVersion, isNewTestament]);
 
   const resetReadingState = () => {
     setIsSummaryOpen(true);

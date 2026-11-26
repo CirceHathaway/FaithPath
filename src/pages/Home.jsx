@@ -4,6 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { generateVerseImage, getRandomBackgroundUrl } from '../utils/verseImageGenerator';
 import { useBackHandler, popNavStateSilently } from '../utils/backNavigation';
+import { getReadingHistory, formatHistoryTime } from '../utils/readingHistory';
 import './Home.css';
 
 const DAILY_VERSES_CACHE_KEY = 'daily_verses_offline_cache';
@@ -63,7 +64,7 @@ const extractVerseMeta = (verse) => {
   };
 };
 
-export default function Home() {
+export default function Home({ navigateToBibleReference }) {
   const [verses, setVerses] = useState(getInitialVerses);
   const [activeIndex, setActiveIndex] = useState(0);
   const [toastMsg, setToastMsg] = useState('');
@@ -75,6 +76,10 @@ export default function Home() {
   const [activeVerseForImage, setActiveVerseForImage] = useState(null);
   const [imageFeedback, setImageFeedback] = useState('');
 
+  // Modal de historial de lectura
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const [readingHistory, setReadingHistory] = useState([]);
+
   const scrollRef = useRef(null);
   const toastTimeoutRef = useRef(null);
 
@@ -85,14 +90,20 @@ export default function Home() {
     setActiveVerseForImage(null);
   };
 
-  // Gesto/botón atrás cierra el modal de imagen sin salir de la app
+  // Gesto/botón atrás cierra los modales del Home sin salir de la app
+  const modalDepth = (imageModalOpen ? 1 : 0) + (historyModalOpen ? 1 : 0);
+
   useBackHandler(() => {
+    if (historyModalOpen) {
+      setHistoryModalOpen(false);
+      return true;
+    }
     if (imageModalOpen) {
       closeImageModalState();
       return true;
     }
     return false;
-  }, imageModalOpen ? 1 : 0);
+  }, modalDepth);
 
   const showToast = useCallback((msg) => {
     setToastMsg(msg);
@@ -138,6 +149,23 @@ export default function Home() {
       isCancelled = true;
     };
   }, []);
+
+  const handleOpenHistoryModal = () => {
+    setReadingHistory(getReadingHistory());
+    setHistoryModalOpen(true);
+  };
+
+  const handleCloseHistoryModal = () => {
+    setHistoryModalOpen(false);
+    popNavStateSilently();
+  };
+
+  const handleSelectHistoryItem = (item) => {
+    setHistoryModalOpen(false);
+    if (navigateToBibleReference) {
+      navigateToBibleReference(item.version, item.bookId, item.chapterId);
+    }
+  };
 
   const handleScroll = (e) => {
     const width = e.target.offsetWidth;
@@ -288,6 +316,19 @@ export default function Home() {
       {/* Columna principal: separa título y versículo para evitar superposiciones */}
       <div className="home-foreground">
         <div className="home-top-bar">
+          <button
+            type="button"
+            className="home-history-btn"
+            onClick={handleOpenHistoryModal}
+            title="Historial de lectura"
+            aria-label="Historial de lectura"
+          >
+            <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <polyline points="12 7 12 12 15.5 14" />
+            </svg>
+          </button>
+
           <VersionSelector />
         </div>
 
@@ -385,6 +426,56 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Modal de historial reciente (cierre exclusivo con botón) */}
+      {historyModalOpen && (
+        <div className="home-image-modal-backdrop">
+          <div className="home-image-modal-box home-history-modal-box">
+            <div className="home-image-modal-header">
+              <h3>Historial reciente</h3>
+              <button
+                type="button"
+                className="home-image-close-btn"
+                onClick={handleCloseHistoryModal}
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+            </div>
+
+            {readingHistory.length === 0 ? (
+              <div className="home-history-empty">
+                <p>Todavía no hay lecturas registradas.</p>
+                <span>Los últimos 10 capítulos que abras en la Biblia aparecerán aquí.</span>
+              </div>
+            ) : (
+              <div className="home-history-list">
+                {readingHistory.map((item) => (
+                  <button
+                    key={`${item.bookId}-${item.chapterId}`}
+                    type="button"
+                    className="home-history-item"
+                    onClick={() => handleSelectHistoryItem(item)}
+                  >
+                    <span
+                      className={`home-history-dot ${item.isNewTestament ? 'is-nt' : ''}`}
+                    />
+                    <div className="home-history-info">
+                      <strong>
+                        {item.bookName} {item.chapterId}
+                      </strong>
+                      <span>
+                        {item.version} · {formatHistoryTime(item.readAt)}
+                      </span>
+                    </div>
+                    <span className="home-history-arrow">›</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Modal de vista previa de imagen (cierre exclusivo con botón) */}
       {imageModalOpen && (

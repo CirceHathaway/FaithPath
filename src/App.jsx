@@ -99,7 +99,7 @@ function App() {
   const renderContent = () => {
     switch (currentTab) {
       case 'home':
-        return <Home />;
+        return <Home navigateToBibleReference={navigateToBibleReference} />;
       case 'devotional':
         return <Devotional navigateToBibleReference={navigateToBibleReference} />;
       case 'favoritos':
