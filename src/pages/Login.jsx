@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import SermonMode from './SermonMode';
 import DailyVersesManager from './DailyVersesManager';
 import { useBackHandler } from '../utils/backNavigation';
 import './Login.css';
+
+const APP_URL = 'https://faith-path.netlify.app';
 
 export default function Login({
   navigateToBibleReference,
@@ -24,8 +26,22 @@ export default function Login({
   const [adminView, setAdminView] = useState(null);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
 
+  const toastTimeoutRef = useRef(null);
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    toastTimeoutRef.current = setTimeout(() => setToastMsg(''), 2500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    };
+  }, []);
 
   // Manejo del botón/gesto "Atrás" para modales y subvista de Versículos Diarios
   const loginNavDepth =
@@ -70,6 +86,52 @@ export default function Login({
       }
     } else {
       setShowInstallHelp(true);
+    }
+  };
+
+  const handleShareApp = async () => {
+    const shareData = {
+      title: 'FaithPath - Biblia Interactiva',
+      text: 'Te comparto FaithPath, una app de Biblia interactiva, devocional diario y lectura sin conexión:',
+      url: APP_URL
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    const fallbackText = `${shareData.text} ${APP_URL}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(fallbackText);
+        showToast('Enlace de la app copiado');
+        return;
+      } catch {
+        // Continúa con el respaldo
+      }
+    }
+
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = fallbackText;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      textarea.setSelectionRange(0, textarea.value.length);
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast(copied ? 'Enlace de la app copiado' : 'No se pudo copiar el enlace');
+    } catch {
+      showToast('No se pudo copiar el enlace');
     }
   };
 
@@ -254,6 +316,27 @@ export default function Login({
         </button>
       </div>
 
+      {/* Botón Compartir App */}
+      <div className="about-entry-card share-app-entry-card">
+        <button
+          type="button"
+          className="about-entry-btn"
+          onClick={handleShareApp}
+        >
+          <span className="about-entry-left">
+            <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+            <span>Compartir App</span>
+          </span>
+          <span className="about-entry-arrow">›</span>
+        </button>
+      </div>
+
       {/* Modal Acerca de (cierre exclusivo por botones) */}
       {showAboutModal && (
         <div className="install-modal-backdrop">
@@ -318,6 +401,21 @@ export default function Login({
                     Más información sobre Reina Valera Contemporánea.
                   </a>
                 </div>
+
+                <div className="credit-block">
+                  <p className="credit-label">Para la versión NVI:</p>
+                  <p>
+                    Santa Biblia, Nueva Versión Internacional® NVI® | © 1999, 2015, 2022 por Biblica, Inc.
+                  </p>
+                  <a
+                    href="https://www.sociedadesbiblicas.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="credit-link"
+                  >
+                    Más información sobre Nueva Versión Internacional - Español.
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -372,6 +470,8 @@ export default function Login({
           </div>
         </div>
       )}
+
+      {toastMsg && <div className="login-toast">{toastMsg}</div>}
     </div>
   );
 }
