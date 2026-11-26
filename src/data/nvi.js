@@ -2026,7 +2026,7 @@ export const nvi = {
       name: "Oseas",
       testament: "Antiguo Testamento",
       type: "Profetas Menores",
-      desc: "Oseas es el primero de los Profetas Menores y presenta el doloroso matrimonio del profeta con la infiel Gómer como símbolo vivo de la relación entre Dios y un Israel idólatra. A lo largo de sus catorce capítulos denuncia la infidelidad espiritual, la corrupción moral y la falta de conocimiento de Dios, anuncia el juicio venidero y proclama con profunda ternura el amor persistente del Señor que llama al arrepentimiento y promete restauración.",
+      desc: "Oseas denuncia la idolatría y la infidelidad de Israel hacia Dios, anunciando su juicio. También muestra el amor y la misericordia de Dios, quien llama a su pueblo al arrepentimiento y promete restaurarlo.",
       chapters: [
         {
           chapterNumber: 1,
@@ -2312,6 +2312,106 @@ export const nvi = {
       ]
     },
     {
+      id: 29,
+      name: "Joel",
+      testament: "Antiguo Testamento",
+      type: "Profetas Menores",
+      desc: "Joel anuncia el día del Señor a través de una plaga de langostas y llama al pueblo a arrepentirse. También promete la restauración de la tierra, el derramamiento del Espíritu Santo y bendiciones para su pueblo.",
+      chapters: [
+        {
+          chapterNumber: 1,
+          summary: "Describe una plaga sin precedentes de langostas y una sequía que arrasan los campos, las vides y las cosechas de Judá, interrumpiendo incluso las ofrendas en el templo. Ante la cercanía del día del Señor, el profeta llama a los sacerdotes, ancianos y habitantes del país a vestirse de luto, convocar un ayuno y clamar al Señor.",
+          verses: [
+            { number: 1, title: "Introducción", text: "Ésta es la palabra del Señor, que vino a Joel hijo de Petuel." },
+            { number: 2, title: "La invasión de langostas", text: "¡Oigan esto, ancianos del pueblo! ¡Presten atención, habitantes todos del país! ¿Alguna vez sucedió cosa semejante en sus tiempos o en los de sus antepasados?" },
+            { number: 3, text: "Cuéntenselo a sus hijos, y que ellos se lo cuenten a los suyos, y éstos a la siguiente generación." },
+            { number: 4, text: "Lo que dejaron las langostas grandes lo devoraron las langostas pequeñas; lo que dejaron las langostas pequeñas se lo comieron las larvas; y lo que dejaron las larvas se lo comieron las orugas." },
+            { number: 5, text: "¡Despierten, borrachos, y lloren! Giman, todos los entregados al vino, porque el vino dulce les fue arrebatado de los labios." },
+            { number: 6, text: "Una nación poderosa e innumerable ha invadido mi país: tiene dientes de león, colmillos de leona." },
+            { number: 7, text: "Asoló mis vides, desgajó mis higueras. Las peló hasta dejar blancas sus ramas; ¡las derribó por completo!" },
+            { number: 8, text: "Mi pueblo gime como virgen vestida de luto por la muerte de su prometido." },
+            { number: 9, text: "Las ofrendas de cereales y las libaciones no se ofrecen ya en la casa del Señor. Hacen duelo los sacerdotes, los ministros del Señor." },
+            { number: 10, text: "Los campos yacen devastados, reseca está la tierra; han sido arrasados los cereales, se ha secado el vino nuevo y agotado el aceite." },
+            { number: 11, text: "Séquense también ustedes, labradores; giman, viñadores, por el trigo y la cebada, porque se ha perdido la cosecha de los campos." },
+            { number: 12, text: "La vid se marchitó; languideció la higuera; se marchitaron los granados, las palmeras, los manzanos, ¡todos los árboles del campo! ¡Y hasta la alegría de la gente acabó por marchitarse!" },
+            { number: 13, title: "Llamado al arrepentimiento", text: "Vístanse de duelo y giman, sacerdotes; laméntense, ministros del altar. Vengan, ministros de mi Dios, y pasen la noche vestidos de luto, porque las ofrendas de cereales y las libaciones han sido suspendidas en la casa de su Dios." },
+            { number: 14, text: "Entréguense al ayuno, convoquen a una asamblea solemne. Reúnan a los ancianos del pueblo en la casa del Señor su Dios; reúnan a todos los habitantes del país, y clamen al Señor." },
+            { number: 15, text: "¡Ay de aquel día, el día del Señor, que ya se aproxima! Vendrá como devastación de parte del Todopoderoso." },
+            { number: 16, text: "¿No se nos arrebató el alimento ante nuestros propios ojos, y la alegría y el regocijo de la casa de nuestro Dios?" },
+            { number: 17, text: "La semilla se pudrió a pesar de haber sido cultivada. Los silos están en ruinas y los graneros derribados porque la cosecha se perdió." },
+            { number: 18, text: "¡Cómo brama el ganado! Vagan sin rumbo las vacas porque no tienen donde pastar, y sufren también las ovejas." },
+            { number: 19, text: "A ti clamo, Señor, porque el fuego ha devorado los pastizales de la estepa; las llamas han consumido todos los árboles silvestres." },
+            { number: 20, text: "Aun los animales del campo te buscan con ansias, porque se han secado los arroyos y el fuego ha devorado los pastizales de la estepa." }
+          ]
+        },
+        {
+          chapterNumber: 2,
+          summary: "Da la voz de alarma en Sión ante un ejército imparable de langostas que anuncia el día del Señor, y exhorta al pueblo a rasgar su corazón y volverse a Dios con ayuno y oración. El Señor responde con compasión prometiendo alejar al invasor, enviar lluvias y restituir los años devorados, y profetiza el derramamiento de su Espíritu sobre todo el género humano y la salvación para todo el que invoque su nombre.",
+          verses: [
+            { number: 1, title: "Un ejército de langostas", text: "Toquen la trompeta en Sión; den la voz de alarma en mi santo monte. Tiemblen todos los habitantes del país, pues ya viene el día del Señor; en realidad ya está cerca." },
+            { number: 2, text: "Día de tinieblas y oscuridad, día de nubes y densos nubarrones. Como la aurora que se extiende sobre los montes, así avanza un pueblo fuerte y numeroso, pueblo como nunca lo hubo en la antigüedad ni lo habrá en las generaciones futuras." },
+            { number: 3, text: "Antes de que llegue, devora el fuego; cuando ya ha pasado, las llamas lo inflaman todo. Antes de que llegue, el país se parece al jardín del Edén; cuando ya ha pasado, queda un desolado desierto; ¡nada escapa su poder!" },
+            { number: 4, text: "Tienen aspecto de caballos; galopan como corceles." },
+            { number: 5, text: "Y al saltar sobre las cumbres de los montes, producen un estruendo como el de carros de guerra, como el crepitar del fuego al consumir la hojarasca. ¡Son como un ejército poderoso en formación de batalla!" },
+            { number: 6, text: "Ante él se estremecen las naciones; todo rostro palidece." },
+            { number: 7, text: "Atacan como guerreros, escalan muros como soldados. Cada uno mantiene la marcha sin romper la formación." },
+            { number: 8, text: "No se atropellan entre sí; cada uno marcha en línea. Se lanzan entre las flechas sin romper filas." },
+            { number: 9, text: "Se abalanzan contra la ciudad, arremeten contra los muros, trepan por las casas, se meten por las ventanas como ladrones." },
+            { number: 10, text: "Ante este ejército tiembla la tierra y se estremece el cielo, el sol y la luna se oscurecen y las estrellas dejan de brillar." },
+            { number: 11, text: "Truena la voz del Señor al frente de su ejército; son innumerables sus tropas y poderosos los que ejecutan su palabra. El día del Señor es grande y terrible. ¿Quién lo podrá resistir?" },
+            { number: 12, title: "Exhortación al arrepentimiento", text: "«Ahora bien afirma el Señor, vuélvanse a mí de todo corazón, con ayuno, llantos y lamentos.»" },
+            { number: 13, text: "Rásguense el corazón y no las vestiduras. Vuélvanse al Señor su Dios, porque él es bondadoso y compasivo, lento para la ira y lleno de amor, cambia de parecer y no castiga." },
+            { number: 14, text: "Tal vez Dios reconsidere y cambie de parecer, y deje tras de sí una bendición. Las ofrendas de cereales y las libaciones son del Señor su Dios." },
+            { number: 15, text: "Toquen la trompeta en Sión, proclamen el ayuno, convoquen a una asamblea solemne." },
+            { number: 16, text: "Congreguen al pueblo, purifiquen la asamblea; junten a los ancianos del pueblo, reúnan a los pequeños y a los niños de pecho. Que salga de su alcoba el recién casado, y la recién casada de su cámara nupcial." },
+            { number: 17, text: "Lloren, sacerdotes, ministros del Señor, entre el pórtico y el altar; y digan: «Compadécete, Señor, de tu pueblo. No entregues tu propiedad al oprobio, para que las naciones no se burlen de ella. ¿Por qué habrán de decir entre los pueblos: Dónde está su Dios? »" },
+            { number: 18, title: "La respuesta del Señor", text: "Entonces el Señor mostró amor por su tierra y perdonó a su pueblo." },
+            { number: 19, text: "Y les respondió el Señor: «Miren, les enviaré cereales, vino nuevo y aceite, hasta dejarlos plenamente satisfechos; y no volveré a entregarlos al oprobio entre las naciones." },
+            { number: 20, text: "»Alejaré de ustedes al que viene del norte, arrojándolo hacia una tierra seca y desolada: lanzaré su vanguardia hacia el mar oriental, y su retaguardia hacia el mar occidental. Subirá su hedor y se elevará su fetidez.» ¡El Señor hará grandes cosas!" },
+            { number: 21, text: "No temas, tierra, sino alégrate y regocíjate, porque el Señor hará grandes cosas." },
+            { number: 22, text: "No teman, animales del campo, porque los pastizales de la estepa reverdecerán; los árboles producirán su fruto, y la higuera y la vid darán su riqueza." },
+            { number: 23, text: "Alégrense, hijos de Sión, regocíjense en el Señor su Dios, que a su tiempo les dará las lluvias de otoño. Les enviará la lluvia, la de otoño y la de primavera, como en tiempos pasados." },
+            { number: 24, text: "Las eras se llenarán de grano; los lagares rebosarán de vino nuevo y de aceite." },
+            { number: 25, text: "«Yo les compensaré a ustedes por los años en que todo lo devoró ese gran ejército de langostas que envié contra ustedes: las grandes, las pequeñas, las larvas y las orugas." },
+            { number: 26, text: "Ustedes comerán en abundancia, hasta saciarse, y alabarán el nombre del Señor su Dios, que hará maravillas por ustedes. ¡Nunca más será avergonzado mi pueblo!" },
+            { number: 27, text: "Entonces sabrán que yo estoy en medio de Israel, que yo soy el Señor su Dios, y no hay otro fuera de mí. ¡Nunca más será avergonzado mi pueblo!" },
+            { number: 28, title: "El día del Señor", text: "»Después de esto, derramaré mi Espíritu sobre todo el género humano. Los hijos y las hijas de ustedes profetizarán, tendrán sueños los ancianos y visiones los jóvenes." },
+            { number: 29, text: "En esos días derramaré mi Espíritu aun sobre los siervos y las siervas." },
+            { number: 30, text: "En el cielo y en la tierra mostraré prodigios: sangre, fuego y columnas de humo." },
+            { number: 31, text: "El sol se convertirá en tinieblas y la luna en sangre antes que llegue el día del Señor, día grande y terrible." },
+            { number: 32, text: "Y todo el que invoque el nombre del Señor escapará con vida, porque en el monte Sión y en Jerusalén habrá escapatoria, como lo ha dicho el Señor." }
+          ]
+        },
+        {
+          chapterNumber: 3,
+          summary: "Anuncia que el Señor reunirá a todas las naciones en el valle de Josafat para juzgarlas por haber dispersado, vendido y saqueado a Israel, convocándolas al valle de la Decisión donde rugirá desde Sión como refugio para su pueblo. Culmina prometiendo abundancia perpetua y fuentes de agua desde la casa del Señor, la desolación de Egipto y Edom, y la morada eterna de Dios en Sión.",
+          verses: [
+            { number: 1, title: "El juicio de las naciones", text: "»En aquellos días, en el tiempo señalado, cuando restaure yo la suerte de Judá y de Jerusalén," },
+            { number: 2, text: "reuniré a todas las naciones y las haré bajar al valle de Josafat. Allí entraré en juicio contra los pueblos en cuanto a mi propiedad, mi pueblo Israel, pues lo dispersaron entre las naciones y se repartieron mi tierra." },
+            { number: 3, text: "Se repartieron a mi pueblo echando suertes, cambiaron a niños por prostitutas y, para emborracharse, vendieron niñas por vino." },
+            { number: 4, text: "»Ahora bien, Tiro y Sidón, y regiones todas de Filistea, ¿qué tienen en contra mía? ¿Quieren acaso vengarse de mí? Si es así, yo haré que muy pronto recaiga sobre ustedes su propia venganza," },
+            { number: 5, text: "pues se robaron mi oro y mi plata, y se llevaron a sus templos mis valiosos tesoros." },
+            { number: 6, text: "A los griegos les vendieron el pueblo de Jerusalén y de Judá, para alejarlos de su tierra." },
+            { number: 7, text: "»Sepan, pues, que voy a sacarlos de los lugares donde fueron vendidos, y haré que recaiga sobre ustedes su propia venganza." },
+            { number: 8, text: "Venderé sus hijos y sus hijas al pueblo de Judá, y ellos a su vez los venderán a los sabeos, una nación lejana.» El Señor lo ha dicho." },
+            { number: 9, text: "Proclamen esto entre las naciones: ¡Prepárense para la batalla! ¡Movilicen a los soldados! ¡Alístense para el combate todos los hombres de guerra!" },
+            { number: 10, text: "Forjen espadas con los azadones y hagan lanzas con las hoces. Que diga el cobarde: «¡Soy un valiente!»" },
+            { number: 11, text: "Dense prisa, naciones vecinas, reúnanse en ese lugar. ¡Haz bajar, Señor, a tus valientes!" },
+            { number: 12, text: "«Movilícense las naciones; suban hasta el valle de Josafat, que allí me sentaré para juzgar a los pueblos vecinos." },
+            { number: 13, text: "Mano a la hoz, que la mies está madura. Vengan a pisar las uvas, que está lleno el lagar. Sus cubas se desbordan: ¡tan grande es su maldad!»" },
+            { number: 14, text: "¡Multitud tras multitud en el valle de la Decisión! ¡Cercano está el día del Señor en el valle de la Decisión!" },
+            { number: 15, text: "Se oscurecerán el sol y la luna; dejarán de brillar las estrellas." },
+            { number: 16, text: "Rugirá el Señor desde Sión, tronará su voz desde Jerusalén, y la tierra y el cielo temblarán. Pero el Señor será un refugio para su pueblo, una fortaleza para los israelitas." },
+            { number: 17, title: "Bendiciones para el pueblo de Dios", text: "«Entonces ustedes sabrán que yo, el Señor su Dios, habito en Sión, mi monte santo. Santa será Jerusalén, y nunca más la invadirán los extranjeros." },
+            { number: 18, text: "»En aquel día las montañas destilarán vino dulce, y de las colinas fluirá leche; correrá el agua por los arroyos de Judá. De la casa del Señor brotará una fuente que irrigará el valle de las Acacias." },
+            { number: 19, text: "Pero Egipto quedará desolado, y Edom convertido en desierto, por la violencia cometida contra el pueblo de Judá, en cuya tierra derramaron sangre inocente." },
+            { number: 20, text: "Judá y Jerusalén serán habitadas para siempre, por todas las generaciones." },
+            { number: 21, text: "¿Perdonaré la sangre que derramaron? ¡Claro que no la perdonaré!» ¡El Señor hará su morada en Sión!" }
+          ]
+        },
+      ]
+    },
+    {
       id: 30,
       name: "Amós",
       testament: "Antiguo Testamento",
@@ -2517,8 +2617,125 @@ export const nvi = {
             { number: 14, text: "Restauraré a mi pueblo Israel; ellos reconstruirán las ciudades arruinadas y vivirán en ellas. Plantarán viñedos y beberán su vino; cultivarán huertos y comerán sus frutos." },
             { number: 15, text: "Plantaré a Israel en su propia tierra, para que nunca más sea arrancado de la tierra que yo le di», dice el Señor tu Dios." }
           ]
-        }
+        },
       ]
-    }
+    },
+    {
+      id: 31,
+      name: "Abdías",
+      testament: "Antiguo Testamento",
+      type: "Profetas Menores",
+      desc: "Abdías anuncia el juicio y la destrucción de Edom por su orgullo y traición hacia Judá. También promete la liberación de su pueblo y afirma el triunfo eterno del reino de Dios.",
+      chapters: [
+        {
+          chapterNumber: 1,
+          summary: "El Señor anuncia el juicio contra la orgullosa nación de Edom, que confía en sus fortalezas rocosas y aliados, pero será humillada y saqueada por haber celebrado la ruina de Jerusalén, saqueado a Judá y entregado a sus sobrevivientes. Proclama luego que el día del Señor está cerca para todas las naciones, prometiendo que en el monte Sión habrá liberación, Israel recuperará sus posesiones y el reino será del Señor.",
+          verses: [
+            { number: 1, title: "Visión de Abdías. Orgullo y caída de Edom", text: "Visión de Abdías. Esto es lo que dice el Señor y Dios acerca de Edom. Hemos oído un mensaje de parte del Señor. Un heraldo ha sido enviado a las naciones, diciendo: «¡Vamos, marchemos a la guerra contra ella!»." },
+            { number: 2, text: "«¡Te haré insignificante entre las naciones, serás tremendamente despreciado!" },
+            { number: 3, text: "Tu carácter soberbio te ha engañado. Como habitas en las hendiduras de los desfiladeros, en la altura de tu morada, te dices a ti mismo: ¿Quién podrá arrojarme a tierra?" },
+            { number: 4, text: "Pero aunque vueles a lo alto como águila, y tu nido esté puesto en las estrellas, de allí te arrojaré afirma el Señor." },
+            { number: 5, text: "Si vinieran a ti ladrones o saqueadores nocturnos, ¿no robarían sólo lo que les bastara? ¡Pero tú, cómo serás destruido! Si vinieran a ti vendimiadores, ¿no dejarían algunos racimos?" },
+            { number: 6, text: "¡Pero cómo registrarán a Esaú! ¡Cómo rebuscarán sus escondrijos!" },
+            { number: 7, text: "Hasta la frontera te expulsarán tus propios aliados, te engañarán y dominarán tus propios amigos. Los que se sientan a tu mesa te pondrán una trampa. ¡Es que Edom ya no tiene inteligencia!" },
+            { number: 8, text: "¿Acaso no destruiré yo en aquel día a los sabios de Edom, a la inteligencia del monte de Esaú? afirma el Señor." },
+            { number: 9, text: "Ciudad de Temán, tus guerreros se caerán de miedo, a fin de que todo hombre sea exterminado del monte de Esaú por la masacre." },
+            { number: 10, text: "»Por la violencia hecha contra tu hermano Jacob, te cubrirá la vergüenza y serás exterminado para siempre." },
+            { number: 11, text: "En el día que te mantuviste aparte, en el día que extranjeros llevaron su ejército cautivo, cuando extraños entraron por su puerta y sobre Jerusalén echaron suerte, tú eras como uno de ellos." },
+            { number: 12, text: "No debiste reírte de tu hermano en su mal día, en el día de su desgracia. No debiste alegrarte a costa del pueblo de Judá en el día de su ruina. No debiste proferir arrogancia en el día de su angustia." },
+            { number: 13, text: "No debiste entrar por la puerta de mi pueblo en el día de su calamidad. No debiste recrear la vista con su desgracia en el día de su calamidad. No debiste echar mano a sus riquezas en el día de su calamidad." },
+            { number: 14, text: "No debiste aguardar en los angostos caminos para matar a los que huían. No debiste entregar a los sobrevivientes en el día de su angustia." },
+            { number: 15, text: "»Porque cercano está el día del Señor contra todas las naciones. ¡Edom, como hiciste, se te hará! ¡sobre tu cabeza recaerá tu merecido!" },
+            { number: 16, text: "Pues sin duda que así como ustedes, israelitas, bebieron de mi copa en mi santo monte, así también la beberán sin cesar todas las naciones; beberán y engullirán, y entonces serán como si nunca hubieran existido." },
+            { number: 17, text: "Pero en el monte Sión habrá liberación, y será sagrado. El pueblo de Jacob recuperará sus posesiones." },
+            { number: 18, text: "Los descendientes de Jacob serán fuego, y los de José, llama; pero la casa real de Esaú será estopa: le pondrán fuego y la consumirán, de tal forma que no quedará sobreviviente entre los descendientes de Esaú.» El Señor lo ha dicho." },
+            { number: 19, text: "Los del Néguev poseerán el monte de Esaú, y los de la Sefelá poseerán Filistea. Los israelitas poseerán los campos de Efraín y de Samaria, y los de Benjamín poseerán Galaad." },
+            { number: 20, text: "Los exiliados, este ejército de israelitas que viven entre los cananeos, poseerán la tierra hasta Sarepta. Los desterrados de Jerusalén, que viven en Sefarad, poseerán las ciudades del Néguev," },
+            { number: 21, text: "y los libertadores subirán al monte Sión para gobernar la región montañosa de Esaú. Y el reino será del Señor." }
+          ]
+        },
+      ]
+    },
+    {
+      id: 32,
+      name: "Jonás",
+      testament: "Antiguo Testamento",
+      type: "Profetas Menores",
+      desc: "Jonás relata cómo Dios lo envía a predicar a Nínive, pero él intenta huir. Tras ser rescatado por un gran pez, cumple su misión y muestra la misericordia de Dios hacia todas las naciones.",
+      chapters: [
+        {
+          chapterNumber: 1,
+          summary: "Dios ordena a Jonás proclamar juicio contra Nínive, pero el profeta huye en barco hacia Tarsis. El Señor desata una violenta tormenta; al descubrir por suertes que Jonás es el culpable, los marineros lo arrojan al mar a petición suya, la tormenta se calma, ellos temen al Señor y un enorme pez se traga a Jonás durante tres días y tres noches.",
+          verses: [
+            { number: 1, title: "Jonás desobedece al Señor", text: "La palabra del Señor vino a Jonás hijo de Amitay:" },
+            { number: 2, text: "«Anda, ve a la gran ciudad de Nínive y proclama contra ella que su maldad ha llegado hasta mi presencia.»" },
+            { number: 3, text: "Jonás se fue, pero en dirección a Tarsis, para huir del Señor. Bajó a Jope, donde encontró un barco que zarpaba rumbo a Tarsis. Pagó su pasaje y se embarcó con los que iban a esa ciudad, huyendo así del Señor." },
+            { number: 4, text: "Pero el Señor lanzó sobre el mar un fuerte viento, y se desencadenó una tormenta tan violenta que el barco amenazaba con hacerse pedazos." },
+            { number: 5, text: "Los marineros, aterrados y a fin de aliviar la situación, comenzaron a clamar cada uno a su dios y a lanzar al mar lo que había en el barco. Jonás, en cambio, que había bajado al fondo de la nave para acostarse, ahora dormía profundamente." },
+            { number: 6, text: "El capitán del barco se le acercó y le dijo: ¿Cómo puedes estar durmiendo? ¡Levántate! ¡Clama a tu dios! Quizá se fije en nosotros, y no perezcamos." },
+            { number: 7, text: "Los marineros, por su parte, se dijeron unos a otros: ¡Vamos, echemos suertes para averiguar quién tiene la culpa de que nos haya venido este desastre! Así lo hicieron, y la suerte recayó en Jonás." },
+            { number: 8, text: "Entonces le preguntaron: Dinos ahora, ¿quién tiene la culpa de que nos haya venido este desastre? ¿A qué te dedicas? ¿De dónde vienes? ¿Cuál es tu país? ¿A qué pueblo perteneces?" },
+            { number: 9, text: "Soy hebreo y temo al Señor, Dios del cielo, que hizo el mar y la tierra firme les respondió." },
+            { number: 10, text: "Al oír esto, los marineros se aterraron aún más, y como sabían que Jonás huía del Señor, pues él mismo se lo había contado, le dijeron: ¡Qué es lo que has hecho!" },
+            { number: 11, text: "Pero el mar se iba enfureciendo más y más, así que le preguntaron: ¿Qué vamos a hacer contigo para que el mar deje de azotarnos?" },
+            { number: 12, text: "Tómenme y láncenme al mar, y el mar dejará de azotarlos les respondió. Yo sé bien que por mi culpa se ha desatado sobre ustedes esta terrible tormenta." },
+            { number: 13, text: "Sin embargo, en un intento por regresar a tierra firme, los marineros se pusieron a remar con todas sus fuerzas; pero como el mar se enfurecía más y más contra ellos, no lo consiguieron." },
+            { number: 14, text: "Entonces clamaron al Señor: «Oh Señor, tú haces lo que quieres. No nos hagas perecer por quitarle la vida a este hombre, ni nos hagas responsables de la muerte de un inocente.»" },
+            { number: 15, text: "Así que tomaron a Jonás y lo lanzaron al agua, y la furia del mar se aplacó." },
+            { number: 16, text: "Al ver esto, se apoderó de ellos un profundo temor al Señor, a quien le ofrecieron un sacrificio y le hicieron votos." },
+            { number: 17, title: "Oración de Jonás", text: "El Señor, por su parte, dispuso un enorme pez para que se tragara a Jonás, quien pasó tres días y tres noches en su vientre." }
+          ]
+        },
+        {
+          chapterNumber: 2,
+          summary: "Desde el vientre del pez, Jonás eleva una oración de gratitud al Señor por haber escuchado su clamor en medio de las profundidades del mar y haberlo rescatado de la muerte. Promete ofrecer sacrificios y cumplir sus votos proclamando que la salvación viene del Señor, tras lo cual Dios ordena al pez vomitarlo en tierra firme.",
+          verses: [
+            { number: 1, title: "Oración de Jonás desde el pez", text: "Entonces Jonás oró al Señor su Dios desde el vientre del pez." },
+            { number: 2, text: "Dijo: «En mi angustia clamé al Señor, y él me respondió. Desde las entrañas del sepulcro pedí auxilio, y tú escuchaste mi clamor." },
+            { number: 3, text: "A lo profundo me arrojaste, al corazón mismo de los mares; las corrientes me envolvían, todas tus ondas y tus olas pasaban sobre mí." },
+            { number: 4, text: "Y pensé: He sido expulsado de tu presencia. ¿Cómo volveré a contemplar tu santo templo?" },
+            { number: 5, text: "Las aguas me llegaban hasta el cuello, lo profundo del océano me envolvía; las algas se me enredaban en la cabeza," },
+            { number: 6, text: "arrastrándome a los cimientos de las montañas. Me tragó la tierra, y para siempre sus cerrojos se cerraron tras de mí. Pero tú, Señor, Dios mío, me rescataste de la fosa." },
+            { number: 7, text: "»Al sentir que se me iba la vida, me acordé del Señor, y mi oración llegó hasta ti, hasta tu santo templo." },
+            { number: 8, text: "»Los que siguen a ídolos vanos abandonan el amor de Dios." },
+            { number: 9, text: "Yo, en cambio, te ofreceré sacrificios y cánticos de gratitud. Cumpliré las promesas que te hice. ¡La salvación viene del Señor!»" },
+            { number: 10, text: "Entonces el Señor dio una orden y el pez vomitó a Jonás en tierra firme." }
+          ]
+        },
+        {
+          chapterNumber: 3,
+          summary: "El Señor llama por segunda vez a Jonás, quien esta vez obedece y recorre Nínive anunciando su destrucción en cuarenta días. Los ninivitas y su rey creen a Dios, decretan un ayuno total, se visten de luto y se apartan de su mal camino, por lo que Dios se compadece y desiste de destruir la ciudad.",
+          verses: [
+            { number: 1, title: "Jonás obedece al Señor", text: "La palabra del Señor vino por segunda vez a Jonás:" },
+            { number: 2, text: "«Anda, ve a la gran ciudad de Nínive y proclámale el mensaje que te voy a dar.»" },
+            { number: 3, text: "Jonás se fue hacia Nínive, conforme al mandato del Señor. Ahora bien, Nínive era una ciudad grande y de mucha importancia." },
+            { number: 4, text: "Jonás se fue internando en la ciudad, y la recorrió todo un día, mientras proclamaba: «¡Dentro de cuarenta días Nínive será destruida!»" },
+            { number: 5, text: "Y los ninivitas le creyeron a Dios, proclamaron ayuno y, desde el mayor hasta el menor, se vistieron de luto en señal de arrepentimiento." },
+            { number: 6, text: "Cuando el rey de Nínive se enteró del mensaje, se levantó de su trono, se quitó su manto real, hizo duelo y se cubrió de ceniza." },
+            { number: 7, text: "Luego mandó que se pregonara en Nínive: «Por decreto del rey y de su corte: »Ninguna persona o animal, ni ganado lanar o vacuno, probará alimento alguno, ni tampoco pastará ni beberá agua." },
+            { number: 8, text: "Al contrario, el rey ordena que toda persona, junto con sus animales, haga duelo y clame a Dios con todas sus fuerzas. Ordena así mismo que cada uno se convierta de su mal camino y de sus hechos violentos." },
+            { number: 9, text: "¡Quién sabe! Tal vez Dios cambie de parecer, y aplaque el ardor de su ira, y no perezcamos.»" },
+            { number: 10, text: "Al ver Dios lo que hicieron, es decir, que se habían convertido de su mal camino, cambió de parecer y no llevó a cabo la destrucción que les había anunciado." }
+          ]
+        },
+        {
+          chapterNumber: 4,
+          summary: "Jonás se enfurece por la misericordia de Dios hacia Nínive y le pide la muerte, acampando al este de la ciudad. Dios hace crecer una planta para darle sombra y luego un gusano la seca, confrontando la rabia del profeta para enseñarle que si él se compadece de una planta pasajera, cuánto más ha de compadecerse Dios de los miles de habitantes y animales de Nínive.",
+          verses: [
+            { number: 1, title: "Enojo de Jonás", text: "Pero esto disgustó mucho a Jonás, y lo hizo enfurecerse." },
+            { number: 2, text: "Así que oró al Señor de esta manera: ¡Oh Señor! ¿No era esto lo que yo decía cuando todavía estaba en mi tierra? Por eso me anticipé a huir a Tarsis, pues bien sabía que tú eres un Dios bondadoso y compasivo, lento para la ira y lleno de amor, que cambias de parecer y no destruyes." },
+            { number: 3, text: "Así que ahora, Señor, te suplico que me quites la vida. ¡Prefiero morir que seguir viviendo!" },
+            { number: 4, text: "¿Tienes razón de enfurecerte tanto? le respondió el Señor." },
+            { number: 5, text: "Jonás salió y acampó al este de la ciudad. Allí hizo una enramada y se sentó bajo su sombra para ver qué iba a suceder con la ciudad." },
+            { number: 6, text: "Para aliviarlo de su malestar, Dios el Señor dispuso una planta, la cual creció hasta cubrirle a Jonás la cabeza con su sombra. Jonás se alegró muchísimo por la planta." },
+            { number: 7, text: "Pero al amanecer del día siguiente Dios dispuso que un gusano la hiriera, y la planta se marchitó." },
+            { number: 8, text: "Al salir el sol, Dios dispuso un viento oriental abrasador. Además, el sol hería a Jonás en la cabeza, de modo que éste desfallecía. Con deseos de morirse, exclamó: «¡Prefiero morir que seguir viviendo!»" },
+            { number: 9, text: "Pero Dios le dijo a Jonás: ¿Tienes razón de enfurecerte tanto por la planta? ¡Claro que la tengo! le respondió. ¡Me muero de rabia!" },
+            { number: 10, text: "El Señor le dijo: Tú te compadeces de una planta que, sin ningún esfuerzo de tu parte, creció en una noche y en la otra pereció." },
+            { number: 11, text: "Y de Nínive, una gran ciudad donde hay más de ciento veinte mil personas que no distinguen su derecha de su izquierda, y tanto ganado, ¿no habría yo de compadecerme?" }
+          ]
+        },
+      ]
+    },
   ]
 };
