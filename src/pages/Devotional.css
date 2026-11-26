@@ -1,4 +1,6 @@
-/* --- ESTILOS PARA DEVOTIONAL.JSX --- */
+/* ==========================================================================
+   ESTILOS PARA DEVOTIONAL.JSX (LECTURA + EDITOR EDITORIAL POR BLOQUES)
+   ========================================================================== */
 
 .devotional-container {
   height: 100%;
@@ -15,7 +17,6 @@
 .devotional-date-header,
 .devotional-top-label,
 .devotional-content,
-.devotional-editor,
 .devotional-empty {
   width: 100%;
   max-width: 720px;
@@ -83,31 +84,80 @@
   margin-bottom: 24px;
 }
 
-.devotional-subtitle {
-  text-align: center;
-  font-size: 15px;
-  color: #ccc;
-  line-height: 1.5;
-  margin-bottom: 36px;
+.devotional-intro-block {
+  margin-bottom: 24px;
 }
 
+.devotional-blocks-reader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Punto clave en lectura */
+.devotional-point-block {
+  width: 100%;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.devotional-point-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.devotional-point-num {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: #E06C75;
+  color: #0D0D0F;
+  font-size: 11.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.devotional-point-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #A1A1AA;
+}
+
+.devotional-point-block h2 {
+  font-size: clamp(20px, 5vw, 24px);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
+}
+
+/* Tarjeta de versículo en lectura */
 .devotional-verse-card {
   width: 100%;
   background-color: #0a0a0a;
   border: 1px solid #2a2a2a;
+  border-left: 3px solid #E5C07B;
   border-radius: 16px;
   padding: 28px 24px;
   position: relative;
-  cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
-  margin-bottom: 36px;
+  margin: 8px 0;
 }
 
-.devotional-verse-card:hover {
+.devotional-verse-card.is-clickable {
+  cursor: pointer;
+}
+
+.devotional-verse-card.is-clickable:hover {
   border-color: #3f3f46;
+  border-left-color: #E5C07B;
 }
 
-.devotional-verse-card:active {
+.devotional-verse-card.is-clickable:active {
   background-color: #111;
 }
 
@@ -141,12 +191,38 @@
   color: #555;
 }
 
+/* Ilustración en lectura */
+.devotional-highlight-card {
+  width: 100%;
+  background-color: #1B1822;
+  border: 1px solid rgba(216, 180, 254, 0.2);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.devotional-highlight-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #C4B5FD;
+}
+
+.devotional-highlight-card p {
+  font-size: clamp(15.5px, 4vw, 18px);
+  line-height: 1.7;
+  color: #E4E4E7;
+}
+
 .devotional-separator {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 28px 0;
+  margin: 18px 0;
   opacity: 0.8;
 }
 
@@ -161,6 +237,9 @@
 
 .devotional-body {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .devotional-body p {
@@ -197,78 +276,6 @@
   cursor: pointer;
 }
 
-.devotional-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.devotional-editor input,
-.devotional-editor textarea {
-  width: 100%;
-  background-color: #111;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 16px;
-  outline: none;
-}
-
-.devotional-editor input:focus,
-.devotional-editor textarea:focus {
-  border-color: #cf666d;
-}
-
-.verse-input-group {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.verse-input-group input {
-  flex: 2;
-  min-width: 0;
-}
-
-.verse-input-group select {
-  flex: 1;
-  min-width: 110px;
-  background-color: #111;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 16px;
-  outline: none;
-}
-
-.editor-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.editor-actions button {
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background-color: #222;
-  color: #fff;
-}
-
-.editor-actions .save-btn {
-  background-color: #cf666d;
-  color: #000;
-  font-weight: bold;
-}
-
-.editor-actions button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .devotional-bottom-actions {
   display: flex;
   flex-wrap: wrap;
@@ -284,7 +291,6 @@
   color: #888;
   padding: 10px 20px;
   border-radius: 20px;
-  margin-top: 0;
   cursor: pointer;
 }
 
@@ -314,37 +320,6 @@
   background-color: rgba(207, 102, 109, 0.15);
 }
 
-.devotional-loading {
-  color: #888;
-  font-size: 15px;
-}
-
-/* Celulares chicos */
-@media (max-width: 380px) {
-  .devotional-container {
-    padding: 16px 15px 88px;
-  }
-
-  .devotional-verse-card {
-    padding: 22px 16px;
-  }
-
-  .verse-input-group {
-    flex-direction: column;
-  }
-}
-
-/* Tablet y PC */
-@media (min-width: 768px) {
-  .devotional-container {
-    padding: 36px 40px 80px;
-  }
-
-  .devotional-verse-card {
-    padding: 36px 34px;
-  }
-}
-
 .copy-btn-ghost {
   display: flex;
   align-items: center;
@@ -367,6 +342,624 @@
   border-color: #666;
 }
 
+.devotional-loading {
+  color: #888;
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   EDITOR EDITORIAL TIPO LIENZO (MISMA DINÁMICA QUE MODO PRÉDICA)
+   ========================================================================== */
+
+.devo-editor-page {
+  height: 100%;
+  width: 100%;
+  background-color: #0D0D0F;
+  color: #F3F4F6;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.devo-editor-page * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.devo-editor-page textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.devo-editor-topbar {
+  flex-shrink: 0;
+  z-index: 20;
+  padding: 12px 16px;
+  background-color: rgba(13, 13, 15, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.devo-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #E06C75;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 8px 6px 2px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.devo-editor-date-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #A1A1AA;
+  background-color: #16161A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 12px;
+  border-radius: 9999px;
+  text-transform: lowercase;
+}
+
+.devo-primary-pill {
+  background-color: #E06C75;
+  color: #0D0D0F;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.devo-primary-pill:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.devo-canvas-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 22px 18px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.devo-hero-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.devo-canvas-title {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 25px;
+  line-height: 1.22;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #F3F4F6;
+  font-family: inherit;
+  padding: 0;
+}
+
+.devo-canvas-title::placeholder {
+  color: #52525B;
+}
+
+/* Secciones opcionales colapsables */
+.devo-optional-section.devo-conclusion-pad {
+  padding-bottom: 12px;
+}
+
+.devo-optional-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  background-color: rgba(22, 22, 26, 0.65);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  color: #A1A1AA;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.devo-plus-coral {
+  color: #E06C75;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.devo-optional-tag {
+  font-size: 11.5px;
+  color: #71717A;
+}
+
+.devo-optional-box {
+  padding-left: 14px;
+  border-left: 2px solid rgba(255, 255, 255, 0.14);
+  transition: border-color 0.15s ease;
+}
+
+.devo-optional-box:focus-within {
+  border-left-color: #E06C75;
+}
+
+.devo-optional-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.devo-optional-head span {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #71717A;
+}
+
+.devo-optional-hide-btn {
+  background: transparent;
+  border: none;
+  color: #71717A;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.devo-optional-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #E4E4E7;
+  font-size: 15px;
+  line-height: 1.6;
+  font-family: inherit;
+  padding: 0;
+}
+
+.devo-optional-textarea::placeholder {
+  color: #52525B;
+}
+
+.devo-editor-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+  width: 100%;
+}
+
+/* Desarrollo y bloques */
+.devo-dev-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.devo-dev-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.devo-dev-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.devo-dev-title-group h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F3F4F6;
+}
+
+.devo-blocks-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #A1A1AA;
+  background-color: #16161A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.devo-empty-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.devo-empty-subtitle {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #A1A1AA;
+}
+
+.devo-empty-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.devo-picker-card {
+  text-align: left;
+  padding: 14px;
+  border-radius: 16px;
+  background-color: #16161A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.devo-picker-card:active {
+  background-color: #1E1E24;
+  transform: scale(0.98);
+}
+
+.devo-picker-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.devo-picker-coral {
+  background-color: rgba(224, 108, 117, 0.15);
+  color: #E06C75;
+}
+
+.devo-picker-neutral {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #D4D4D8;
+}
+
+.devo-picker-gold {
+  background-color: rgba(229, 192, 123, 0.15);
+  color: #E5C07B;
+}
+
+.devo-picker-purple {
+  background-color: rgba(196, 181, 253, 0.15);
+  color: #C4B5FD;
+}
+
+.devo-picker-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.devo-picker-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F3F4F6;
+}
+
+.devo-picker-text span {
+  font-size: 11px;
+  color: #A1A1AA;
+}
+
+/* Tarjetas de bloques activos */
+.devo-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.devo-block-card {
+  border-radius: 16px;
+  background-color: #16161A;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s ease;
+}
+
+.devo-block-card.devo-block-subtitle:focus-within {
+  border-color: rgba(224, 108, 117, 0.45);
+}
+
+.devo-block-card.devo-block-paragraph {
+  background-color: rgba(22, 22, 26, 0.65);
+}
+
+.devo-block-card.devo-block-paragraph:focus-within {
+  background-color: #16161A;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.devo-block-card.devo-block-verse {
+  border-left: 3px solid #E5C07B;
+}
+
+.devo-block-card.devo-block-highlight {
+  background-color: #1B1822;
+  border-color: rgba(216, 180, 254, 0.16);
+}
+
+.devo-block-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.devo-block-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.devo-point-num-badge {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: rgba(224, 108, 117, 0.16);
+  color: #E06C75;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.devo-block-badge-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #71717A;
+}
+
+.devo-block-badge-label.label-gold {
+  color: #E5C07B;
+}
+
+.devo-block-badge-label.label-purple {
+  color: #C4B5FD;
+}
+
+.devo-block-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.devo-block-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #A1A1AA;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.devo-block-controls button:active {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.devo-block-controls button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.devo-block-controls .devo-block-delete {
+  color: #E06C75;
+}
+
+.devo-input-point,
+.devo-input-paragraph,
+.devo-input-highlight {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.devo-input-point {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #F3F4F6;
+}
+
+.devo-input-paragraph,
+.devo-input-highlight {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #E4E4E7;
+}
+
+.devo-input-point::placeholder,
+.devo-input-paragraph::placeholder,
+.devo-input-highlight::placeholder {
+  color: #52525B;
+}
+
+/* Bloque versículo en editor */
+.devo-verse-builder {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.devo-verse-row {
+  display: flex;
+  gap: 8px;
+}
+
+.devo-verse-ref-input {
+  flex: 1;
+  min-width: 0;
+  background-color: #1E1E24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #E5C07B;
+  outline: none;
+}
+
+.devo-verse-ref-input::placeholder {
+  color: #71717A;
+  font-weight: 400;
+}
+
+.devo-verse-ref-input:focus {
+  border-color: rgba(229, 192, 123, 0.5);
+}
+
+.devo-verse-version-select {
+  width: 98px;
+  flex-shrink: 0;
+  background-color: #1E1E24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  padding: 10px 8px;
+  font-size: 13px;
+  color: #F3F4F6;
+  outline: none;
+}
+
+.devo-fetch-verse-btn {
+  width: 100%;
+  background-color: rgba(229, 192, 123, 0.12);
+  border: 1px solid rgba(229, 192, 123, 0.35);
+  color: #E5C07B;
+  padding: 9px 12px;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.devo-verse-error {
+  color: #F87171;
+  font-size: 12.5px;
+}
+
+.devo-verse-preview {
+  background-color: rgba(13, 13, 15, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.devo-verse-preview strong {
+  color: #E5C07B;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.devo-verse-preview p {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: #E4E4E7;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Barra inferior contextual del editor */
+.devo-sticky-footer {
+  flex-shrink: 0;
+  z-index: 20;
+  background-color: rgba(18, 18, 22, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.devo-quick-add-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.devo-quick-add-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.devo-quick-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 11px;
+  background-color: #1E1E24;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #E4E4E7;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dqa-coral { color: #E06C75; font-weight: 700; }
+.dqa-neutral { color: #A1A1AA; font-weight: 700; }
+.dqa-gold { color: #E5C07B; font-weight: 700; }
+.dqa-purple { color: #C4B5FD; font-weight: 700; }
+
+.devo-save-cta {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background-color: #E06C75;
+  color: #0D0D0F;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.devo-save-cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Toast */
 .devotional-toast {
   position: fixed;
   bottom: 88px;
@@ -385,8 +978,108 @@
   pointer-events: none;
 }
 
+.devotional-toast.devo-editor-toast {
+  bottom: 175px;
+}
+
+/* ==========================================================================
+   RESPONSIVE — CELULARES CHICOS, TABLET Y PC
+   ========================================================================== */
+
+@media (max-width: 380px) {
+  .devotional-container {
+    padding: 16px 15px 88px;
+  }
+
+  .devotional-verse-card {
+    padding: 22px 16px;
+  }
+
+  .devo-canvas-scroll {
+    padding: 16px 14px 24px;
+  }
+
+  .devo-canvas-title {
+    font-size: 21px;
+  }
+
+  .devo-picker-card {
+    padding: 11px;
+    gap: 8px;
+  }
+
+  .devo-verse-version-select {
+    width: 84px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .devotional-container {
+    padding: 36px 40px 80px;
+  }
+
+  .devotional-verse-card {
+    padding: 36px 34px;
+  }
+
+  .devo-editor-topbar {
+    padding: 14px 28px;
+  }
+
+  .devo-canvas-scroll {
+    padding: 32px 32px 36px;
+  }
+
+  .devo-canvas-scroll > * {
+    width: 100%;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .devo-empty-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .devo-sticky-footer {
+    padding: 12px 28px 16px;
+  }
+
+  .devo-sticky-footer > * {
+    width: 100%;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 @media (min-width: 1024px) {
+  .devo-sticky-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .devo-sticky-footer .devo-quick-add-strip {
+    width: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  .devo-sticky-footer .devo-save-cta {
+    width: auto;
+    min-width: 220px;
+    max-width: 280px;
+    margin: 0;
+  }
+
   .devotional-toast {
     bottom: 28px;
+  }
+
+  .devotional-toast.devo-editor-toast {
+    bottom: 84px;
   }
 }
