@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebas
 import { auth } from '../firebase/config';
 import SermonMode from './SermonMode';
 import DailyVersesManager from './DailyVersesManager';
+import { useBackHandler } from '../utils/backNavigation';
 import './Login.css';
 
 export default function Login({
@@ -25,6 +26,28 @@ export default function Login({
   const [showAboutModal, setShowAboutModal] = useState(false);
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  // Manejo del botón/gesto "Atrás" para modales y subvista de Versículos Diarios
+  const loginNavDepth =
+    (adminView === 'dailyVerses' ? 1 : 0) +
+    (showAboutModal ? 1 : 0) +
+    (showInstallHelp ? 1 : 0);
+
+  useBackHandler(() => {
+    if (showAboutModal) {
+      setShowAboutModal(false);
+      return true;
+    }
+    if (showInstallHelp) {
+      setShowInstallHelp(false);
+      return true;
+    }
+    if (adminView === 'dailyVerses') {
+      setAdminView(null);
+      return true;
+    }
+    return false;
+  }, loginNavDepth);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -256,7 +279,7 @@ export default function Login({
                 <h4>¿Qué puedes hacer en la app?</h4>
                 <ul className="about-features-list">
                   <li><strong>Biblia interactiva sin conexión:</strong> Lee el Antiguo y Nuevo Testamento en Reina-Valera 1960 (RVR1960), Reina Valera Contemporánea (RVC) y Nueva Versión Internacional (NVI) desde el modo cartas o el modo lista con buscador.</li>
-                  <li><strong>Lectura personalizada:</strong> Activa la versión paralela para comparar traducciones versículo por versículo, ajusta el tamaño de la letra, resalta pasajes, guarda favoritos y comparte citas.</li>
+                  <li><strong>Lectura personalizada:</strong> Activa la versión paralela para comparar traducciones versículo por versículo, ajusta el tamaño de la letra, resalta pasajes, guarda favoritos y comparte citas como texto o imagen.</li>
                   <li><strong>Devocional diario y Versículos del día:</strong> Accede a reflexiones diarias con salto directo a la cita bíblica y a los versículos destacados en la pantalla de inicio.</li>
                   <li><strong>Modo Prédica y Modo Púlpito:</strong> Herramienta administrativa para armar bosquejos por bloques con citas automáticas, copiar citas para proyección, compartir prédicas completas y leer en vivo con pantalla siempre encendida.</li>
                   <li><strong>Aplicación instalable (PWA):</strong> Descárgala en tu dispositivo para usarla incluso sin acceso a internet.</li>

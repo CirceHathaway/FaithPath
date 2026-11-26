@@ -6,6 +6,7 @@ import './Devotional.css';
 import { rv1960 } from '../data/rv1960';
 import { rvc } from '../data/rvc';
 import { nvi } from '../data/nvi';
+import { useBackHandler } from '../utils/backNavigation';
 
 const DEVOTIONALS_CACHE_KEY = 'devotionals_offline_cache';
 
@@ -50,6 +51,15 @@ export default function Devotional({ navigateToBibleReference }) {
     conclusionText: ''
   });
 
+  // Manejo del botón/gesto "Atrás" al editar un devocional
+  useBackHandler(() => {
+    if (isEditing) {
+      setIsEditing(false);
+      return true;
+    }
+    return false;
+  }, isEditing ? 1 : 0);
+
   const dateKey = formatDateKey(currentDate);
   const displayDate = currentDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
@@ -82,7 +92,6 @@ export default function Devotional({ navigateToBibleReference }) {
           setLoading(false);
         }
       } catch (error) {
-        // Sin conexión: se usa el caché existente sin romper la vista
         console.warn('Sin conexión para sincronizar todos los devocionales:', error);
       }
     };
@@ -258,7 +267,6 @@ export default function Devotional({ navigateToBibleReference }) {
 
     setSaving(true);
     try {
-      // Actualiza caché local primero
       const updatedCache = readDevotionalsCache();
       updatedCache[dateKey] = finalData;
       writeDevotionalsCache(updatedCache);

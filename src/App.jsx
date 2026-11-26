@@ -6,6 +6,11 @@ import Bible from './pages/Bible';
 import Favoritos from './pages/Favoritos';
 import Login from './pages/Login';
 import { BibleProvider } from './context/BibleContext';
+import {
+  initBackNavigation,
+  pushNavState,
+  resetNavToRoot
+} from './utils/backNavigation';
 
 function App() {
   const [currentTab, setCurrentTab] = useState('home');
@@ -20,6 +25,21 @@ function App() {
   });
 
   const bibleRef = useRef(null);
+  const currentTabRef = useRef(currentTab);
+  currentTabRef.current = currentTab;
+
+  // Inicializa el listener global del botón/gesto "Atrás"
+  useEffect(() => {
+    initBackNavigation(() => {
+      if (currentTabRef.current !== 'home') {
+        setIsPulpitMode(false);
+        setCurrentTab('home');
+        resetNavToRoot();
+        return true;
+      }
+      return false;
+    });
+  }, []);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -41,6 +61,22 @@ function App() {
     };
   }, []);
 
+  const handleSetTab = (nextTab) => {
+    if (nextTab === currentTab) return;
+
+    if (nextTab === 'home') {
+      setIsPulpitMode(false);
+      setCurrentTab('home');
+      resetNavToRoot();
+      return;
+    }
+
+    if (currentTab === 'home') {
+      pushNavState();
+    }
+    setCurrentTab(nextTab);
+  };
+
   const resetBible = () => {
     if (bibleRef.current) {
       bibleRef.current.reset();
@@ -48,6 +84,9 @@ function App() {
   };
 
   const navigateToBibleReference = (version, bookId, chapterId, verseId = null) => {
+    if (currentTab === 'home') {
+      pushNavState();
+    }
     setIsPulpitMode(false);
     setCurrentTab('bible');
     setTimeout(() => {
@@ -93,7 +132,7 @@ function App() {
       {!isPulpitMode && (
         <BottomNav
           currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
+          setCurrentTab={handleSetTab}
           resetBible={resetBible}
           isReadingMode={isReadingMode}
         />

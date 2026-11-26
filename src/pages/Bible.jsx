@@ -5,6 +5,7 @@ import { rv1960 } from '../data/rv1960';
 import { rvc } from '../data/rvc';
 import { nvi } from '../data/nvi';
 import { generateVerseImage, formatVerseRanges } from '../utils/verseImageGenerator';
+import { useBackHandler } from '../utils/backNavigation';
 
 const bibleDataMap = {
   'RVR1960': rv1960,
@@ -32,7 +33,7 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
   // Estado del modal de compartir versículo como imagen
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [generatingImage, setGeneratingImage] = useState(false);
-  const [verseImageData, setVerseImageData] = useState(null); // { blob, previewUrl, reference, fileName }
+  const [verseImageData, setVerseImageData] = useState(null);
   const [imageFeedback, setImageFeedback] = useState('');
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -158,6 +159,55 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
       readingContainerRef.current.scrollTop = 0;
     }
   };
+
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+    setImageFeedback('');
+    setVerseImageData(null);
+  };
+
+  // Manejo del botón/gesto "Atrás" dentro de Biblia
+  const bibleNavDepth =
+    (view === 'capitulos' ? 1 : view === 'lectura' ? 2 : 0) +
+    (isListViewGlobal && listViewBookSelected ? 1 : 0) +
+    (isMenuOpen ? 1 : 0) +
+    (imageModalOpen ? 1 : 0) +
+    (selectedVerses.length > 0 ? 1 : 0);
+
+  useBackHandler(() => {
+    if (imageModalOpen) {
+      handleCloseImageModal();
+      return true;
+    }
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      return true;
+    }
+    if (selectedVerses.length > 0) {
+      setSelectedVerses([]);
+      return true;
+    }
+    if (view === 'lectura') {
+      if (lastListViewBook) {
+        setIsListViewGlobal(true);
+        setListViewBookSelected(lastListViewBook);
+        setView('libros');
+      } else {
+        setView('capitulos');
+        setIsListViewGlobal(false);
+      }
+      return true;
+    }
+    if (isListViewGlobal && listViewBookSelected) {
+      setListViewBookSelected(null);
+      return true;
+    }
+    if (view === 'capitulos') {
+      setView('libros');
+      return true;
+    }
+    return false;
+  }, bibleNavDepth);
 
   const handleScroll = () => {
     if (!scrollRef.current || view === 'lectura' || isListViewGlobal) return;
@@ -372,12 +422,6 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
     }
   };
 
-  const handleCloseImageModal = () => {
-    setImageModalOpen(false);
-    setImageFeedback('');
-    setVerseImageData(null);
-  };
-
   const handleDownloadVerseImage = () => {
     if (!verseImageData?.previewUrl) return;
     const link = document.createElement('a');
@@ -409,7 +453,6 @@ const Bible = forwardRef(({ setIsReadingMode }, ref) => {
       }
     }
 
-    // Respaldo automático en navegadores de escritorio que no soportan compartir archivos
     handleDownloadVerseImage();
     setImageFeedback('Tu navegador no admite envío directo: imagen descargada.');
   };

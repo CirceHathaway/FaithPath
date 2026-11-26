@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useBackHandler } from '../utils/backNavigation';
 import {
   collection,
   getDocs,
@@ -672,6 +673,46 @@ export default function SermonMode({
     setActiveMetaModal(null);
     setMode('library');
   };
+
+  const sermonNavDepth =
+    1 +
+    (mode === 'editor' || mode === 'pulpit' ? 1 : 0) +
+    (activeMetaModal ? 1 : 0) +
+    (showSettingsModal ? 1 : 0) +
+    (showIndexModal ? 1 : 0) +
+    (deleteTarget ? 1 : 0);
+
+  useBackHandler(() => {
+    if (deleteTarget) {
+      setDeleteTarget(null);
+      return true;
+    }
+    if (activeMetaModal) {
+      setActiveMetaModal(null);
+      return true;
+    }
+    if (showSettingsModal) {
+      setShowSettingsModal(false);
+      return true;
+    }
+    if (showIndexModal) {
+      setShowIndexModal(false);
+      return true;
+    }
+    if (mode === 'pulpit') {
+      setMode('library');
+      return true;
+    }
+    if (mode === 'editor') {
+      handleBackToLibraryFromEditor();
+      return true;
+    }
+    if (mode === 'library') {
+      onBack();
+      return true;
+    }
+    return false;
+  }, sermonNavDepth);
 
   // --- ACCIONES DEL MODO PÚLPITO ---
   const toggleDone = (id) => {

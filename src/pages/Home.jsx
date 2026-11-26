@@ -3,6 +3,7 @@ import VersionSelector from '../components/VersionSelector';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { generateVerseImage, getRandomBackgroundUrl } from '../utils/verseImageGenerator';
+import { useBackHandler, popNavStateSilently } from '../utils/backNavigation';
 import './Home.css';
 
 const DAILY_VERSES_CACHE_KEY = 'daily_verses_offline_cache';
@@ -35,7 +36,6 @@ const getInitialVerses = () => {
   return FALLBACK_VERSES;
 };
 
-// Separa cita y versión limpiamente (evita duplicar la versión en la imagen)
 const extractVerseMeta = (verse) => {
   if (verse.verseRef && verse.version) {
     return {
@@ -78,6 +78,22 @@ export default function Home() {
   const scrollRef = useRef(null);
   const toastTimeoutRef = useRef(null);
 
+  const closeImageModalState = () => {
+    setImageModalOpen(false);
+    setImageFeedback('');
+    setVerseImageData(null);
+    setActiveVerseForImage(null);
+  };
+
+  // Gesto/botón atrás cierra el modal de imagen sin salir de la app
+  useBackHandler(() => {
+    if (imageModalOpen) {
+      closeImageModalState();
+      return true;
+    }
+    return false;
+  }, imageModalOpen ? 1 : 0);
+
   const showToast = useCallback((msg) => {
     setToastMsg(msg);
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
@@ -90,7 +106,6 @@ export default function Home() {
     };
   }, []);
 
-  // Libera la URL temporal del Blob al cerrar o cambiar de imagen
   useEffect(() => {
     return () => {
       if (verseImageData?.previewUrl) {
@@ -143,7 +158,6 @@ export default function Home() {
     setActiveIndex(clamped);
   };
 
-  // Copia el texto del versículo diario al portapapeles (con fallback para HTTP local)
   const handleCopyVerse = async (verse) => {
     const { displayRef } = extractVerseMeta(verse);
     const textToCopy = `“${verse.text}”\n— ${displayRef}`;
@@ -221,10 +235,8 @@ export default function Home() {
   };
 
   const handleCloseImageModal = () => {
-    setImageModalOpen(false);
-    setImageFeedback('');
-    setVerseImageData(null);
-    setActiveVerseForImage(null);
+    closeImageModalState();
+    popNavStateSilently();
   };
 
   const handleDownloadVerseImage = () => {
@@ -273,8 +285,8 @@ export default function Home() {
         style={{ backgroundImage: backgroundImages[1], opacity: activeIndex === 1 ? 1 : 0 }}
       />
 
-      {/* Capa estática superior (No deslizable, siempre visible) */}
-      <div className="home-static-overlay">
+      {/* Columna principal: separa título y versículo para evitar superposiciones */}
+      <div className="home-foreground">
         <div className="home-top-bar">
           <VersionSelector />
         </div>
@@ -286,86 +298,91 @@ export default function Home() {
           </h1>
           <p className="home-subtitle">Biblia Interactiva</p>
         </div>
-      </div>
 
-      {/* Capa deslizable que cubre TODA la pantalla */}
-      <div className="home-swipe-area" ref={scrollRef} onScroll={handleScroll}>
-        {verses.map((verse, index) => {
-          const { displayRef } = extractVerseMeta(verse);
+        {/* Zona deslizable inferior con scroll interno seguro si el texto es largo */}
+        <div className="home-swipe-stage">
+          <div className="home-swipe-area" ref={scrollRef} onScroll={handleScroll}>
+            {verses.map((verse, index) => {
+              const { displayRef } = extractVerseMeta(verse);
+              const charLen = verse.text?.length || 0;
+              const lengthClass =
+                charLen > 300 ? 'is-very-long' : charLen > 170 ? 'is-long' : '';
 
-          return (
-            <div key={index} className="home-verse-slide">
-              <div className="home-verse-content">
-                <p className="home-verse-text">“{verse.text}”</p>
-                <p className="home-verse-ref">{displayRef}</p>
+              return (
+                <div key={index} className="home-verse-slide">
+                  <div className={`home-verse-content ${lengthClass}`}>
+                    <p className="home-verse-text">“{verse.text}”</p>
+                    <p className="home-verse-ref">{displayRef}</p>
 
-                <div className="home-verse-actions">
-                  <button
-                    type="button"
-                    className="home-action-btn"
-                    onClick={() => handleCopyVerse(verse)}
-                  >
-                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                    <span>Copiar</span>
-                  </button>
+                    <div className="home-verse-actions">
+                      <button
+                        type="button"
+                        className="home-action-btn"
+                        onClick={() => handleCopyVerse(verse)}
+                      >
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        <span>Copiar</span>
+                      </button>
 
-                  <button
-                    type="button"
-                    className="home-action-btn"
-                    onClick={() => handleOpenImageModal(verse)}
-                  >
-                    <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                      <circle cx="8.5" cy="8.5" r="1.5" />
-                      <polyline points="21 15 16 10 5 21" />
-                    </svg>
-                    <span>Imagen</span>
-                  </button>
+                      <button
+                        type="button"
+                        className="home-action-btn"
+                        onClick={() => handleOpenImageModal(verse)}
+                      >
+                        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <span>Imagen</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
 
-      {/* Flechas laterales de navegación (solo visibles en PC) */}
-      {verses.length > 1 && (
-        <>
-          <button
-            type="button"
-            className="home-nav-arrow prev"
-            onClick={() => goToSlide(activeIndex - 1)}
-            disabled={activeIndex <= 0}
-            aria-label="Versículo anterior"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
+          {/* Flechas laterales de navegación (solo visibles en PC) */}
+          {verses.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="home-nav-arrow prev"
+                onClick={() => goToSlide(activeIndex - 1)}
+                disabled={activeIndex <= 0}
+                aria-label="Versículo anterior"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
 
-          <button
-            type="button"
-            className="home-nav-arrow next"
-            onClick={() => goToSlide(activeIndex + 1)}
-            disabled={activeIndex >= verses.length - 1}
-            aria-label="Versículo siguiente"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        </>
-      )}
+              <button
+                type="button"
+                className="home-nav-arrow next"
+                onClick={() => goToSlide(activeIndex + 1)}
+                disabled={activeIndex >= verses.length - 1}
+                aria-label="Versículo siguiente"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </>
+          )}
+        </div>
 
-      {/* Indicadores en la parte inferior */}
-      <div className="home-indicators-wrapper">
-        <div className="home-indicators">
-          {verses.map((_, i) => (
-            <div key={i} className={`home-dot ${activeIndex === i ? 'active' : ''}`} />
-          ))}
+        {/* Indicadores en la parte inferior */}
+        <div className="home-indicators-wrapper">
+          <div className="home-indicators">
+            {verses.map((_, i) => (
+              <div key={i} className={`home-dot ${activeIndex === i ? 'active' : ''}`} />
+            ))}
+          </div>
         </div>
       </div>
 
