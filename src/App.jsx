@@ -11,6 +11,7 @@ import {
   pushNavState,
   resetNavToRoot
 } from './utils/backNavigation';
+import { initViewportSync } from './utils/viewportSync';
 
 function App() {
   const [initialDevotionalDate, setInitialDevotionalDate] = useState(() => {
@@ -24,6 +25,7 @@ function App() {
   const [isReadingMode, setIsReadingMode] = useState(false);
   const [isPulpitMode, setIsPulpitMode] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [highlightInstallBtn, setHighlightInstallBtn] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(() => {
     return (
       window.matchMedia('(display-mode: standalone)').matches ||
@@ -36,11 +38,17 @@ function App() {
   const handledInitialLinkRef = useRef(false);
   currentTabRef.current = currentTab;
 
+  // Calibra el alto real de pantalla en móvil/tablet al iniciar y tras actualizaciones PWA
+  useEffect(() => {
+    return initViewportSync();
+  }, []);
+
   // Inicializa el listener global del botón/gesto "Atrás"
   useEffect(() => {
     initBackNavigation(() => {
       if (currentTabRef.current !== 'home') {
         setIsPulpitMode(false);
+        setHighlightInstallBtn(false);
         setInitialDevotionalDate(null);
         setCurrentTab('home');
         resetNavToRoot();
@@ -66,6 +74,7 @@ function App() {
     const handleAppInstalled = () => {
       setIsAppInstalled(true);
       setInstallPrompt(null);
+      setHighlightInstallBtn(false);
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -84,6 +93,10 @@ function App() {
       setInitialDevotionalDate(null);
     }
 
+    if (currentTab === 'more') {
+      setHighlightInstallBtn(false);
+    }
+
     if (nextTab === 'home') {
       setIsPulpitMode(false);
       setCurrentTab('home');
@@ -95,6 +108,15 @@ function App() {
       pushNavState();
     }
     setCurrentTab(nextTab);
+  };
+
+  const handleGoToInstall = () => {
+    setIsPulpitMode(false);
+    if (currentTab === 'home') {
+      pushNavState();
+    }
+    setHighlightInstallBtn(true);
+    setCurrentTab('more');
   };
 
   const resetBible = () => {
@@ -111,6 +133,7 @@ function App() {
       pushNavState();
     }
     setIsPulpitMode(false);
+    setHighlightInstallBtn(false);
     setCurrentTab('bible');
     setTimeout(() => {
       if (bibleRef.current) {
@@ -122,7 +145,13 @@ function App() {
   const renderContent = () => {
     switch (currentTab) {
       case 'home':
-        return <Home navigateToBibleReference={navigateToBibleReference} />;
+        return (
+          <Home
+            navigateToBibleReference={navigateToBibleReference}
+            isAppInstalled={isAppInstalled}
+            onGoToInstall={handleGoToInstall}
+          />
+        );
       case 'devotional':
         return (
           <Devotional
@@ -142,6 +171,8 @@ function App() {
             installPrompt={installPrompt}
             isAppInstalled={isAppInstalled}
             clearInstallPrompt={() => setInstallPrompt(null)}
+            highlightInstall={highlightInstallBtn}
+            onClearHighlightInstall={() => setHighlightInstallBtn(false)}
           />
         );
       default:
@@ -153,7 +184,7 @@ function App() {
     <BibleProvider>
       <div
         className="app-container"
-        style={isPulpitMode ? { height: '100dvh' } : undefined}
+        style={isPulpitMode ? { height: 'var(--app-height, 100dvh)' } : undefined}
       >
         {renderContent()}
       </div>

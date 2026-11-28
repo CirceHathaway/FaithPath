@@ -683,3 +683,113 @@
   line-height: 1;
   flex-shrink: 0;
 }
+
+/* --- MODAL DE INVITACIÓN A INSTALAR LA APP EN HOME --- */
+.home-install-prompt-box {
+  max-width: 370px;
+  padding: 22px 20px 20px;
+  gap: 16px;
+  animation: installPromptPop 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes installPromptPop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.home-install-prompt-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.home-install-prompt-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  background-color: rgba(207, 102, 109, 0.14);
+  border: 1px solid rgba(207, 102, 109, 0.35);
+  color: #cf666d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-install-prompt-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-install-prompt-copy h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.home-install-prompt-copy p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #b4b4bc;
+}
+
+.home-install-prompt-copy strong {
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+.home-install-prompt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.home-install-prompt-cta {
+  width: 100%;
+  background-color: #cf666d;
+  color: #050505;
+  border: none;
+  padding: 13px 16px;
+  border-radius: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s ease, transform 0.12s ease;
+}
+
+.home-install-prompt-cta:hover,
+.home-install-prompt-cta:active {
+  opacity: 0.92;
+  transform: scale(0.985);
+}
+
+.home-install-prompt-later {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #9ca3af;
+  padding: 9px 12px;
+  border-radius: 11px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.home-install-prompt-later:hover,
+.home-install-prompt-later:active {
+  color: #e4e4e7;
+  background-color: rgba(255, 255, 255, 0.05);
+}

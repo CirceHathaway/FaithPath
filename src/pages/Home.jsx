@@ -8,6 +8,7 @@ import { getReadingHistory, formatHistoryTime } from '../utils/readingHistory';
 import './Home.css';
 
 const DAILY_VERSES_CACHE_KEY = 'daily_verses_offline_cache';
+const INSTALL_MODAL_DISMISSED_KEY = 'fp_install_modal_dismissed';
 
 const backgroundImages = [
   'url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80")',
@@ -64,10 +65,17 @@ const extractVerseMeta = (verse) => {
   };
 };
 
-export default function Home({ navigateToBibleReference }) {
+export default function Home({
+  navigateToBibleReference,
+  isAppInstalled = false,
+  onGoToInstall
+}) {
   const [verses, setVerses] = useState(getInitialVerses);
   const [activeIndex, setActiveIndex] = useState(0);
   const [toastMsg, setToastMsg] = useState('');
+
+  // Modal de invitación a instalar la app
+  const [installModalOpen, setInstallModalOpen] = useState(false);
 
   // Modal de imagen del versículo diario
   const [imageModalOpen, setImageModalOpen] = useState(false);
@@ -83,6 +91,41 @@ export default function Home({ navigateToBibleReference }) {
   const scrollRef = useRef(null);
   const toastTimeoutRef = useRef(null);
 
+  const dismissInstallModal = useCallback((popHistory = true) => {
+    try {
+      sessionStorage.setItem(INSTALL_MODAL_DISMISSED_KEY, '1');
+    } catch {
+      // Ignora si sessionStorage no está disponible
+    }
+    setInstallModalOpen(false);
+    if (popHistory) {
+      popNavStateSilently();
+    }
+  }, []);
+
+  // Muestra el modal al entrar a Inicio si la app no está instalada
+  useEffect(() => {
+    if (isAppInstalled) {
+      setInstallModalOpen(false);
+      return;
+    }
+
+    let alreadyDismissed = false;
+    try {
+      alreadyDismissed = sessionStorage.getItem(INSTALL_MODAL_DISMISSED_KEY) === '1';
+    } catch {
+      alreadyDismissed = false;
+    }
+
+    if (alreadyDismissed) return;
+
+    const timer = setTimeout(() => {
+      setInstallModalOpen(true);
+    }, 450);
+
+    return () => clearTimeout(timer);
+  }, [isAppInstalled]);
+
   const closeImageModalState = () => {
     setImageModalOpen(false);
     setImageFeedback('');
@@ -91,7 +134,10 @@ export default function Home({ navigateToBibleReference }) {
   };
 
   // Gesto/botón atrás cierra los modales del Home sin salir de la app
-  const modalDepth = (imageModalOpen ? 1 : 0) + (historyModalOpen ? 1 : 0);
+  const modalDepth =
+    (imageModalOpen ? 1 : 0) +
+    (historyModalOpen ? 1 : 0) +
+    (installModalOpen ? 1 : 0);
 
   useBackHandler(() => {
     if (historyModalOpen) {
@@ -100,6 +146,10 @@ export default function Home({ navigateToBibleReference }) {
     }
     if (imageModalOpen) {
       closeImageModalState();
+      return true;
+    }
+    if (installModalOpen) {
+      dismissInstallModal(false);
       return true;
     }
     return false;
@@ -149,6 +199,13 @@ export default function Home({ navigateToBibleReference }) {
       isCancelled = true;
     };
   }, []);
+
+  const handleConfirmInstallRedirect = () => {
+    dismissInstallModal(true);
+    if (onGoToInstall) {
+      onGoToInstall();
+    }
+  };
 
   const handleOpenHistoryModal = () => {
     setReadingHistory(getReadingHistory());
@@ -426,6 +483,61 @@ export default function Home({ navigateToBibleReference }) {
           </div>
         </div>
       </div>
+
+      {/* Modal de invitación a instalar la app */}
+      {installModalOpen && !isAppInstalled && (
+        <div className="home-image-modal-backdrop">
+          <div className="home-image-modal-box home-install-prompt-box">
+            <div className="home-install-prompt-top">
+              <div className="home-install-prompt-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </div>
+
+              <button
+                type="button"
+                className="home-image-close-btn"
+                onClick={() => dismissInstallModal(true)}
+                aria-label="Cerrar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="home-install-prompt-copy">
+              <h3>¿Quieres instalar la app?</h3>
+              <p>
+                Instala <strong>FaithPath</strong> en tu dispositivo para abrirla rápido y leer la Biblia sin conexión.
+              </p>
+            </div>
+
+            <div className="home-install-prompt-actions">
+              <button
+                type="button"
+                className="home-install-prompt-cta"
+                onClick={handleConfirmInstallRedirect}
+              >
+                <span>Ir a instalar</span>
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2.3" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                className="home-install-prompt-later"
+                onClick={() => dismissInstallModal(true)}
+              >
+                Ahora no
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal de historial reciente (cierre exclusivo con botón) */}
       {historyModalOpen && (

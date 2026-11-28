@@ -13,7 +13,9 @@ export default function Login({
   setIsPulpitMode,
   installPrompt,
   isAppInstalled,
-  clearInstallPrompt
+  clearInstallPrompt,
+  highlightInstall = false,
+  onClearHighlightInstall
 }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,8 +29,10 @@ export default function Login({
   const [showInstallHelp, setShowInstallHelp] = useState(false);
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
+  const [isHighlightingInstall, setIsHighlightingInstall] = useState(false);
 
   const toastTimeoutRef = useRef(null);
+  const installCardRef = useRef(null);
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
   const showToast = (msg) => {
@@ -42,6 +46,29 @@ export default function Login({
       if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
     };
   }, []);
+
+  // Señala durante 4 segundos el botón "Instalar aplicación" al venir desde el modal de Inicio
+  useEffect(() => {
+    if (!highlightInstall || isAppInstalled) {
+      setIsHighlightingInstall(false);
+      return;
+    }
+
+    setIsHighlightingInstall(true);
+
+    if (installCardRef.current) {
+      installCardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    const timer = setTimeout(() => {
+      setIsHighlightingInstall(false);
+      if (onClearHighlightInstall) {
+        onClearHighlightInstall();
+      }
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [highlightInstall, isAppInstalled, onClearHighlightInstall]);
 
   // Manejo del botón/gesto "Atrás" para modales y subvista de Versículos Diarios
   const loginNavDepth =
@@ -78,6 +105,11 @@ export default function Login({
   }, [setIsPulpitMode]);
 
   const handleInstallClick = async () => {
+    if (isHighlightingInstall) {
+      setIsHighlightingInstall(false);
+      if (onClearHighlightInstall) onClearHighlightInstall();
+    }
+
     if (installPrompt) {
       installPrompt.prompt();
       const { outcome } = await installPrompt.userChoice;
@@ -197,7 +229,10 @@ export default function Login({
       <h1 className="login-title">Más Opciones</h1>
 
       {/* Tarjeta de instalación PWA */}
-      <div className="install-app-card">
+      <div
+        ref={installCardRef}
+        className={`install-app-card ${isHighlightingInstall ? 'is-highlighted' : ''}`}
+      >
         <div className="install-app-info">
           <h3>Aplicación FaithPath</h3>
           <p>
@@ -210,18 +245,30 @@ export default function Login({
         {isAppInstalled ? (
           <span className="install-done-badge">✓ Instalada</span>
         ) : (
-          <button
-            type="button"
-            className="install-app-btn"
-            onClick={handleInstallClick}
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span>Instalar aplicación</span>
-          </button>
+          <div className="install-app-btn-wrap">
+            {isHighlightingInstall && (
+              <div className="install-pointer-badge" role="status">
+                <span>Toca aquí para instalar</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <polyline points="19 12 12 19 5 12" />
+                </svg>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className={`install-app-btn ${isHighlightingInstall ? 'is-highlighted' : ''}`}
+              onClick={handleInstallClick}
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span>Instalar aplicación</span>
+            </button>
+          </div>
         )}
       </div>
 
