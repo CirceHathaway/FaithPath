@@ -4,6 +4,14 @@ import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp } from 'fireb
 import { auth, db } from '../firebase/config';
 import { BIBLE_VERSIONS, parseAndFetchVerse } from '../utils/bibleHelper';
 import { useBackHandler } from '../utils/backNavigation';
+import {
+  sanitizeRichHtml,
+  richHtmlToPlainText,
+  hasRichContent,
+  useBoldToolbar,
+  RichTextEditor,
+  RichTextDisplay
+} from '../utils/richText';
 import './Devotional.css';
 
 const DEVOTIONALS_CACHE_KEY = 'devotionals_offline_cache';
@@ -42,7 +50,7 @@ const writeDevotionalsCache = (cacheObj) => {
 
 const createBlock = (type) => ({
   id: `dblk_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-  type, // 'subtitle' | 'paragraph' | 'verse' | 'highlight'
+  type, // 'subtitle' | 'heading' | 'paragraph' | 'verse' | 'highlight' (legacy)
   content: '',
   verseInput: '',
   version: 'RVR1960',
@@ -124,30 +132,6 @@ const normalizeDevotional = (raw, fallbackDateKey = '') => {
   };
 };
 
-// Textarea con auto-crecimiento limpio (sin resize handle nativo)
-function AutoTextarea({ value, onChange, className, placeholder, rows = 1, ...rest }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
-
-  return (
-    <textarea
-      ref={ref}
-      rows={rows}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className={className}
-      {...rest}
-    />
-  );
-}
-
 export default function Devotional({ navigateToBibleReference, initialDateKey = null }) {
   const [currentDate, setCurrentDate] = useState(
     () => parseLocalDateKey(initialDateKey) || new Date()
@@ -164,6 +148,8 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
   const [draft, setDraft] = useState(() => createEmptyDevotional(formatDateKey(new Date())));
   const [introOpen, setIntroOpen] = useState(false);
   const [conclusionOpen, setConclusionOpen] = useState(false);
+
+  const { isBoldActive, toggleBold, syncSelection } = useBoldToolbar();
 
   const toastTimeoutRef = useRef(null);
   const containerRef = useRef(null);
@@ -314,8 +300,8 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
     const normalized = normalizeDevotional(devotionalData, dateKey) || createEmptyDevotional(dateKey);
     const cloned = JSON.parse(JSON.stringify(normalized));
     setDraft(cloned);
-    setIntroOpen(Boolean(cloned.intro?.trim()));
-    setConclusionOpen(Boolean(cloned.conclusion?.trim()));
+    setIntroOpen(hasRichContent(cloned.intro));
+    setConclusionOpen(hasRichContent(cloned.conclusion));
     setIsEditing(true);
   };
 
@@ -331,7 +317,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
         const el = document.getElementById(`devo-blk-${created.id}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          const field = el.querySelector('input, textarea');
+          const field = el.querySelector('[data-rich-editor="true"], input, textarea');
           if (field) field.focus();
         }
       }, 60);
@@ -361,6 +347,13 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
       blocks: prev.blocks.filter((b) => b.id !== blockId)
     }));
     showToast('Bloque eliminado');
+  };
+
+  const handleBoldButton = () => {
+    const applied = toggleBold();
+    if (!applied) {
+      showToast('Toca un campo de texto para aplicar negrita');
+    }
   };
 
   const handleFetchBlockVerse = (block, forcedVersion = null) => {
@@ -394,7 +387,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
   };
 
   const handleSave = async () => {
-    if (!draft.title.trim()) {
+    if (!hasRichContent(draft.title)) {
       showToast('Escribe un título principal antes de guardar');
       return;
     }
@@ -436,9 +429,12 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
           resolvedBlocks.push(cleanBlock);
         }
       } else {
-        if (!block.content?.trim()) continue; // Ignora bloques vacíos
+        if (!hasRichContent(block.content)) continue; // Ignora bloques vacíos
         const { verseError, ...cleanBlock } = block;
-        resolvedBlocks.push({ ...cleanBlock, content: block.content.trim() });
+        resolvedBlocks.push({
+          ...cleanBlock,
+          content: sanitizeRichHtml(block.content).trim()
+        });
       }
     }
 
@@ -454,16 +450,21 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
       return;
     }
 
-    if (!draft.intro.trim() && resolvedBlocks.length === 0 && !draft.conclusion.trim()) {
+    const cleanIntro = hasRichContent(draft.intro) ? sanitizeRichHtml(draft.intro).trim() : '';
+    const cleanConclusion = hasRichContent(draft.conclusion)
+      ? sanitizeRichHtml(draft.conclusion).trim()
+      : '';
+
+    if (!cleanIntro && resolvedBlocks.length === 0 && !cleanConclusion) {
       showToast('Agrega al menos un bloque de contenido al devocional');
       return;
     }
 
     const finalData = {
-      title: draft.title.trim(),
-      intro: draft.intro.trim(),
+      title: sanitizeRichHtml(draft.title).trim(),
+      intro: cleanIntro,
       blocks: resolvedBlocks,
-      conclusion: draft.conclusion.trim(),
+      conclusion: cleanConclusion,
       dateKey,
       updatedAtMs: Date.now()
     };
@@ -491,7 +492,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
     }
   };
 
-  // --- LECTURA, COMPARTIR Y COPIAR ---
+  // --- LECTURA, COMPARTIR Y COPIAR (SIEMPRE TEXTO PLANO SIN NEGRITAS) ---
   const handleVerseBlockClick = (block) => {
     if (block && block.bookId && navigateToBibleReference) {
       navigateToBibleReference(
@@ -536,12 +537,12 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
     return `${APP_URL}/?devotional=${targetKey}`;
   };
 
-  // Compartir: envía solo el título y el enlace directo a este devocional
+  // Compartir: envía solo el título (en texto plano) y el enlace directo
   const handleShare = async () => {
     if (!devotionalData) return;
 
     const directUrl = getDirectDevotionalUrl();
-    const shareTitle = devotionalData.title?.trim() || 'Devocional diario';
+    const shareTitle = richHtmlToPlainText(devotionalData.title).trim() || 'Devocional diario';
     const shareText = `📖 ${shareTitle}`;
 
     if (navigator.share) {
@@ -561,38 +562,45 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
     showToast(copied ? 'Enlace del devocional copiado' : 'No se pudo compartir el enlace');
   };
 
-  // Copiar: copia el texto completo del devocional estructurado + enlace directo
+  // Copiar: copia el texto completo del devocional en texto plano limpio (sin negritas)
   const handleCopy = async () => {
     if (!devotionalData) return;
 
     const directUrl = getDirectDevotionalUrl();
     const sections = [];
 
-    if (devotionalData.title?.trim()) {
-      sections.push(`📌 ${devotionalData.title.trim()}`);
+    const plainTitle = richHtmlToPlainText(devotionalData.title).trim();
+    if (plainTitle) {
+      sections.push(`📌 ${plainTitle}`);
     }
 
-    if (devotionalData.intro?.trim()) {
-      sections.push(devotionalData.intro.trim());
+    const plainIntro = richHtmlToPlainText(devotionalData.intro).trim();
+    if (plainIntro) {
+      sections.push(plainIntro);
     }
 
     let pointNum = 0;
     (devotionalData.blocks || []).forEach((block) => {
-      if (block.type === 'subtitle' && block.content?.trim()) {
+      if (block.type === 'subtitle' && hasRichContent(block.content)) {
         pointNum += 1;
-        sections.push(`${String(pointNum).padStart(2, '0')}. ${block.content.trim()}`);
-      } else if (block.type === 'paragraph' && block.content?.trim()) {
-        sections.push(block.content.trim());
-      } else if (block.type === 'highlight' && block.content?.trim()) {
-        sections.push(`💡 Ilustración:\n${block.content.trim()}`);
+        sections.push(
+          `${String(pointNum).padStart(2, '0')}. ${richHtmlToPlainText(block.content).trim()}`
+        );
+      } else if (block.type === 'heading' && hasRichContent(block.content)) {
+        sections.push(richHtmlToPlainText(block.content).trim());
+      } else if (block.type === 'paragraph' && hasRichContent(block.content)) {
+        sections.push(richHtmlToPlainText(block.content).trim());
+      } else if (block.type === 'highlight' && hasRichContent(block.content)) {
+        sections.push(`💡 Ilustración:\n${richHtmlToPlainText(block.content).trim()}`);
       } else if (block.type === 'verse' && block.verseText?.trim()) {
         const refLine = block.formattedRef ? `\n— ${block.formattedRef}` : '';
         sections.push(`“${block.verseText.trim()}”${refLine}`);
       }
     });
 
-    if (devotionalData.conclusion?.trim()) {
-      sections.push(devotionalData.conclusion.trim());
+    const plainConclusion = richHtmlToPlainText(devotionalData.conclusion).trim();
+    if (plainConclusion) {
+      sections.push(plainConclusion);
     }
 
     const appLink = `\n\n📲 Lee este devocional en FaithPath: ${directUrl}`;
@@ -611,11 +619,11 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
   );
 
   // =========================================================================
-  // VISTA EDITOR EDITORIAL POR BLOQUES (Misma dinámica que Modo Prédica)
+  // VISTA EDITOR EDITORIAL POR BLOQUES
   // =========================================================================
   if (isEditing) {
-    const showIntro = introOpen || Boolean(draft.intro?.trim());
-    const showConclusion = conclusionOpen || Boolean(draft.conclusion?.trim());
+    const showIntro = introOpen || hasRichContent(draft.intro);
+    const showConclusion = conclusionOpen || hasRichContent(draft.conclusion);
     let editPointCounter = 0;
 
     return (
@@ -650,12 +658,13 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
         <main className="devo-canvas-scroll">
           {/* Título */}
           <section className="devo-hero-section">
-            <AutoTextarea
-              rows={1}
+            <RichTextEditor
+              minLines={1}
               className="devo-canvas-title"
               placeholder="Título del devocional..."
               value={draft.title}
-              onChange={(e) => setDraft((prev) => ({ ...prev, title: e.target.value }))}
+              onChange={(val) => setDraft((prev) => ({ ...prev, title: val }))}
+              onSelectionChange={syncSelection}
             />
           </section>
 
@@ -675,7 +684,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
               <div className="devo-optional-box">
                 <div className="devo-optional-head">
                   <span>Introducción</span>
-                  {!draft.intro?.trim() && (
+                  {!hasRichContent(draft.intro) && (
                     <button
                       type="button"
                       className="devo-optional-hide-btn"
@@ -685,12 +694,13 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                     </button>
                   )}
                 </div>
-                <AutoTextarea
-                  rows={2}
+                <RichTextEditor
+                  minLines={2}
                   className="devo-optional-textarea"
                   placeholder="Contexto inicial o idea disparadora..."
                   value={draft.intro}
-                  onChange={(e) => setDraft((prev) => ({ ...prev, intro: e.target.value }))}
+                  onChange={(val) => setDraft((prev) => ({ ...prev, intro: val }))}
+                  onSelectionChange={syncSelection}
                 />
               </div>
             )}
@@ -712,7 +722,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
             {draft.blocks.length === 0 ? (
               <div className="devo-empty-blocks">
                 <p className="devo-empty-subtitle">
-                  Arma el devocional combinando puntos clave, párrafos, versículos e ilustraciones.
+                  Arma el devocional combinando puntos clave, párrafos, versículos y títulos de sección.
                 </p>
 
                 <div className="devo-empty-grid">
@@ -761,17 +771,19 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                     </div>
                   </button>
 
-                  <button type="button" className="devo-picker-card" onClick={() => addBlock('highlight', true)}>
+                  <button type="button" className="devo-picker-card" onClick={() => addBlock('heading', true)}>
                     <div className="devo-picker-icon devo-picker-purple">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M9 18h6" />
-                        <path d="M10 22h4" />
-                        <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" />
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 12h8" />
+                        <path d="M4 18V6" />
+                        <path d="M12 18V6" />
+                        <path d="M17 10v8" />
+                        <path d="M21 10v8" />
                       </svg>
                     </div>
                     <div className="devo-picker-text">
-                      <strong>+ Ilustración</strong>
-                      <span>Historia o ejemplo</span>
+                      <strong>+ Título</strong>
+                      <span>Sección libre sin número</span>
                     </div>
                   </button>
                 </div>
@@ -795,6 +807,9 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                               <span className="devo-point-num-badge">{pointNum}</span>
                               <span className="devo-block-badge-label">Punto clave</span>
                             </>
+                          )}
+                          {block.type === 'heading' && (
+                            <span className="devo-block-badge-label label-purple">Título</span>
                           )}
                           {block.type === 'paragraph' && (
                             <span className="devo-block-badge-label">Párrafo</span>
@@ -839,32 +854,46 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                       </div>
 
                       {block.type === 'subtitle' && (
-                        <AutoTextarea
-                          rows={1}
+                        <RichTextEditor
+                          minLines={1}
                           className="devo-input-point"
                           placeholder="Escribe la idea principal de este punto..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
+                        />
+                      )}
+
+                      {block.type === 'heading' && (
+                        <RichTextEditor
+                          minLines={1}
+                          className="devo-input-heading"
+                          placeholder="Escribe un título de sección..."
+                          value={block.content}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
                       {block.type === 'paragraph' && (
-                        <AutoTextarea
-                          rows={2}
+                        <RichTextEditor
+                          minLines={2}
                           className="devo-input-paragraph"
                           placeholder="Desarrolla tu reflexión o enseñanza..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
                       {block.type === 'highlight' && (
-                        <AutoTextarea
-                          rows={2}
+                        <RichTextEditor
+                          minLines={2}
                           className="devo-input-highlight"
                           placeholder="Comparte una historia, analogía o frase destacada..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
@@ -949,7 +978,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
               <div className="devo-optional-box">
                 <div className="devo-optional-head">
                   <span>Conclusión</span>
-                  {!draft.conclusion?.trim() && (
+                  {!hasRichContent(draft.conclusion) && (
                     <button
                       type="button"
                       className="devo-optional-hide-btn"
@@ -959,21 +988,36 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                     </button>
                   )}
                 </div>
-                <AutoTextarea
-                  rows={2}
+                <RichTextEditor
+                  minLines={2}
                   className="devo-optional-textarea"
                   placeholder="Oración final, cierre o aplicación práctica..."
                   value={draft.conclusion}
-                  onChange={(e) => setDraft((prev) => ({ ...prev, conclusion: e.target.value }))}
+                  onChange={(val) => setDraft((prev) => ({ ...prev, conclusion: val }))}
+                  onSelectionChange={syncSelection}
                 />
               </div>
             )}
           </section>
         </main>
 
-        {/* Barra inferior rápida de bloques */}
+        {/* Barra inferior rápida de formato y bloques */}
         <footer className="devo-sticky-footer">
           <div className="devo-quick-add-strip">
+            <button
+              type="button"
+              className={`devo-quick-pill devo-bold-pill ${isBoldActive ? 'is-active' : ''}`}
+              aria-pressed={isBoldActive}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleBoldButton}
+              title="Negrita (selecciona texto o activa para escribir)"
+            >
+              <strong className="dqa-bold-icon">B</strong>
+              <span>Negrita</span>
+            </button>
+
+            <span className="devo-strip-divider" aria-hidden="true" />
+
             <button type="button" className="devo-quick-pill" onClick={() => addBlock('subtitle', true)}>
               <span className="dqa-coral">+</span> Punto
             </button>
@@ -983,8 +1027,8 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
             <button type="button" className="devo-quick-pill" onClick={() => addBlock('verse', true)}>
               <span className="dqa-gold">+</span> Versículo
             </button>
-            <button type="button" className="devo-quick-pill" onClick={() => addBlock('highlight', true)}>
-              <span className="dqa-purple">+</span> Ilustración
+            <button type="button" className="devo-quick-pill" onClick={() => addBlock('heading', true)}>
+              <span className="dqa-purple">+</span> Título
             </button>
           </div>
 
@@ -1024,14 +1068,14 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
         </div>
       ) : devotionalData ? (
         <div className="devotional-content">
-          <h1 className="devotional-title">{devotionalData.title}</h1>
+          <h1 className="devotional-title">
+            <RichTextDisplay html={devotionalData.title} inline />
+          </h1>
           <hr className="devotional-line" />
 
-          {devotionalData.intro && (
+          {hasRichContent(devotionalData.intro) && (
             <div className="devotional-body devotional-intro-block">
-              {devotionalData.intro.split('\n').map((line, i) =>
-                line.trim() ? <p key={i}>{line}</p> : null
-              )}
+              <RichTextDisplay html={devotionalData.intro} />
             </div>
           )}
 
@@ -1042,7 +1086,7 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
               const needsSeparatorBetweenParagraphs =
                 block.type === 'paragraph' && prevBlock?.type === 'paragraph';
 
-              if (block.type === 'subtitle' && block.content?.trim()) {
+              if (block.type === 'subtitle' && hasRichContent(block.content)) {
                 readPointCounter += 1;
                 const numLabel = String(readPointCounter).padStart(2, '0');
                 return (
@@ -1051,31 +1095,39 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
                       <span className="devotional-point-num">{numLabel}</span>
                       <span className="devotional-point-label">Punto clave</span>
                     </div>
-                    <h2>{block.content}</h2>
+                    <h2>
+                      <RichTextDisplay html={block.content} inline />
+                    </h2>
                   </div>
                 );
               }
 
-              if (block.type === 'paragraph' && block.content?.trim()) {
+              if (block.type === 'heading' && hasRichContent(block.content)) {
+                return (
+                  <div key={block.id || index} className="devotional-section-heading-block">
+                    <h2>
+                      <RichTextDisplay html={block.content} inline />
+                    </h2>
+                  </div>
+                );
+              }
+
+              if (block.type === 'paragraph' && hasRichContent(block.content)) {
                 return (
                   <React.Fragment key={block.id || index}>
                     {needsSeparatorBetweenParagraphs && <DecorativeSeparator />}
                     <div className="devotional-body">
-                      {block.content.split('\n').map((line, i) =>
-                        line.trim() ? <p key={i}>{line}</p> : null
-                      )}
+                      <RichTextDisplay html={block.content} />
                     </div>
                   </React.Fragment>
                 );
               }
 
-              if (block.type === 'highlight' && block.content?.trim()) {
+              if (block.type === 'highlight' && hasRichContent(block.content)) {
                 return (
                   <div key={block.id || index} className="devotional-highlight-card">
                     <span className="devotional-highlight-kicker">Ilustración</span>
-                    {block.content.split('\n').map((line, i) =>
-                      line.trim() ? <p key={i}>{line}</p> : null
-                    )}
+                    <RichTextDisplay html={block.content} />
                   </div>
                 );
               }
@@ -1108,13 +1160,11 @@ export default function Devotional({ navigateToBibleReference, initialDateKey = 
             })}
           </div>
 
-          {devotionalData.conclusion && (
+          {hasRichContent(devotionalData.conclusion) && (
             <>
               <DecorativeSeparator />
               <div className="devotional-body conclusion">
-                {devotionalData.conclusion.split('\n').map((line, i) =>
-                  line.trim() ? <p key={i}>{line}</p> : null
-                )}
+                <RichTextDisplay html={devotionalData.conclusion} />
               </div>
             </>
           )}

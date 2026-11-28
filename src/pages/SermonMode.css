@@ -2209,3 +2209,115 @@
   }
 }
 
+/* ==========================================================================
+   BLOQUE "+ TÍTULO" Y BOTÓN VISUAL "NEGRITA" EN MODO PRÉDICA
+   ========================================================================== */
+
+.editor-block-card.block-type-heading {
+  border-left: 3px solid var(--sm-purple);
+}
+
+.editor-block-card.block-type-heading:focus-within {
+  border-color: rgba(196, 181, 253, 0.45);
+  border-left-color: var(--sm-purple);
+}
+
+.block-input-heading {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  padding: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.32;
+  color: #FFFFFF;
+}
+
+.block-input-point strong,
+.block-input-heading strong,
+.editor-canvas-title strong {
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+/* Botón Negrita en la barra inferior del editor */
+.quick-add-strip {
+  align-items: center;
+}
+
+.qa-strip-divider {
+  width: 1px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.sermon-bold-pill {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sermon-bold-pill .qa-bold-icon {
+  font-weight: 800;
+  font-size: 13px;
+  color: #F3F4F6;
+}
+
+.sermon-bold-pill.is-active {
+  background-color: var(--sm-coral);
+  border-color: var(--sm-coral);
+  color: #0D0D0F;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(224, 108, 117, 0.45);
+}
+
+.sermon-bold-pill.is-active .qa-bold-icon {
+  color: #0D0D0F;
+}
+
+/* Sección libre (+ Título) y negritas en Modo Púlpito */
+.pulpit-heading-block {
+  margin-top: 32px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pulpit-heading-block h2 {
+  font-size: 1.24em;
+  font-weight: 700;
+  line-height: 1.28;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+.pulpit-paragraph p strong,
+.pulpit-intro p strong,
+.pulpit-conclusion p strong,
+.pulpit-highlight p strong {
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.pulpit-subtitle-block h2 strong,
+.pulpit-heading-block h2 strong,
+.pulpit-title strong {
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.pulpit-light .pulpit-heading-block {
+  border-bottom-color: #D4D4D8;
+}
+
+.pulpit-light .pulpit-heading-block h2,
+.pulpit-light .pulpit-paragraph p strong,
+.pulpit-light .pulpit-intro p strong,
+.pulpit-light .pulpit-conclusion p strong,
+.pulpit-light .pulpit-highlight p strong,
+.pulpit-light .pulpit-subtitle-block h2 strong,
+.pulpit-light .pulpit-heading-block h2 strong,
+.pulpit-light .pulpit-title strong {
+  color: #000000;
+}

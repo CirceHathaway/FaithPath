@@ -14,6 +14,14 @@ import {
   parseAndFetchVerse,
   getVerseInVersion
 } from '../utils/bibleHelper';
+import {
+  sanitizeRichHtml,
+  richHtmlToPlainText,
+  hasRichContent,
+  useBoldToolbar,
+  RichTextEditor,
+  RichTextDisplay
+} from '../utils/richText';
 import './SermonMode.css';
 
 const CACHE_KEY = 'sermons_offline_cache';
@@ -69,7 +77,7 @@ const createEmptySermon = () => ({
 
 const createBlock = (type) => ({
   id: `blk_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-  type, // 'subtitle' | 'paragraph' | 'verse' | 'highlight'
+  type, // 'subtitle' | 'heading' | 'paragraph' | 'verse' | 'highlight' (legacy)
   content: '',
   verseInput: '',
   version: 'RVR1960',
@@ -85,37 +93,17 @@ const createBlock = (type) => ({
 
 const hasAnyContent = (sermon) => {
   if (!sermon) return false;
-  if (sermon.title?.trim() || sermon.intro?.trim() || sermon.conclusion?.trim()) {
+  if (
+    hasRichContent(sermon.title) ||
+    hasRichContent(sermon.intro) ||
+    hasRichContent(sermon.conclusion)
+  ) {
     return true;
   }
   return (sermon.blocks || []).some(
-    (b) => b.content?.trim() || b.verseInput?.trim() || b.verseText?.trim()
+    (b) => hasRichContent(b.content) || b.verseInput?.trim() || b.verseText?.trim()
   );
 };
-
-// Textarea con auto-crecimiento limpio (sin resize handle nativo)
-function AutoTextarea({ value, onChange, className, placeholder, rows = 1, ...rest }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
-
-  return (
-    <textarea
-      ref={ref}
-      rows={rows}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className={className}
-      {...rest}
-    />
-  );
-}
 
 export default function SermonMode({
   onBack,
@@ -144,6 +132,8 @@ export default function SermonMode({
   const [introOpen, setIntroOpen] = useState(false);
   const [conclusionOpen, setConclusionOpen] = useState(false);
   const [activeMetaModal, setActiveMetaModal] = useState(null); // 'tag' | 'date' | 'preacher' | null
+
+  const { isBoldActive, toggleBold, syncSelection } = useBoldToolbar();
 
   // Modo Púlpito
   const [fontSize, setFontSize] = useState(20);
@@ -245,10 +235,22 @@ export default function SermonMode({
 
       setSaveStatus('saving');
 
-      const cleanedBlocks = (sermonToSave.blocks || []).map(({ verseError, ...rest }) => rest);
+      const cleanedBlocks = (sermonToSave.blocks || []).map(({ verseError, ...rest }) => {
+        if (rest.type === 'verse') return rest;
+        return {
+          ...rest,
+          content: sanitizeRichHtml(rest.content || '')
+        };
+      });
+
       const now = Date.now();
       const payload = {
         ...sermonToSave,
+        title: sanitizeRichHtml(sermonToSave.title || ''),
+        intro: hasRichContent(sermonToSave.intro) ? sanitizeRichHtml(sermonToSave.intro) : '',
+        conclusion: hasRichContent(sermonToSave.conclusion)
+          ? sanitizeRichHtml(sermonToSave.conclusion)
+          : '',
         status: targetStatus,
         blocks: cleanedBlocks,
         updatedAtMs: now
@@ -392,8 +394,8 @@ export default function SermonMode({
       sermonDate: sermon.sermonDate || getLocalDateString()
     };
     setActiveSermon(normalized);
-    setIntroOpen(Boolean(normalized.intro?.trim()));
-    setConclusionOpen(Boolean(normalized.conclusion?.trim()));
+    setIntroOpen(hasRichContent(normalized.intro));
+    setConclusionOpen(hasRichContent(normalized.conclusion));
     setActiveMetaModal(null);
     setSaveStatus(normalized.status === 'lista' ? 'saved' : 'draft_saved');
     setMode('editor');
@@ -473,8 +475,9 @@ export default function SermonMode({
         return;
       }
 
+      const plainTitle = richHtmlToPlainText(sermon.title).trim() || 'Sin título';
       const lines = verseBlocks.map((b, i) => `${i + 1}. ${b.formattedRef || b.verseInput.trim()}`);
-      const text = `PRÉDICA: ${sermon.title || 'Sin título'}\nCitas para proyección:\n${lines.join('\n')}`;
+      const text = `PRÉDICA: ${plainTitle}\nCitas para proyección:\n${lines.join('\n')}`;
 
       const ok = await copyTextToClipboard(text);
       if (ok) {
@@ -490,7 +493,7 @@ export default function SermonMode({
     [copyTextToClipboard, showToast]
   );
 
-  // --- COMPARTIR PRÉDICA COMPLETA (COPIA ORDENADA PARA WHATSAPP / FACEBOOK) ---
+  // --- COMPARTIR PRÉDICA COMPLETA (SIEMPRE EN TEXTO PLANO SIN NEGRITAS) ---
   const handleShareSermon = useCallback(
     async (sermon, overrides = {}) => {
       if (!sermon || !hasAnyContent(sermon)) {
@@ -501,7 +504,8 @@ export default function SermonMode({
       const sections = [];
 
       // Cabecera: título, fecha, etiqueta y firma
-      const headerLines = [`📌 ${(sermon.title || 'Sin título').trim()}`];
+      const plainTitle = richHtmlToPlainText(sermon.title).trim() || 'Sin título';
+      const headerLines = [`📌 ${plainTitle}`];
       const metaParts = [];
       if (sermon.sermonDate) metaParts.push(`📅 ${formatDisplayDate(sermon.sermonDate)}`);
       if (sermon.tag) metaParts.push(`🏷️ ${sermon.tag}`);
@@ -510,23 +514,26 @@ export default function SermonMode({
       sections.push(headerLines.join('\n'));
 
       // Introducción
-      if (sermon.intro?.trim()) {
-        sections.push(`── INTRODUCCIÓN ──\n${sermon.intro.trim()}`);
+      const plainIntro = richHtmlToPlainText(sermon.intro).trim();
+      if (plainIntro) {
+        sections.push(`── INTRODUCCIÓN ──\n${plainIntro}`);
       }
 
-      // Desarrollo (bloques ordenados)
+      // Desarrollo (bloques ordenados en texto plano)
       const devParts = [];
       let pointNum = 0;
 
       (sermon.blocks || []).forEach((block) => {
-        if (block.type === 'subtitle' && block.content?.trim()) {
+        if (block.type === 'subtitle' && hasRichContent(block.content)) {
           pointNum += 1;
           const numStr = String(pointNum).padStart(2, '0');
-          devParts.push(`${numStr}. ${block.content.trim()}`);
-        } else if (block.type === 'paragraph' && block.content?.trim()) {
-          devParts.push(block.content.trim());
-        } else if (block.type === 'highlight' && block.content?.trim()) {
-          devParts.push(`💡 Ilustración:\n${block.content.trim()}`);
+          devParts.push(`${numStr}. ${richHtmlToPlainText(block.content).trim()}`);
+        } else if (block.type === 'heading' && hasRichContent(block.content)) {
+          devParts.push(richHtmlToPlainText(block.content).trim());
+        } else if (block.type === 'paragraph' && hasRichContent(block.content)) {
+          devParts.push(richHtmlToPlainText(block.content).trim());
+        } else if (block.type === 'highlight' && hasRichContent(block.content)) {
+          devParts.push(`💡 Ilustración:\n${richHtmlToPlainText(block.content).trim()}`);
         } else if (block.type === 'verse') {
           const override = overrides[block.id] || {};
           const activeVer = override.version || block.version || 'RVR1960';
@@ -567,8 +574,9 @@ export default function SermonMode({
       }
 
       // Conclusión
-      if (sermon.conclusion?.trim()) {
-        sections.push(`── CONCLUSIÓN ──\n${sermon.conclusion.trim()}`);
+      const plainConclusion = richHtmlToPlainText(sermon.conclusion).trim();
+      if (plainConclusion) {
+        sections.push(`── CONCLUSIÓN ──\n${plainConclusion}`);
       }
 
       const ok = await copyTextToClipboard(sections.join('\n\n'));
@@ -590,7 +598,7 @@ export default function SermonMode({
         const el = document.getElementById(`editor-blk-${created.id}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          const field = el.querySelector('input, textarea');
+          const field = el.querySelector('[data-rich-editor="true"], input, textarea');
           if (field) field.focus();
         }
       }, 60);
@@ -622,6 +630,13 @@ export default function SermonMode({
     showToast('Bloque eliminado');
   };
 
+  const handleBoldButton = () => {
+    const applied = toggleBold();
+    if (!applied) {
+      showToast('Toca un campo de texto para aplicar negrita');
+    }
+  };
+
   const handleFetchBlockVerse = (block, forcedVersion = null) => {
     const versionToUse = forcedVersion || block.version || 'RVR1960';
     const result = parseAndFetchVerse(block.verseInput, versionToUse);
@@ -650,7 +665,7 @@ export default function SermonMode({
 
   // Guardar explícito = marca automáticamente como 'lista' (terminado)
   const handleFinalSave = async (goToPulpit = false) => {
-    if (!activeSermon?.title?.trim()) {
+    if (!hasRichContent(activeSermon?.title)) {
       showToast('Escribe un título principal antes de guardar');
       return;
     }
@@ -768,8 +783,9 @@ export default function SermonMode({
   if (mode === 'library') {
     const filteredSermons = sermons.filter((s) => {
       const q = searchQuery.toLowerCase();
+      const plainTitle = richHtmlToPlainText(s.title).toLowerCase();
       const matchesQuery =
-        (s.title || '').toLowerCase().includes(q) ||
+        plainTitle.includes(q) ||
         (s.tag || '').toLowerCase().includes(q) ||
         (s.preacher || '').toLowerCase().includes(q);
       const matchesTag = filterTag === 'Todas' || s.tag === filterTag;
@@ -864,6 +880,7 @@ export default function SermonMode({
             filteredSermons.map((sermon) => {
               const versesCount = (sermon.blocks || []).filter((b) => b.type === 'verse').length;
               const dateLabel = formatDisplayDate(sermon.sermonDate);
+              const cardTitle = richHtmlToPlainText(sermon.title).trim() || 'Sin título';
 
               return (
                 <article key={sermon.id} className="sermon-card">
@@ -880,7 +897,7 @@ export default function SermonMode({
                     </span>
                   </div>
 
-                  <h2 className="sermon-card-title">{sermon.title || 'Sin título'}</h2>
+                  <h2 className="sermon-card-title">{cardTitle}</h2>
 
                   <div className="sermon-card-meta">
                     <span>{dateLabel}</span>
@@ -952,7 +969,7 @@ export default function SermonMode({
                 </button>
               </div>
               <p className="modal-desc-text">
-                ¿Seguro que quieres eliminar “{deleteTarget.title || 'Sin título'}”? Esta acción no se puede deshacer.
+                ¿Seguro que quieres eliminar “{richHtmlToPlainText(deleteTarget.title).trim() || 'Sin título'}”? Esta acción no se puede deshacer.
               </p>
               <div className="sermon-modal-actions">
                 <button
@@ -984,8 +1001,8 @@ export default function SermonMode({
   // =========================================================================
   if (mode === 'editor' && activeSermon) {
     const verseCount = (activeSermon.blocks || []).filter((b) => b.type === 'verse').length;
-    const showIntro = introOpen || Boolean(activeSermon.intro?.trim());
-    const showConclusion = conclusionOpen || Boolean(activeSermon.conclusion?.trim());
+    const showIntro = introOpen || hasRichContent(activeSermon.intro);
+    const showConclusion = conclusionOpen || hasRichContent(activeSermon.conclusion);
     let pointCounter = 0;
 
     return (
@@ -1026,12 +1043,13 @@ export default function SermonMode({
         <main className="editor-canvas-scroll">
           {/* Encabezado tipo lienzo */}
           <section className="editor-hero-section">
-            <AutoTextarea
-              rows={1}
+            <RichTextEditor
+              minLines={1}
               className="editor-canvas-title"
               placeholder="Ej: La fe que vence el temor"
               value={activeSermon.title}
-              onChange={(e) => updateActiveDraft({ title: e.target.value })}
+              onChange={(val) => updateActiveDraft({ title: val })}
+              onSelectionChange={syncSelection}
             />
 
             {/* Chips de metadatos: Etiqueta, Fecha y Firma (Pastor / Pastora) */}
@@ -1095,7 +1113,7 @@ export default function SermonMode({
               <div className="optional-editor-box">
                 <div className="optional-editor-head">
                   <span>Introducción</span>
-                  {!activeSermon.intro?.trim() && (
+                  {!hasRichContent(activeSermon.intro) && (
                     <button
                       type="button"
                       className="optional-hide-btn"
@@ -1105,12 +1123,13 @@ export default function SermonMode({
                     </button>
                   )}
                 </div>
-                <AutoTextarea
-                  rows={2}
+                <RichTextEditor
+                  minLines={2}
                   className="optional-textarea"
                   placeholder="Contexto inicial, saludo o idea disparadora..."
                   value={activeSermon.intro}
-                  onChange={(e) => updateActiveDraft({ intro: e.target.value })}
+                  onChange={(val) => updateActiveDraft({ intro: val })}
+                  onSelectionChange={syncSelection}
                 />
               </div>
             )}
@@ -1163,7 +1182,7 @@ export default function SermonMode({
             {activeSermon.blocks.length === 0 ? (
               <div className="empty-blocks-container">
                 <p className="empty-blocks-subtitle">
-                  Estructura tu mensaje combinando puntos clave, párrafos, versículos e ilustraciones.
+                  Estructura tu mensaje combinando puntos clave, párrafos, versículos y títulos de sección.
                 </p>
 
                 <div className="empty-blocks-grid">
@@ -1212,17 +1231,19 @@ export default function SermonMode({
                     </div>
                   </button>
 
-                  <button type="button" className="block-picker-card" onClick={() => addBlock('highlight', true)}>
+                  <button type="button" className="block-picker-card" onClick={() => addBlock('heading', true)}>
                     <div className="picker-icon picker-purple">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M9 18h6" />
-                        <path d="M10 22h4" />
-                        <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" />
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 12h8" />
+                        <path d="M4 18V6" />
+                        <path d="M12 18V6" />
+                        <path d="M17 10v8" />
+                        <path d="M21 10v8" />
                       </svg>
                     </div>
                     <div className="picker-text">
-                      <strong>+ Ilustración</strong>
-                      <span>Historia o ejemplo</span>
+                      <strong>+ Título</strong>
+                      <span>Sección libre sin número</span>
                     </div>
                   </button>
                 </div>
@@ -1246,6 +1267,9 @@ export default function SermonMode({
                               <span className="point-num-badge">{pointNum}</span>
                               <span className="block-badge-label">Punto clave</span>
                             </>
+                          )}
+                          {block.type === 'heading' && (
+                            <span className="block-badge-label label-purple">Título</span>
                           )}
                           {block.type === 'paragraph' && (
                             <span className="block-badge-label">Párrafo</span>
@@ -1290,32 +1314,46 @@ export default function SermonMode({
                       </div>
 
                       {block.type === 'subtitle' && (
-                        <AutoTextarea
-                          rows={1}
+                        <RichTextEditor
+                          minLines={1}
                           className="block-input-point"
                           placeholder="Escribe la idea principal de este punto..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
+                        />
+                      )}
+
+                      {block.type === 'heading' && (
+                        <RichTextEditor
+                          minLines={1}
+                          className="block-input-heading"
+                          placeholder="Escribe un título de sección..."
+                          value={block.content}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
                       {block.type === 'paragraph' && (
-                        <AutoTextarea
-                          rows={2}
+                        <RichTextEditor
+                          minLines={2}
                           className="block-input-paragraph"
                           placeholder="Desarrolla tu explicación, contexto o reflexión..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
                       {block.type === 'highlight' && (
-                        <AutoTextarea
-                          rows={2}
+                        <RichTextEditor
+                          minLines={2}
                           className="block-input-highlight"
                           placeholder="Comparte una historia, analogía o frase destacada..."
                           value={block.content}
-                          onChange={(e) => updateBlock(block.id, { content: e.target.value })}
+                          onChange={(val) => updateBlock(block.id, { content: val })}
+                          onSelectionChange={syncSelection}
                         />
                       )}
 
@@ -1398,7 +1436,7 @@ export default function SermonMode({
               <div className="optional-editor-box">
                 <div className="optional-editor-head">
                   <span>Conclusión</span>
-                  {!activeSermon.conclusion?.trim() && (
+                  {!hasRichContent(activeSermon.conclusion) && (
                     <button
                       type="button"
                       className="optional-hide-btn"
@@ -1408,21 +1446,36 @@ export default function SermonMode({
                     </button>
                   )}
                 </div>
-                <AutoTextarea
-                  rows={2}
+                <RichTextEditor
+                  minLines={2}
                   className="optional-textarea"
                   placeholder="Cierre, llamado o aplicación práctica final..."
                   value={activeSermon.conclusion}
-                  onChange={(e) => updateActiveDraft({ conclusion: e.target.value })}
+                  onChange={(val) => updateActiveDraft({ conclusion: val })}
+                  onSelectionChange={syncSelection}
                 />
               </div>
             )}
           </section>
         </main>
 
-        {/* Barra inferior contextual fija (reemplaza BottomNav en edición) */}
+        {/* Barra inferior contextual fija en editor */}
         <footer className="editor-sticky-footer">
           <div className="quick-add-strip">
+            <button
+              type="button"
+              className={`quick-add-pill sermon-bold-pill ${isBoldActive ? 'is-active' : ''}`}
+              aria-pressed={isBoldActive}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleBoldButton}
+              title="Negrita (selecciona texto o activa para escribir)"
+            >
+              <strong className="qa-bold-icon">B</strong>
+              <span>Negrita</span>
+            </button>
+
+            <span className="qa-strip-divider" aria-hidden="true" />
+
             <button type="button" className="quick-add-pill" onClick={() => addBlock('subtitle', true)}>
               <span className="qa-coral">+</span> Punto
             </button>
@@ -1432,8 +1485,8 @@ export default function SermonMode({
             <button type="button" className="quick-add-pill" onClick={() => addBlock('verse', true)}>
               <span className="qa-gold">+</span> Versículo
             </button>
-            <button type="button" className="quick-add-pill" onClick={() => addBlock('highlight', true)}>
-              <span className="qa-purple">+</span> Ilustración
+            <button type="button" className="quick-add-pill" onClick={() => addBlock('heading', true)}>
+              <span className="qa-purple">+</span> Título
             </button>
           </div>
 
@@ -1569,16 +1622,21 @@ export default function SermonMode({
   // =========================================================================
   if (mode === 'pulpit' && activeSermon) {
     const indexItems = [];
-    if (activeSermon.intro && activeSermon.intro.trim()) {
+    if (hasRichContent(activeSermon.intro)) {
       indexItems.push({ id: 'pulpit-intro', label: 'Introducción' });
     }
     let idxPointCount = 0;
     (activeSermon.blocks || []).forEach((b) => {
-      if (b.type === 'subtitle' && b.content.trim()) {
+      if (b.type === 'subtitle' && hasRichContent(b.content)) {
         idxPointCount += 1;
         indexItems.push({
           id: `pulpit-block-${b.id}`,
-          label: `${String(idxPointCount).padStart(2, '0')} · ${b.content}`
+          label: `${String(idxPointCount).padStart(2, '0')} · ${richHtmlToPlainText(b.content).trim()}`
+        });
+      } else if (b.type === 'heading' && hasRichContent(b.content)) {
+        indexItems.push({
+          id: `pulpit-block-${b.id}`,
+          label: richHtmlToPlainText(b.content).trim()
         });
       } else if (b.type === 'verse' && b.formattedRef) {
         indexItems.push({
@@ -1588,7 +1646,7 @@ export default function SermonMode({
         });
       }
     });
-    if (activeSermon.conclusion && activeSermon.conclusion.trim()) {
+    if (hasRichContent(activeSermon.conclusion)) {
       indexItems.push({ id: 'pulpit-conclusion', label: 'Conclusión' });
     }
 
@@ -1655,21 +1713,27 @@ export default function SermonMode({
                 </span>
               )}
             </div>
-            <h1 className="pulpit-title">{activeSermon.title || 'Sin título'}</h1>
+            <h1 className="pulpit-title">
+              {hasRichContent(activeSermon.title) ? (
+                <RichTextDisplay html={activeSermon.title} inline />
+              ) : (
+                'Sin título'
+              )}
+            </h1>
             <p className="pulpit-hint">
               Toca un bloque para marcarlo como ya dicho · Toca un versículo para cambiar de versión
             </p>
           </div>
 
           {/* Introducción */}
-          {activeSermon.intro && activeSermon.intro.trim() && (
+          {hasRichContent(activeSermon.intro) && (
             <div
               id="pulpit-intro"
               className={`pulpit-block pulpit-intro ${doneIds.includes('intro') ? 'is-done' : ''}`}
               onClick={() => toggleDone('intro')}
             >
               <span className="pulpit-section-kicker">Introducción</span>
-              <p>{activeSermon.intro}</p>
+              <RichTextDisplay html={activeSermon.intro} />
             </div>
           )}
 
@@ -1677,7 +1741,7 @@ export default function SermonMode({
           {(activeSermon.blocks || []).map((block) => {
             const isDone = doneIds.includes(block.id);
 
-            if (block.type === 'subtitle') {
+            if (block.type === 'subtitle' && hasRichContent(block.content)) {
               pulpitPointCounter += 1;
               const numLabel = String(pulpitPointCounter).padStart(2, '0');
               return (
@@ -1691,12 +1755,29 @@ export default function SermonMode({
                     <span className="pulpit-point-num">{numLabel}</span>
                     <span className="pulpit-point-label">Punto clave</span>
                   </div>
-                  <h2>{block.content}</h2>
+                  <h2>
+                    <RichTextDisplay html={block.content} inline />
+                  </h2>
                 </div>
               );
             }
 
-            if (block.type === 'paragraph') {
+            if (block.type === 'heading' && hasRichContent(block.content)) {
+              return (
+                <div
+                  key={block.id}
+                  id={`pulpit-block-${block.id}`}
+                  className={`pulpit-block pulpit-heading-block ${isDone ? 'is-done' : ''}`}
+                  onClick={() => toggleDone(block.id)}
+                >
+                  <h2>
+                    <RichTextDisplay html={block.content} inline />
+                  </h2>
+                </div>
+              );
+            }
+
+            if (block.type === 'paragraph' && hasRichContent(block.content)) {
               return (
                 <div
                   key={block.id}
@@ -1704,14 +1785,12 @@ export default function SermonMode({
                   className={`pulpit-block pulpit-paragraph ${isDone ? 'is-done' : ''}`}
                   onClick={() => toggleDone(block.id)}
                 >
-                  {block.content.split('\n').map((line, i) =>
-                    line.trim() ? <p key={i}>{line}</p> : null
-                  )}
+                  <RichTextDisplay html={block.content} />
                 </div>
               );
             }
 
-            if (block.type === 'highlight') {
+            if (block.type === 'highlight' && hasRichContent(block.content)) {
               return (
                 <div
                   key={block.id}
@@ -1720,7 +1799,7 @@ export default function SermonMode({
                   onClick={() => toggleDone(block.id)}
                 >
                   <span className="pulpit-section-kicker kicker-purple">Ilustración</span>
-                  <p>{block.content}</p>
+                  <RichTextDisplay html={block.content} />
                 </div>
               );
             }
@@ -1872,14 +1951,14 @@ export default function SermonMode({
           })}
 
           {/* Conclusión */}
-          {activeSermon.conclusion && activeSermon.conclusion.trim() && (
+          {hasRichContent(activeSermon.conclusion) && (
             <div
               id="pulpit-conclusion"
               className={`pulpit-block pulpit-conclusion ${doneIds.includes('conclusion') ? 'is-done' : ''}`}
               onClick={() => toggleDone('conclusion')}
             >
               <span className="pulpit-section-kicker">Conclusión</span>
-              <p>{activeSermon.conclusion}</p>
+              <RichTextDisplay html={activeSermon.conclusion} />
             </div>
           )}
 

@@ -135,6 +135,33 @@
   color: #ffffff;
 }
 
+.devotional-point-block h2 strong {
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Título de sección libre (+ Título) en lectura */
+.devotional-section-heading-block {
+  width: 100%;
+  margin-top: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.devotional-section-heading-block h2 {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(21px, 5.4vw, 26px);
+  font-weight: 700;
+  line-height: 1.28;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.devotional-section-heading-block h2 strong {
+  font-weight: 800;
+  color: #ffffff;
+}
+
 /* Tarjeta de versículo en lectura */
 .devotional-verse-card {
   width: 100%;
@@ -191,7 +218,7 @@
   color: #555;
 }
 
-/* Ilustración en lectura */
+/* Ilustración anterior en lectura (compatibilidad) */
 .devotional-highlight-card {
   width: 100%;
   background-color: #1B1822;
@@ -215,6 +242,11 @@
   font-size: clamp(15.5px, 4vw, 18px);
   line-height: 1.7;
   color: #E4E4E7;
+}
+
+.devotional-highlight-card p strong {
+  font-weight: 700;
+  color: #FFFFFF;
 }
 
 .devotional-separator {
@@ -250,9 +282,19 @@
   letter-spacing: 0.2px;
 }
 
+.devotional-body p strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
 .devotional-body.conclusion p {
   font-style: italic;
   color: #c7c7c7;
+}
+
+.devotional-body.conclusion p strong {
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .devotional-empty {
@@ -368,9 +410,30 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.devo-editor-page textarea {
-  resize: none;
-  overflow: hidden;
+/* Editor visual contentEditable */
+.rich-text-editable {
+  width: 100%;
+  min-height: 1.4em;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: text;
+}
+
+.rich-text-editable.is-multiline {
+  min-height: 3.1em;
+}
+
+.rich-text-editable:empty::before {
+  content: attr(data-placeholder);
+  color: #52525B;
+  pointer-events: none;
+}
+
+.rich-text-editable strong,
+.rich-text-editable b {
+  font-weight: 700;
+  color: #FFFFFF;
 }
 
 .devo-editor-topbar {
@@ -457,8 +520,10 @@
   padding: 0;
 }
 
-.devo-canvas-title::placeholder {
-  color: #52525B;
+.devo-canvas-title strong,
+.devo-canvas-title b {
+  font-weight: 800;
+  color: #FFFFFF;
 }
 
 /* Secciones opcionales colapsables */
@@ -538,10 +603,6 @@
   line-height: 1.6;
   font-family: inherit;
   padding: 0;
-}
-
-.devo-optional-textarea::placeholder {
-  color: #52525B;
 }
 
 .devo-editor-divider {
@@ -689,6 +750,15 @@
   border-color: rgba(224, 108, 117, 0.45);
 }
 
+.devo-block-card.devo-block-heading {
+  border-left: 3px solid #C4B5FD;
+}
+
+.devo-block-card.devo-block-heading:focus-within {
+  border-color: rgba(196, 181, 253, 0.45);
+  border-left-color: #C4B5FD;
+}
+
 .devo-block-card.devo-block-paragraph {
   background-color: rgba(22, 22, 26, 0.65);
 }
@@ -780,6 +850,7 @@
 }
 
 .devo-input-point,
+.devo-input-heading,
 .devo-input-paragraph,
 .devo-input-highlight {
   width: 100%;
@@ -797,17 +868,24 @@
   color: #F3F4F6;
 }
 
+.devo-input-heading {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.32;
+  color: #FFFFFF;
+}
+
+.devo-input-point strong,
+.devo-input-heading strong {
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
 .devo-input-paragraph,
 .devo-input-highlight {
   font-size: 14.5px;
   line-height: 1.6;
   color: #E4E4E7;
-}
-
-.devo-input-point::placeholder,
-.devo-input-paragraph::placeholder,
-.devo-input-highlight::placeholder {
-  color: #52525B;
 }
 
 /* Bloque versículo en editor */
@@ -913,7 +991,8 @@
 
 .devo-quick-add-strip {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 7px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -922,12 +1001,19 @@
   display: none;
 }
 
+.devo-strip-divider {
+  width: 1px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
 .devo-quick-pill {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 7px 12px;
+  padding: 7px 11px;
   border-radius: 11px;
   background-color: #1E1E24;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -935,6 +1021,25 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.devo-bold-pill .dqa-bold-icon {
+  font-weight: 800;
+  font-size: 13px;
+  color: #F3F4F6;
+}
+
+.devo-bold-pill.is-active {
+  background-color: #E06C75;
+  border-color: #E06C75;
+  color: #0D0D0F;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(224, 108, 117, 0.45);
+}
+
+.devo-bold-pill.is-active .dqa-bold-icon {
+  color: #0D0D0F;
 }
 
 .dqa-coral { color: #E06C75; font-weight: 700; }
