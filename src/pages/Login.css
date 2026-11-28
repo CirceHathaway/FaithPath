@@ -494,7 +494,7 @@
   }
 }
 
-* --- DESTACADO TEMPORAL DEL BOTÓN INSTALAR APLICACIÓN --- */
+/* --- DESTACADO TEMPORAL DEL BOTÓN INSTALAR APLICACIÓN --- */
 .install-app-card {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
